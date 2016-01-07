@@ -1,0 +1,114 @@
+@CHARSET "ISO-8859-1";
+
+#loader{z-index: 99999;}
+#loader:after{border-color: white transparent transparent !important;}
+
+#dimmerLoader{opacity: 0.7;}
+
+#conteudo{margin:0 !important;}
+
+#header{
+	background-color: white;
+}
+
+.subtitle{
+	background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%,rgba(184, 62, 62, 1) 100%);
+	color: white;
+	margin-bottom: 20px;
+  	margin-top: 20px;
+	border-top-left-radius: 50px;
+	border-bottom-left-radius: 50px;
+}
+
+.title {
+	background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%,
+		rgba(203, 203, 203, 1) 100%);
+	color: black;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	border-top-left-radius: 50px;
+	border-bottom-left-radius: 50px;
+}
+
+#content{
+  box-shadow: none;
+  margin-top: 80px;
+  margin-bottom: 65px;
+  border: 0;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+#content-title{
+	padding-left: 15px;
+	padding-top: 1px;
+  	margin-bottom: 10px;
+  	border-bottom: 1px solid #e5e5e5;
+  	background-color: rgb(244, 243, 243);
+}
+
+#content-header{
+	border: 1px solid;
+ 	border-color: rgb(242, 241, 241);
+  	border-radius: 5px;
+	margin: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 10px;
+}
+
+#content-body{
+	margin: 10px;
+}
+
+
+#loading {
+	padding: 20px;
+	padding-top: initial;
+	width: 100%
+}
+
+
+.pointer{
+	cursor: pointer;
+}
+.icon-sort{
+	float: right;
+}
+
+.font-size-15{
+	font-size: 15px;
+}
+
+.text-left{
+	text-align:left !important;
+}
+
+.text-right{
+	text-align: right !important;
+}
+
+.item-header-icon{
+    margin-top: -50px !important;
+}
+.item-header-icon img{
+    margin-bottom: -29px !important;
+    width: 30px !important;
+}
+
+.card-demanda {
+	text-align: center;
+	padding-bottom: 50px;
+	padding-top: 50px;
+	cursor: pointer;
+    background-color: #2185d0;
+    color: white;
+}
+.card-demanda:hover{
+	background-color: #BF2E2E;
+    -webkit-box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
+       -moz-box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
+		    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
+}
+.card-demanda-pos{margin: 0 !important;}
+.progress-demanda{transition-duration: 300ms;}

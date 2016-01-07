@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="br.com.gedai.mapper.StatusAtividadeMapper">
+
+	<resultMap id="mapSimples" type="br.com.gedai.data.StatusAtividade">
+		<id property="id" column="ID" />
+		<result property="descricao" column="DESCRICAO" />
+	</resultMap>
+
+	<sql id="selectSimples">
+		SELECT ID,
+		       DESCRICAO
+		FROM TB_STATUS_ATIVIDADE
+	</sql>
+	
+	<select id="obterPorId" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		WHERE id = #{id}
+	</select>
+	
+</mapper>

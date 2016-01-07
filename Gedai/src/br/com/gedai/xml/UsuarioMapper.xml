@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="br.com.gedai.mapper.UsuarioMapper">
+
+	<resultMap id="mapSimples" type="br.com.gedai.data.Usuario">
+		<id property="id" column="ID" />
+		<result property="nome" column="NOME" />
+		<result property="usuario" column="USUARIO" />
+		<result property="senha" column="SENHA" />
+	</resultMap>
+
+	<sql id="selectSimples">
+		SELECT ID,
+		       NOME,
+		       USUARIO,
+		       SENHA
+		FROM TB_USUARIO
+	</sql>
+	
+	<select id="obterTodos" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+	</select>
+	
+	<select id="obterPorId" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		WHERE id = #{id}
+	</select>
+	
+	<select id="obterPorLogin" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		WHERE USUARIO = #{usuario}
+	</select>
+	
+	<select id="obterLoginSenha" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		WHERE USUARIO = #{usuario}
+		  AND SENHA = #{senha}
+	</select>
+	
+	<update id="updateSenha">
+		UPDATE TB_USUARIO
+		   SET SENHA = #{senha}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
