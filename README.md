@@ -1,5 +1,6 @@
 # Gedai
 Gerenciador de Demandas e Atividades Internas
+
 Siga o link: http://alvarocjunq.github.io/Gedai/
 
 Ferramenta simples, desenvolvida com tecnologias simples para controlar atividades internas de:
