@@ -32,11 +32,10 @@
 
 #content{
   box-shadow: none;
-  margin-top: 80px;
-  margin-bottom: 65px;
   border: 0;
   margin-left: 5%;
   margin-right: 5%;
+  padding-top: 80px;
 }
 
 #content-title{
@@ -101,11 +100,11 @@
 	padding-bottom: 50px;
 	padding-top: 50px;
 	cursor: pointer;
-    background-color: #2185d0;
+    background-color: #BC4949!important;
     color: white;
 }
 .card-demanda:hover{
-	background-color: #BF2E2E;
+    background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%,rgba(184, 62, 62, 1) 100%);
     -webkit-box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
        -moz-box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
 		    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);

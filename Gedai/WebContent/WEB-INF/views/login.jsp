@@ -63,9 +63,9 @@ $(document).ready(function(){
   <div class="row">
     <h4 class="ui red image header">
       <img src="resources/img/sabre-de-luz.png" class="image">
-      <div class="content">
+<!--       <div class="content"> -->
         Gedai - Gerenciador de Demandas e Atividades Internas
-      </div>
+<!--       </div> -->
     </h4>
     <form class="ui large form" method="post" id="frmLogin" action="efetuarLogin">
       <div class="ui stacked segment">
