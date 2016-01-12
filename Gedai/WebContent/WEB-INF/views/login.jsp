@@ -58,14 +58,12 @@ $(document).ready(function(){
 
 <input type="hidden"  id="codMsgem" value="${codMsgem}"/>
 <input type="hidden"  id="mensagemRetorno" value="${mensagemRetorno}"/>
-<div class="ui middle aligned center aligned grid" id="conteudo">
+<div class="ui middle aligned center aligned grid conteudo" id="conteudo">
   <div class="column row padding-top-150">
   <div class="row">
     <h4 class="ui red image header">
       <img src="resources/img/sabre-de-luz.png" class="image">
-<!--       <div class="content"> -->
         Gedai - Gerenciador de Demandas e Atividades Internas
-<!--       </div> -->
     </h4>
     <form class="ui large form" method="post" id="frmLogin" action="efetuarLogin">
       <div class="ui stacked segment">

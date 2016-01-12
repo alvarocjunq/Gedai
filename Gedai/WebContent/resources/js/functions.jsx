@@ -63,8 +63,13 @@ function getOptionCombo(value, text){
 function loading(ligado){
 	if(ligado){
 		$("body").append("<div class='ui loader large' id='loader'></div>");
-		$("#conteudo").addClass("ui blurring segment dimmable dimmed");
-		$("#conteudo").append("<div class='ui simple dimmer' id='dimmerLoader'></div>");
+//		if($("#conteudo") == undefined){
+//			$("#content").addClass("ui blurring segment dimmable dimmed");
+//			$("#content").append("<div class='ui simple dimmer' id='dimmerLoader'></div>");
+//		}else{
+			$(".conteudo").addClass("ui blurring segment dimmable dimmed");
+			$(".conteudo").append("<div class='ui simple dimmer' id='dimmerLoader'></div>");
+//		}
 		$("#loader").addClass("active");
 	}
 	else{

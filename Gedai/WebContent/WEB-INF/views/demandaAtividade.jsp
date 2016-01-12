@@ -6,26 +6,27 @@
 <html>
 <c:import url="/WEB-INF/views/components/imports.jsp" />
 
-<script type="text/javascript">
-$(document).ready(function(){
-	$(".card-demanda").click(function(e){
-		e.stopPropagation();
-		
-		go("atividade?idDemanda=".concat($(this).attr("data-idDemanda")));
-	});
-});
-</script>
-
 <body>
 
 <c:import url="/WEB-INF/views/components/header.jsp" />
 	
-<div id="content" class="conteudo">
-	<div class="ui three column grid">
-		<c:forEach items="${demandas}" var="demanda">
-		    <gedai:cardDemanda progress="0" label="${demanda.nome}" id="${demanda.id}" />
-		</c:forEach>
+<div id="content">
+	<div class="ui large horizontal divided list">
+		<div class="item">
+			<div class="ui card">
+				<div class="content lista-atividade">
+					<h4>A Fazer</h4>
+					<div class="card-atividade" >
+						atividade 1
+					</div>
+					<div class="content footer-atividade">
+					  Nova atividade <i class="plus square outline icon"></i>
+			    	</div>
+		    	</div>
+	    	</div>
+		</div>
 	</div>
+		
 </div>
 
 </body>

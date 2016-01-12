@@ -5,7 +5,8 @@
 
 #dimmerLoader{opacity: 0.7;}
 
-#conteudo{margin:0 !important;}
+#conteudo{margin:0 !important;position: static !important;}
+.conteudo{margin:0 !important;position: static !important;}
 
 #header{
 	background-color: white;
@@ -33,8 +34,8 @@
 #content{
   box-shadow: none;
   border: 0;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 5% !important;
+  margin-right: 5% !important;
   padding-top: 80px;
 }
 
@@ -104,10 +105,32 @@
     color: white;
 }
 .card-demanda:hover{
-    background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%,rgba(184, 62, 62, 1) 100%);
+/*     background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%,rgba(184, 62, 62, 1) 100%); */
     -webkit-box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
        -moz-box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
 		    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
 }
 .card-demanda-pos{margin: 0 !important;}
 .progress-demanda{transition-duration: 300ms;}
+
+.footer-atividade {
+	margin-top: 20px !important;
+	text-align: right;
+}
+
+.lista-atividade{
+   background-color: #BC4949 !important;
+    color: white;
+}
+
+.card-atividade{
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #863030;
+    background-color: #FFFFFF;
+    color: black;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+}
