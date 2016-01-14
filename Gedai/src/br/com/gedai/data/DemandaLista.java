@@ -1,6 +1,7 @@
 package br.com.gedai.data;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class DemandaLista implements Serializable {
 
@@ -10,6 +11,7 @@ public class DemandaLista implements Serializable {
 	private Integer idDemanda;
 	private TipoLista tipoLista;
 	private String nome;
+	private List<DemandaListaAtividade> lstAtividades;
 	
 	public DemandaLista() {
 		tipoLista = new TipoLista();
@@ -29,6 +31,14 @@ public class DemandaLista implements Serializable {
 
 	public String getNome() {
 		return nome;
+	}
+	
+	public List<DemandaListaAtividade> getLstAtividades() {
+		return lstAtividades;
+	}
+
+	public void setLstAtividades(List<DemandaListaAtividade> lstAtividades) {
+		this.lstAtividades = lstAtividades;
 	}
 
 	public void setId(Integer id) {

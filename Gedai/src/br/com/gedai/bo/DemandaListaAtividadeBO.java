@@ -14,8 +14,9 @@ public class DemandaListaAtividadeBO {
 	@Autowired
 	private DemandaListaAtividadeMapper demandaListaAtividadeMapper;
 	
-	public void insert(DemandaListaAtividade demandaListaAtividade) {
-		demandaListaAtividadeMapper.insert(demandaListaAtividade);
+	public void insert(List<DemandaListaAtividade> atividades) {
+		for(DemandaListaAtividade dla: atividades)
+			demandaListaAtividadeMapper.insert(dla);
 	}
 
 	public void update(DemandaListaAtividade demandaListaAtividade) {

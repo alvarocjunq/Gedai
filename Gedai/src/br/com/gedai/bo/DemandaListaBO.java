@@ -13,6 +13,9 @@ public class DemandaListaBO {
 	
 	@Autowired
 	private DemandaListaMapper demandaListaMapper;
+	
+	@Autowired
+	private DemandaListaAtividadeBO demandaListaAtividadeBO;
 
 	public void insert(DemandaLista demandaLista) {
 		demandaListaMapper.insert(demandaLista);
@@ -27,7 +30,12 @@ public class DemandaListaBO {
 	}
 
 	public List<DemandaLista> obterPorDemanda(Integer idDemanda) {
-		return demandaListaMapper.obterPorDemanda(idDemanda);
+		List<DemandaLista> lista = demandaListaMapper.obterPorDemanda(idDemanda);
+		
+		for(DemandaLista dl: lista)
+			dl.setLstAtividades(demandaListaAtividadeBO.obterPorLista(dl.getId()));
+		
+		return lista;
 	}
 
 }

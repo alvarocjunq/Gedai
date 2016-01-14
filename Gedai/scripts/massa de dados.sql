@@ -5,3 +5,10 @@ values ('Usuario', 'user', 'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E
 
 insert into tb_demanda (nome) values('Projeto 1');
 insert into tb_demanda (nome) values('Projeto 2');
+
+
+insert into tb_tipo_lista(descricao)
+values('Fixa'),('Dinamica');
+
+insert into TB_STATUS_ATIVIDADE(descricao)
+values('Em progresso'),('Pausada'),('Nova');

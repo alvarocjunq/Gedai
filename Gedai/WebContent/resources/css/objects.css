@@ -1,5 +1,15 @@
 @CHARSET "ISO-8859-1";
 
+[draggable] {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	/* Required to make elements draggable in old WebKit */
+	-khtml-user-drag: element;
+	-webkit-user-drag: element;
+}
+
 #loader{z-index: 99999;}
 #loader:after{border-color: white transparent transparent !important;}
 
@@ -116,21 +126,56 @@
 .footer-atividade {
 	margin-top: 20px !important;
 	text-align: right;
+	cursor: pointer;
+	font-size: 14px;
 }
 
 .lista-atividade{
    background-color: #BC4949 !important;
-    color: white;
+   color: white;
 }
 
+.lista-atividade.over{
+	background-color: #d01919 !important
+}
+.card-atividade * { pointer-events: none; }
 .card-atividade{
     padding-bottom: 5px;
     padding-top: 5px;
     border-radius: 4px;
-    border: 1px solid #863030;
+    margin: 2px;
     background-color: #FFFFFF;
     color: black;
-    font-size: 16px;
-    text-align: center;
+    font-size: 15px;
+  	line-height: normal;
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.card-atividade label{
+   	cursor: pointer;
+}
+
+.card-atividade textarea {
+	width: 100%;
+	border: 0;
+    background-color: #EFEFEF;
+    resize: none;
+}
+
+.nova-atividade{
+	padding: 7.5px;
+    float: right;
+    cursor: pointer;
+}
+
+.salvar-atividade{
+    float: left;
+    color: white;
+    background-color: #63B363;
+    padding: 10px;
+    border-radius: 2px;
+    visibility: hidden;
     cursor: pointer;
 }
