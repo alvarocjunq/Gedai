@@ -9,6 +9,7 @@ public class DemandaLista implements Serializable {
 
 	private Integer id;
 	private Integer idDemanda;
+	private Integer qtd;
 	private TipoLista tipoLista;
 	private String nome;
 	private List<DemandaListaAtividade> lstAtividades;
@@ -56,5 +57,12 @@ public class DemandaLista implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
+	public Integer getQtd() {
+		return qtd;
+	}
+
+	public void setQtd(Integer qtd) {
+		this.qtd = qtd;
+	}
 }

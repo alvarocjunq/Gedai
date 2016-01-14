@@ -7,6 +7,7 @@ public class Demanda implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+	private Integer progresso;
 	private String nome;
 	
 	public Demanda() {	}
@@ -26,5 +27,12 @@ public class Demanda implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
+	public Integer getProgresso() {
+		return progresso;
+	}
+
+	public void setProgresso(Integer progresso) {
+		this.progresso = progresso;
+	}
 }

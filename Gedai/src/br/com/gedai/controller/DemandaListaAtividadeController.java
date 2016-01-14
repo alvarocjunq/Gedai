@@ -28,8 +28,14 @@ public class DemandaListaAtividadeController {
 	
 	@RequestMapping(value="atualizarAtividade", method=RequestMethod.POST, 
 					produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public void atualizarAtividade(@RequestBody DemandaListaAtividade atividade) {
+	public @ResponseBody boolean atualizarAtividade(@RequestBody DemandaListaAtividade atividade) {
 		demandaListaAtividadeBO.update(atividade);
+		return true;
+	}
+	
+	@RequestMapping(value="obterAtividade", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody DemandaListaAtividade obterAtividade(Integer idAtividade) {
+		return demandaListaAtividadeBO.obterPorId(idAtividade);
 	}
 	
 }

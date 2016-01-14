@@ -23,7 +23,7 @@ $(document).ready(function(){
 <div id="content" class="conteudo">
 	<div class="ui three column grid">
 		<c:forEach items="${demandas}" var="demanda">
-		    <gedai:cardDemanda progress="0" label="${demanda.nome}" id="${demanda.id}" />
+		    <gedai:cardDemanda progress="${demanda.progresso}" label="${demanda.nome}" id="${demanda.id}" />
 		</c:forEach>
 	</div>
 </div>

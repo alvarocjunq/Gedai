@@ -13,4 +13,5 @@ public interface DemandaListaAtividadeMapper {
 	void update(DemandaListaAtividade demandaListaAtividade);
 	void delete(Integer idDemandaListaAtividade);
 	List<DemandaListaAtividade> obterPorLista(Integer idDemandaLista);
+	DemandaListaAtividade obterPorId(Integer idDemandaListaAtividade);
 }

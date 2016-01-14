@@ -21,8 +21,13 @@
 		FROM TB_DEMANDA_LISTA_ATIVIDADE
 	</sql>
 	
+	<select id="obterPorId" resultMap="mapSimples">
+		<include refid="selectSimples" />
+		WHERE ID = #{idDemandaListaAtividade}
+	</select>
+
 	<select id="obterPorLista" resultMap="mapSimples">
-		<include refid="selectSimples"/>
+		<include refid="selectSimples" />
 		WHERE ID_DEMANDA_LISTA = #{idDemandaLista}
 	</select>
 	
@@ -35,6 +40,11 @@
 		UPDATE TB_DEMANDA_LISTA_ATIVIDADE
 		   SET NOME = #{nome},
 		       DESCRICAO = #{descricao}
+		       
+	       <if test="idDemandaLista != null">
+	       		,ID_DEMANDA_LISTA=#{idDemandaLista}
+	       </if>
+
 		WHERE ID = #{id}
 	</update>
 	

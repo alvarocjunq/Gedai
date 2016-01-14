@@ -11,6 +11,11 @@
 					 select="br.com.gedai.mapper.TipoListaMapper.obterPorId"/>
 	</resultMap>
 
+	<resultMap id="mapQtdPorLista" type="br.com.gedai.data.DemandaLista">
+		<id property="id" column="ID_DEMANDA_LISTA" />
+		<result property="qtd" column="QTD" />
+	</resultMap>
+	
 	<sql id="selectSimples">
 		SELECT ID,
 		       ID_DEMANDA,
@@ -22,6 +27,16 @@
 	<select id="obterPorDemanda" resultMap="mapSimples">
 		<include refid="selectSimples"/>
 		WHERE ID_DEMANDA = #{idDemanda}
+	</select>
+	
+	
+	<select id="obterQtdAtividadePorLista" resultMap="mapQtdPorLista">
+		SELECT COUNT(1) AS QTD,
+		       ID_DEMANDA_LISTA
+		FROM TB_DEMANDA_LISTA_ATIVIDADE
+		  JOIN TB_DEMANDA_LISTA ON TB_DEMANDA_LISTA.ID = TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA
+		WHERE TB_DEMANDA_LISTA.ID_DEMANDA = #{idDemanda}
+		GROUP BY ID_DEMANDA_LISTA
 	</select>
 	
 	<update id="update">

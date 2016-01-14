@@ -70,7 +70,7 @@ $(document).ready(function(){
         <div class="field">
           <div class="ui left icon input">
             <i class="user icon"></i>
-            <input type="text" name="usuario" placeholder="Usuário">
+            <input type="text" name="usuario" placeholder="Usuário" autofocus="autofocus">
           </div>
         </div>
         <div class="field">

@@ -14,6 +14,9 @@ public class DemandaBO {
 	@Autowired
 	private DemandaMapper demandaMapper;
 	
+	@Autowired
+	private DemandaListaBO demandaListaBO;
+	
 	public void insert(Demanda demanda) {
 		demandaMapper.insert(demanda);
 	}
@@ -23,7 +26,10 @@ public class DemandaBO {
 	}
 
 	public List<Demanda> obterTodos() {
-		return demandaMapper.obterTodos();
+		List<Demanda> lista = demandaMapper.obterTodos();
+		for(Demanda d: lista)
+			d.setProgresso(demandaListaBO.obterProgresso(d.getId()));
+		return lista;
 	}
 
 }

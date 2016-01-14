@@ -170,6 +170,14 @@
     cursor: pointer;
 }
 
+.cancelar-atividade{
+    float: left;
+    padding-left: 15px;
+    padding-top: 8px;
+    visibility: hidden;
+    cursor: pointer;
+}
+
 .salvar-atividade{
     float: left;
     color: white;
@@ -179,3 +187,19 @@
     visibility: hidden;
     cursor: pointer;
 }
+
+.description{
+	width: 100% !important;
+}
+.description textarea{
+	background-color: transparent;
+    resize: none;
+    width: 100%;
+    border-color: #B12A27;
+    border-radius: 5px;
+    padding: 5px;
+    height: 200px;
+}
+
+.ui.card>:last-child{border-radius: .28571429rem .28571429rem .28571429rem .28571429rem !important;}
+.floating.green.label{background-color: #24903E!important;}

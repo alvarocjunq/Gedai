@@ -7,7 +7,7 @@
 		<id property="id" column="ID" />
 		<result property="nome" column="NOME" />
 	</resultMap>
-
+	
 	<sql id="selectSimples">
 		SELECT ID,
 		       NOME

@@ -8,6 +8,51 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+	$('.ui.dropdown').dropdown();
+	$('.dropdown').dropdown({direction: 'upward'});
+	
+	$(".card-atividade").click(function(e){
+		e.stopPropagation();
+		var id = $(this).attr("id");
+		$("#idAtividade").val(id);
+		
+		$('.ui.basic.modal')
+				.modal({
+				    onShow: function(){
+						$.ajax({
+						    url: "obterAtividade?idAtividade="+id,
+						    type: 'GET',
+						    contentType : "application/json",
+						    success: function(data) {
+						    	$("#header-modal-atividade").text(data.nome);
+						    	$(".description p").text(data.descricao);
+						    }
+						});
+				    	
+						$.ajax({
+						    url: "obterListas?idDemanda="+$("#idDemanda").val(),
+						    type: 'GET',
+						    contentType : "application/json",
+						    success: function(lista) {
+						    	loadTable("lstListas .menu", lista, getLineListas)
+						    }
+						});
+				    	
+				    },
+				    onHidden: function(){
+				    	$("#header-modal-atividade").text("");
+				    	
+				    	if($(".description p"))
+					    	$(".description p").text("");
+				    		
+				    	if($(".description textarea"))
+				    		$(".description textarea").replaceWith("<p></p>");
+				    	
+				    }
+			  	})
+			  	.modal('show');
+	});
+	
 	$(".nova-atividade").click(function(e){
 		e.stopPropagation();
 		var id = guid();
@@ -16,6 +61,22 @@ $(document).ready(function(){
 		$(this).parent().parent().find(".atividades").append(card);
 		$("#"+id).focus();	
 		$(this).parent().find(".salvar-atividade").css("visibility", "visible");
+		$(this).parent().find(".cancelar-atividade").css("visibility", "visible");
+	});
+	
+	$(".cancelar-atividade").click(function(e){
+		e.stopPropagation();
+		var nomeAtividade = "";
+		var demandaLista = $(this).parent().parent();
+		
+		demandaLista.find(".atividades .card-atividade").each(function(){
+			nomeAtividade = $(this).find("textarea").val();
+			if(nomeAtividade != undefined){
+				$(this).remove();
+			}
+		})
+		$(this).css("visibility", "hidden");
+		$(this).parent().find(".salvar-atividade").css("visibility", "hidden");
 	});
 	
 	$(".salvar-atividade").click(function(e){
@@ -58,30 +119,69 @@ $(document).ready(function(){
 				});
 		    	
 		    	botaoSalvar.css("visibility", "hidden");
+		    	botaoSalvar.parent().find(".cancelar-atividade").css("visibility", "hidden");
 		    }
 		});
 	});
 	
+	$(".description").click(function(e){
+		e.stopPropagation();
+		var p = $(this).find("p");
+		var texto = p.text();
+		p.replaceWith("<textarea>"+texto+"</textarea>");
+		
+	});
+	
+	$("#salvar-modal").click(function(){
+		var _nome = $("#header-modal-atividade").text();
+    	var _descricao = ($(".description textarea").val() ? $(".description textarea").val() : $(".description p").text());
+    	var _idDemandaLista = $("#lstListas .menu .selected").attr("data-id");
+    	
+		var atividade = {id : $("#idAtividade").val(), 
+						 nome: _nome,
+						 descricao: _descricao,
+						 idDemandaLista: _idDemandaLista};
+		
+		$.ajax({
+		    url: "atualizarAtividade",
+		    type: 'POST',
+		    contentType : "application/json",
+		    data: JSON.stringify(atividade),
+		    success: function() {
+				$(".ui.basic.modal").modal("hide");
+		    }
+		});
+	});
 	
 });
+
+function getLineListas(item){
+	var linha="";
+	linha = linha.concat("<div class='item' data-id='", item.id,"'>", item.nome ,"</div>")
+	return linha;
+}
 
 </script>
 
 <body>
 
 <c:import url="/WEB-INF/views/components/header.jsp" />
-	
+<input type="hidden" value="${idDemanda}" id="idDemanda"/>
+<input type="hidden" value="" id="idAtividade"/>
 <div id="content">
 	<div class="ui large horizontal list">
 	
-	<c:forEach items="${listas}" var="lista">
+	<c:forEach items="${listas}" var="lista" >
 		<div class="item">
 			<div class="ui card">
+				<c:set var="contador" value="0"/>
+				
 				<div class="content lista-atividade" id="${lista.id}">
 					<h4>${lista.nome}</h4>
 					<div class="atividades">
 					
-						<c:forEach items="${lista.lstAtividades}" var="atividade">
+						<c:forEach items="${lista.lstAtividades}" var="atividade" varStatus="i">
+							<c:set var="contador" value="${i.count}"/>
 							<div class="card-atividade" id="${atividade.id}" draggable="true">
 								<label>
 									${atividade.nome}
@@ -92,16 +192,18 @@ $(document).ready(function(){
 					</div>
 					<div class="content footer-atividade">
 					  	<label class="salvar-atividade">Salvar</label>
+					  	<label class="cancelar-atividade"><i class="remove large icon"></i></label>
 					  	<label class="nova-atividade">Nova atividade <i class="plus square outline icon"></i></label> 
 			    	</div>
 		    	</div>
+		    	<div class="floating ui green label">${contador}</div>
 	    	</div>
 		</div>
-	</c:forEach>	
+	</c:forEach>
 	</div>
 		
 </div>
-
+<c:import url="demandaAtividadeModal.jsp" />
 </body>
 
 <script>
