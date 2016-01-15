@@ -27,8 +27,10 @@ public class DemandaBO {
 
 	public List<Demanda> obterTodos() {
 		List<Demanda> lista = demandaMapper.obterTodos();
-		for(Demanda d: lista)
+		for(Demanda d: lista){
 			d.setProgresso(demandaListaBO.obterProgresso(d.getId()));
+			d.setLstProgressoRacional(demandaListaBO.obterProgressoRacional(d.getId()));
+		}
 		return lista;
 	}
 

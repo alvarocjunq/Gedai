@@ -1,4 +1,4 @@
-<%@ tag language="java" pageEncoding="ISO-8859-1"%>
+ <%@ tag language="java" pageEncoding="ISO-8859-1"%>
 
 <%@ attribute name="label" required="true" %>
 <%@ attribute name="id" required="true" %>
@@ -10,7 +10,7 @@
 	    <h4>${label}</h4>
 	  </div>
 	  <div class="content">
-	    <div class="ui progress green card-demanda-pos">
+	    <div class="ui progress green card-demanda-pos" id="${id}">
 			<div class="bar progress-demanda" style="width: ${progress}%;">
 		  		<div class="progress">${progress}%</div>
 		  	</div>

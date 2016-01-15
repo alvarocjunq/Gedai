@@ -203,3 +203,16 @@
 
 .ui.card>:last-child{border-radius: .28571429rem .28571429rem .28571429rem .28571429rem !important;}
 .floating.green.label{background-color: #24903E!important;}
+
+
+.status-demanda{
+    display: none;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.status-demanda div{
+    display: none;
+    padding: 0 !important;
+    margin: 0 !important;
+}

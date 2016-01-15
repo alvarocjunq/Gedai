@@ -1,6 +1,7 @@
 package br.com.gedai.data;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Demanda implements Serializable {
 
@@ -9,6 +10,7 @@ public class Demanda implements Serializable {
 	private Integer id;
 	private Integer progresso;
 	private String nome;
+	private List<DemandaLista> lstProgressoRacional;
 	
 	public Demanda() {	}
 
@@ -34,5 +36,13 @@ public class Demanda implements Serializable {
 
 	public void setProgresso(Integer progresso) {
 		this.progresso = progresso;
+	}
+
+	public List<DemandaLista> getLstProgressoRacional() {
+		return lstProgressoRacional;
+	}
+
+	public void setLstProgressoRacional(List<DemandaLista> lstProgressoRacional) {
+		this.lstProgressoRacional = lstProgressoRacional;
 	}
 }

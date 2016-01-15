@@ -39,6 +39,10 @@ public class DemandaListaBO {
 		return lista;
 	}
 	
+	public List<DemandaLista> obterProgressoRacional(Integer idDemanda){
+		return demandaListaMapper.obterQtdAtividadePorLista(idDemanda);
+	}
+	
 	public Integer obterProgresso(Integer idDemanda){
 		List<DemandaLista> lista = demandaListaMapper.obterQtdAtividadePorLista(idDemanda);
 		double total = 0, feito = 0;

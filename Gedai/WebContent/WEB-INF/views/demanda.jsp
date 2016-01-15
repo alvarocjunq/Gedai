@@ -8,6 +8,31 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+	$('.card-demanda-pos')
+		.popup({position : 'right center',html: '*', 
+				onShow : function(item){
+					var popup = this;
+					var texto = "";
+					texto = texto.concat("<div class='ui two column grid'>");
+					
+					$(".status-demanda[id="+ $(item).attr("id") +"] div").each(function(){
+						texto = texto.concat("<div class='row'>");
+						
+						texto = texto.concat("<div class='column bold'>", 
+												$(this).find("label[data-nome]").text(),
+											  "</div>");
+						
+						texto = texto.concat("<div class='column'>", 
+											 	$(this).find("label[data-qtd]").text(),
+											 "</div>");
+						
+						texto = texto.concat("</div>");
+					});
+					
+					texto = texto.concat("</div>");
+					popup.html(texto);
+				}});
+	
 	$(".card-demanda").click(function(e){
 		e.stopPropagation();
 		
@@ -23,6 +48,16 @@ $(document).ready(function(){
 <div id="content" class="conteudo">
 	<div class="ui three column grid">
 		<c:forEach items="${demandas}" var="demanda">
+		
+			<div class="status-demanda" id="${demanda.id}">
+				<c:forEach items="${demanda.lstProgressoRacional}" var="status">
+					<div>
+						<label data-nome>${status.nome}</label> 
+						<label data-qtd>${status.qtd}</label>
+					</div>
+				</c:forEach>
+			</div>
+			
 		    <gedai:cardDemanda progress="${demanda.progresso}" label="${demanda.nome}" id="${demanda.id}" />
 		</c:forEach>
 	</div>
