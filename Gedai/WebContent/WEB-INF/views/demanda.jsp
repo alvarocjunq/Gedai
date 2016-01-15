@@ -36,7 +36,8 @@ $(document).ready(function(){
 	$(".card-demanda").click(function(e){
 		e.stopPropagation();
 		
-		go("atividade?idDemanda=".concat($(this).attr("data-idDemanda")));
+		go("atividade?idDemanda=".concat($(this).attr("data-idDemanda"), 
+					 "&nome=", $(this).find("h4").text()));
 	});
 });
 </script>

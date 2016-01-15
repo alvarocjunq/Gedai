@@ -178,7 +178,9 @@ function getLineListas(item){
 <c:import url="/WEB-INF/views/components/header.jsp" />
 <input type="hidden" value="${idDemanda}" id="idDemanda"/>
 <input type="hidden" value="" id="idAtividade"/>
-<div id="content">
+<div id="content" class="conteudo">
+
+	<h3 class="ui header header-atividades">${nomeDemanda}</h3>
 	<div class="ui large horizontal list">
 	
 	<c:forEach items="${listas}" var="lista" >
