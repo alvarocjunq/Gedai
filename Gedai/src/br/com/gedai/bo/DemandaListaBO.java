@@ -44,7 +44,7 @@ public class DemandaListaBO {
 		double total = 0, feito = 0;
 		
 		for(DemandaLista dl: lista){
-			TipoListaEnum tipo = TipoListaEnum.getEnum(dl.getId());
+			TipoListaEnum tipo = TipoListaEnum.getEnum(dl.getNome());
 			switch (tipo) {
 			case FAZER:
 				total+= dl.getQtd();
@@ -53,6 +53,7 @@ public class DemandaListaBO {
 				total+= dl.getQtd();
 				break;
 			case FEITO:
+				total+= dl.getQtd();
 				feito += dl.getQtd();
 				break;
 			default:

@@ -28,6 +28,10 @@
 		    <param-value>ISO-8859-1</param-value>
 		</context-param> 
 
+		<session-config>
+		    <session-timeout>-1</session-timeout>
+		</session-config>
+
 	  <error-page>
 	    <error-code>500</error-code>
 	    <location>/500</location>

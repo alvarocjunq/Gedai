@@ -12,7 +12,7 @@
 	</resultMap>
 
 	<resultMap id="mapQtdPorLista" type="br.com.gedai.data.DemandaLista">
-		<id property="id" column="ID_DEMANDA_LISTA" />
+		<result property="nome" column="NOME" />
 		<result property="qtd" column="QTD" />
 	</resultMap>
 	
@@ -32,11 +32,12 @@
 	
 	<select id="obterQtdAtividadePorLista" resultMap="mapQtdPorLista">
 		SELECT COUNT(1) AS QTD,
-		       ID_DEMANDA_LISTA
-		FROM TB_DEMANDA_LISTA_ATIVIDADE
+		       TB_DEMANDA_LISTA.NOME as nome
+		  FROM TB_DEMANDA_LISTA_ATIVIDADE
 		  JOIN TB_DEMANDA_LISTA ON TB_DEMANDA_LISTA.ID = TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA
-		WHERE TB_DEMANDA_LISTA.ID_DEMANDA = #{idDemanda}
-		GROUP BY ID_DEMANDA_LISTA
+		 WHERE TB_DEMANDA_LISTA.ID_DEMANDA = #{idDemanda}
+		   AND TB_DEMANDA_LISTA.ID_TIPO_LISTA = 1
+		 GROUP BY TB_DEMANDA_LISTA.NOME
 	</select>
 	
 	<update id="update">

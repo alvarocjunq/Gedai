@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.gedai.data.DemandaListaAtividade;
 import br.com.gedai.mapper.DemandaListaAtividadeMapper;
+import br.com.gedai.utils.StringUtils;
 
 @Service
 public class DemandaListaAtividadeBO {
@@ -29,6 +30,7 @@ public class DemandaListaAtividadeBO {
 	}
 
 	public void update(DemandaListaAtividade demandaListaAtividade) {
+		StringUtils.emptyToNull(demandaListaAtividade);
 		demandaListaAtividadeMapper.update(demandaListaAtividade);
 	}
 

@@ -1,11 +1,34 @@
 package br.com.gedai.utils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Set;
+
 
 public class StringUtils {
 	
 	public static String emptyToNull(String value){
 		return (value == null || "".equals(value) ? null : value.trim());
+	}
+	
+	
+	/**
+	 * Basta mandar o objeto, que o método se encarregará de buscar todos os campos do tipo String que estejam 
+	 * com o valor vazio ("") e mudar para null
+	 * @param obj Objeto da classe que necessita ser varrida
+	 */
+	public static void emptyToNull(Object obj){
+		try {
+			for(Method method: obj.getClass().getMethods()){
+				if (method.getReturnType().getSimpleName().equals(String.class.getSimpleName()) && method.getName().startsWith("get")) {
+					Method set = obj.getClass().getMethod("set".concat(method.getName().substring(3)), String.class);
+					set.invoke(obj, emptyToNull((String) method.invoke(obj, new Object[0])));
+				}
+			}
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static String nullToEmpty(String value){

@@ -1,21 +1,21 @@
 package br.com.gedai.enums;
 
 public enum TipoListaEnum {
-	FAZER(1),FAZENDO(2),FEITO(3);
+	FAZER("Fazer"),FAZENDO("Fazendo"),FEITO("Feito");
 	
-	private Integer id;
+	private String nome;
 
-	private TipoListaEnum(Integer id) {
-		this.id = id;
+	private TipoListaEnum(String nome) {
+		this.nome = nome;
 	}
 
-	public Integer getId() {
-		return id;
+	public String getNome() {
+		return nome;
 	}
 	
-	public static TipoListaEnum getEnum(Integer id){
+	public static TipoListaEnum getEnum(String nome){
 		for(TipoListaEnum tipo: TipoListaEnum.values()){
-			if(id == tipo.getId()){
+			if(nome.equals(tipo.getNome())){
 				return tipo;
 			}
 		}

@@ -34,6 +34,9 @@ $(document).ready(function(){
 						    type: 'GET',
 						    contentType : "application/json",
 						    success: function(lista) {
+						    	$("#lstListas .menu .item").removeClass(".active");
+						    	$("#lstListas .menu .item").removeClass(".selected");
+						    	$("#lstListas .text").text("Mover para...");
 						    	loadTable("lstListas .menu", lista, getLineListas)
 						    }
 						});
@@ -136,8 +139,9 @@ $(document).ready(function(){
 		var _nome = $("#header-modal-atividade").text();
     	var _descricao = ($(".description textarea").val() ? $(".description textarea").val() : $(".description p").text());
     	var _idDemandaLista = $("#lstListas .menu .selected").attr("data-id");
+    	var idAtividade = $("#idAtividade").val();
     	
-		var atividade = {id : $("#idAtividade").val(), 
+		var atividade = {id : idAtividade, 
 						 nome: _nome,
 						 descricao: _descricao,
 						 idDemandaLista: _idDemandaLista};
@@ -149,6 +153,12 @@ $(document).ready(function(){
 		    data: JSON.stringify(atividade),
 		    success: function() {
 				$(".ui.basic.modal").modal("hide");
+				
+		    	
+		    	if(_idDemandaLista){
+		    		var atividade = $(".card-atividade[data-idAtividade= "+idAtividade+"]");
+		    		$(".lista-atividade[id="+_idDemandaLista+"] .atividades").append(atividade);
+		    	}
 		    }
 		});
 	});
@@ -182,7 +192,7 @@ function getLineListas(item){
 					
 						<c:forEach items="${lista.lstAtividades}" var="atividade" varStatus="i">
 							<c:set var="contador" value="${i.count}"/>
-							<div class="card-atividade" id="${atividade.id}" draggable="true">
+							<div class="card-atividade" id="${atividade.id}" data-idAtividade="${atividade.id}" draggable="true">
 								<label>
 									${atividade.nome}
 								</label>

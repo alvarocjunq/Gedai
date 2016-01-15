@@ -138,7 +138,7 @@
 .lista-atividade.over{
 	background-color: #d01919 !important
 }
-.card-atividade * { pointer-events: none; }
+/* .card-atividade * { pointer-events: none; } */
 .card-atividade{
     padding-bottom: 5px;
     padding-top: 5px;
