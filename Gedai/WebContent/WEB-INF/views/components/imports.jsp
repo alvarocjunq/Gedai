@@ -13,7 +13,7 @@
 	
 	<script type="text/javascript" src="resources/js/jquery-2.1.4.jsx"></script>
 	<script type="text/javascript" src="resources/js/semantic.min.jsx"></script>
-	<script type="text/javascript" src="resources/js/alertify.min.js"></script>
+	<script type="text/javascript" src="resources/js/alertify.min.jsx"></script>
 	<script type="text/javascript" src="resources/js/functions.jsx"></script>
 	
 </head>
