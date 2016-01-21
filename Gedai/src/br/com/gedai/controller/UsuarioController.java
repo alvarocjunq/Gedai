@@ -48,7 +48,7 @@ public class UsuarioController {
 
 		session.setAttribute(ConfigEnum.USUARIO_LOGADO.getValor(), usuarioBanco);
 		
-		return "redirect:demanda";
+		return "redirect:area";
 	}
 	
 	@RequestMapping("logout")

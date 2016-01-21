@@ -29,7 +29,6 @@
 		WHERE ID_DEMANDA = #{idDemanda}
 	</select>
 	
-	
 	<select id="obterQtdAtividadePorLista" resultMap="mapQtdPorLista">
 		SELECT COUNT(1) AS QTD,
 		       TB_DEMANDA_LISTA.NOME as nome

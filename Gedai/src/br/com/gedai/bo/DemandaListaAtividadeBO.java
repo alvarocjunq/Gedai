@@ -20,6 +20,7 @@ public class DemandaListaAtividadeBO {
 	
 	public DemandaListaAtividade obterPorId(Integer idDemandaListaAtividade){
 		DemandaListaAtividade atividade = demandaListaAtividadeMapper.obterPorId(idDemandaListaAtividade);
+		atividade.setDescricao(StringUtils.quebraDeLinha(atividade.getDescricao()));
 		atividade.setLstAtividadeUsuario(demandaListaAtividadeUsuarioBO.obterPorAtividade(atividade.getId()));
 		return atividade;
 	}

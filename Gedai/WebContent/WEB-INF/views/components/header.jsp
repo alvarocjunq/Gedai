@@ -11,7 +11,7 @@ $(document).ready(function(){
 	
 	$(".item-header-icon").click(function(e){
 		e.stopPropagation();
-		go("demanda");
+		go("area");
 	});
 	
 });
@@ -28,7 +28,7 @@ $(document).ready(function(){
 		    Demandas
 		    <i class="dropdown icon"></i>
 		    <div class="menu">
-	    		<c:forEach items="${demandas}" var="demanda" >
+	    		<c:forEach items="${demandasAll}" var="demanda" >
 		      		<div class="item item-menu" data-id="${demanda.id}">${demanda.nome}</div>
 	      		</c:forEach>
 		    </div>

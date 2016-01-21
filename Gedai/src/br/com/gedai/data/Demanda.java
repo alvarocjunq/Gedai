@@ -10,6 +10,7 @@ public class Demanda implements Serializable {
 	private Integer id;
 	private Integer progresso;
 	private String nome;
+	private String descricao;
 	private List<DemandaLista> lstProgressoRacional;
 	
 	public Demanda() {	}
@@ -44,5 +45,13 @@ public class Demanda implements Serializable {
 
 	public void setLstProgressoRacional(List<DemandaLista> lstProgressoRacional) {
 		this.lstProgressoRacional = lstProgressoRacional;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 }

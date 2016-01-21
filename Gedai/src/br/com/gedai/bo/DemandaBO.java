@@ -27,11 +27,25 @@ public class DemandaBO {
 
 	public List<Demanda> obterTodos() {
 		List<Demanda> lista = demandaMapper.obterTodos();
+		setProgresso(lista);
+		return lista;
+	}
+	
+	public List<Demanda> obterPorArea(Integer idArea) {
+		List<Demanda> lista = demandaMapper.obterPorArea(idArea);
+		setProgresso(lista);
+		return lista;
+	}
+
+	public Demanda obterPorId(Integer id){
+		return demandaMapper.obterPorId(id);
+	}
+	
+	private void setProgresso(List<Demanda> lista) {
 		for(Demanda d: lista){
 			d.setProgresso(demandaListaBO.obterProgresso(d.getId()));
 			d.setLstProgressoRacional(demandaListaBO.obterProgressoRacional(d.getId()));
 		}
-		return lista;
 	}
 
 }

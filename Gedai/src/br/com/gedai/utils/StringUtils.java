@@ -31,6 +31,10 @@ public class StringUtils {
 		
 	}
 	
+	public static String quebraDeLinha(String value){
+		return (value != null ? value.replaceAll("\n", "<br>") : null);
+	}
+	
 	public static String nullToEmpty(String value){
 		return (value == null  || "null".equals(value)? "" : value.trim());
 	}

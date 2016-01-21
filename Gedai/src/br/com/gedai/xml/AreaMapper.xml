@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="br.com.gedai.mapper.AreaMapper">
+
+	<resultMap id="mapSimples" type="br.com.gedai.data.Area">
+		<id property="id" column="ID" />
+		<result property="nome" column="NOME" />
+	</resultMap>
+	
+	<sql id="selectSimples">
+		SELECT ID,
+		       NOME
+		FROM TB_AREA
+	</sql>
+	
+	<select id="obterTodos" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+	</select>
+	
+</mapper>

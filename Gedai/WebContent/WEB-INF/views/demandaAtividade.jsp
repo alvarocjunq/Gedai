@@ -16,7 +16,7 @@ $(document).ready(function(){
 		var id = $(this).attr("id");
 		$("#idAtividade").val(id);
 		
-		$('.ui.basic.modal')
+		$('.ui.long.modal')
 				.modal({
 				    onShow: function(){
 						$.ajax({
@@ -25,7 +25,7 @@ $(document).ready(function(){
 						    contentType : "application/json",
 						    success: function(data) {
 						    	$("#header-modal-atividade").text(data.nome);
-						    	$(".description p").text(data.descricao);
+						    	$(".description p").html(data.descricao);
 						    }
 						});
 				    	
@@ -60,7 +60,7 @@ $(document).ready(function(){
 		e.stopPropagation();
 		var id = guid();
 		var card = "";
-		card = card.concat("<div class='card-atividade'><textarea id='", id, "'></textarea></div>"); 
+		card = card.concat("<div class='card-atividade'><textarea maxlength='100' id='", id, "'></textarea></div>"); 
 		$(this).parent().parent().find(".atividades").append(card);
 		$("#"+id).focus();	
 		$(this).parent().find(".salvar-atividade").css("visibility", "visible");
@@ -130,9 +130,10 @@ $(document).ready(function(){
 	$(".description").click(function(e){
 		e.stopPropagation();
 		var p = $(this).find("p");
-		var texto = p.text();
+		var texto = p.html();
+		texto = texto.replace(/<br>/g, '\n');
 		p.replaceWith("<textarea>"+texto+"</textarea>");
-		
+		$(this).find("textarea").focus();
 	});
 	
 	$("#salvar-modal").click(function(){
@@ -152,11 +153,16 @@ $(document).ready(function(){
 		    contentType : "application/json",
 		    data: JSON.stringify(atividade),
 		    success: function() {
-				$(".ui.basic.modal").modal("hide");
-				
+				$(".ui.modal").modal("hide");
 		    	
 		    	if(_idDemandaLista){
 		    		var atividade = $(".card-atividade[data-idAtividade= "+idAtividade+"]");
+		    		var contListaAnterior = parseInt(atividade.closest(".ui.card").find(".floating.ui.label").text()) - 1;
+		    		var contListaPosterior = parseInt($(".contador[data-idDemandaLista="+_idDemandaLista+"]").text()) +1;
+		    		
+		    		atividade.closest(".ui.card").find(".floating.ui.label").text(contListaAnterior);
+		    		$(".contador[data-idDemandaLista="+_idDemandaLista+"]").text(contListaPosterior);
+		    		
 		    		$(".lista-atividade[id="+_idDemandaLista+"] .atividades").append(atividade);
 		    	}
 		    }
@@ -180,7 +186,7 @@ function getLineListas(item){
 <input type="hidden" value="" id="idAtividade"/>
 <div id="content" class="conteudo">
 
-	<h3 class="ui header header-atividades">${nomeDemanda}</h3>
+	<h3 class="ui header header-atividades">${demanda.nome} <small>${demanda.descricao}</small></h3>
 	<div class="ui large horizontal list">
 	
 	<c:forEach items="${listas}" var="lista" >
@@ -208,7 +214,7 @@ function getLineListas(item){
 					  	<label class="nova-atividade">Nova atividade <i class="plus square outline icon"></i></label> 
 			    	</div>
 		    	</div>
-		    	<div class="floating ui green label">${contador}</div>
+		    	<div class="floating ui green label contador" data-idDemandaLista="${lista.id}">${contador}</div>
 	    	</div>
 		</div>
 	</c:forEach>

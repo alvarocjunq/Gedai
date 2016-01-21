@@ -24,11 +24,12 @@ public class DemandaListaController {
 	private DemandaBO demandaBO; 
 	
 	@RequestMapping("atividade")
-	public String demanda(Model model, Integer idDemanda, String nome) {
+	public String demanda(Model model, Integer idDemanda, Integer idArea) {
 		model.addAttribute("listas", demandaListaBO.obterPorDemanda(idDemanda));
 		model.addAttribute("idDemanda", idDemanda);
 		model.addAttribute("demandas", demandaBO.obterTodos());
-		model.addAttribute("nomeDemanda", nome);
+		model.addAttribute("demanda", demandaBO.obterPorId(idDemanda));
+		model.addAttribute("demandasAll", demandaBO.obterPorArea(idArea));
 		return "demandaAtividade";
 	}
 	

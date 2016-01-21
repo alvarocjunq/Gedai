@@ -6,16 +6,31 @@
 	<resultMap id="mapSimples" type="br.com.gedai.data.Demanda">
 		<id property="id" column="ID" />
 		<result property="nome" column="NOME" />
+		<result property="descricao" column="DESCRICAO" />
 	</resultMap>
 	
 	<sql id="selectSimples">
 		SELECT ID,
-		       NOME
+		       NOME,
+		       DESCRICAO
 		FROM TB_DEMANDA
 	</sql>
 	
 	<select id="obterTodos" resultMap="mapSimples">
 		<include refid="selectSimples"/>
+		ORDER BY NOME
+	</select>
+	
+	<select id="obterPorId" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		WHERE ID = #{id}
+	</select>
+	
+	
+	<select id="obterPorArea" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		WHERE ID_AREA = #{idArea}
+		ORDER BY NOME
 	</select>
 	
 	<update id="update">

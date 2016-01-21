@@ -35,9 +35,7 @@ $(document).ready(function(){
 	
 	$(".card-demanda").click(function(e){
 		e.stopPropagation();
-		
-		go("atividade?idDemanda=".concat($(this).attr("data-idDemanda"), 
-					 "&nome=", $(this).find("h4").text()));
+		go("atividade?idDemanda=".concat($(this).attr("data-idDemanda"), "&idArea=", $("#idArea").val()));
 	});
 });
 </script>
@@ -46,8 +44,10 @@ $(document).ready(function(){
 
 <c:import url="/WEB-INF/views/components/header.jsp" />
 	
+<input type="hidden" value="${idArea}" id="idArea" />
 <div id="content" class="conteudo">
 	<div class="ui three column grid">
+	<div class="ui link cards">
 		<c:forEach items="${demandas}" var="demanda">
 		
 			<div class="status-demanda" id="${demanda.id}">
@@ -58,9 +58,12 @@ $(document).ready(function(){
 					</div>
 				</c:forEach>
 			</div>
-			
-		    <gedai:cardDemanda progress="${demanda.progresso}" label="${demanda.nome}" id="${demanda.id}" />
+	     <gedai:cardDemanda progress="${demanda.progresso}" 
+	    					label="${demanda.nome}" 
+	    					id="${demanda.id}" 
+	    					descricao="${demanda.descricao}" />
 		</c:forEach>
+	</div>
 	</div>
 </div>
 
