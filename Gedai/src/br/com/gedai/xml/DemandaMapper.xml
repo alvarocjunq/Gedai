@@ -7,12 +7,14 @@
 		<id property="id" column="ID" />
 		<result property="nome" column="NOME" />
 		<result property="descricao" column="DESCRICAO" />
+		<result property="uuid" column="UUID" />
 	</resultMap>
 	
 	<sql id="selectSimples">
 		SELECT ID,
 		       NOME,
-		       DESCRICAO
+		       DESCRICAO,
+		       UUID
 		FROM TB_DEMANDA
 	</sql>
 	
@@ -26,6 +28,10 @@
 		WHERE ID = #{id}
 	</select>
 	
+	<select id="obterPorUUID" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		WHERE UUID = #{uuid}
+	</select>
 	
 	<select id="obterPorArea" resultMap="mapSimples">
 		<include refid="selectSimples"/>
@@ -35,15 +41,23 @@
 	
 	<update id="update">
 		UPDATE TB_DEMANDA
-		   SET NOME = #{nome}
+		   SET NOME = #{nome},
+		   	   DESCRICAO = #{descricao}
 		WHERE ID = #{id}
 	</update>
 	
 	<insert id="insert">
 		INSERT INTO TB_DEMANDA
-			(NOME)
+			(NOME, 
+			ID_AREA, 
+			DESCRICAO, 
+			UUID)
 		VALUES
-			(#{nome})
+			(#{nome},
+			#{idArea},
+			#{descricao},
+			#{uuid}
+			)
 	</insert>
 	
 </mapper>

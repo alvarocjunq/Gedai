@@ -51,10 +51,6 @@ function clearAll(container){
 	});
 }
 
-//function alerta(msg, type) {
-//	humane.log(msg, { baseCls: 'humane-jackedup', addnCls: 'humane-jackedup-'+type });
-//}
-
 function getOptionCombo(value, text){
 	return "<option value='".concat(value, "'>", text, "</option>");
 }

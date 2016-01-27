@@ -27,7 +27,6 @@ public class DemandaListaController {
 	public String demanda(Model model, Integer idDemanda, Integer idArea) {
 		model.addAttribute("listas", demandaListaBO.obterPorDemanda(idDemanda));
 		model.addAttribute("idDemanda", idDemanda);
-		model.addAttribute("demandas", demandaBO.obterTodos());
 		model.addAttribute("demanda", demandaBO.obterPorId(idDemanda));
 		model.addAttribute("demandasAll", demandaBO.obterPorArea(idArea));
 		return "demandaAtividade";

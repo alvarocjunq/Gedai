@@ -8,6 +8,7 @@
 		<result property="idDemandaLista" column="ID_DEMANDA_LISTA" />
 		<result property="nome" column="NOME" />
 		<result property="descricao" column="DESCRICAO" />
+		<result property="uuid" column="UUID" />
 		<association property="statusAtividade" column="ID_STATUS_ATIVIDADE"	
 					 select="br.com.gedai.mapper.StatusAtividadeMapper.obterPorId"/>
 	</resultMap>
@@ -17,7 +18,8 @@
 		       ID_DEMANDA_LISTA,
 		       ID_STATUS_ATIVIDADE,
 		       NOME,
-		       DESCRICAO
+		       DESCRICAO,
+		       UUID
 		FROM TB_DEMANDA_LISTA_ATIVIDADE
 	</sql>
 	
@@ -26,6 +28,14 @@
 		WHERE ID = #{idDemandaListaAtividade}
 	</select>
 
+	<select id="obterPorUUID" resultMap="mapSimples">
+		<include refid="selectSimples" />
+		WHERE UUID IN
+		<foreach item="item" index="index" collection="lstUuid" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</select>
+	
 	<select id="obterPorLista" resultMap="mapSimples">
 		<include refid="selectSimples" />
 		WHERE ID_DEMANDA_LISTA = #{idDemandaLista}
@@ -54,14 +64,16 @@
 		  ID_DEMANDA_LISTA,
 		  ID_STATUS_ATIVIDADE,
 		  NOME,
-		  DESCRICAO
+		  DESCRICAO,
+		  UUID
 		)
 		VALUES
 		(
 		  #{idDemandaLista},
 		  #{statusAtividade.id},
 		  #{nome},
-		  #{descricao}
+		  #{descricao},
+		  #{uuid}
 		)
 	</insert>
 	

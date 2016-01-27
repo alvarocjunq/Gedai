@@ -3,6 +3,7 @@ package br.com.gedai.data;
 import java.io.Serializable;
 import java.util.List;
 
+
 public class Demanda implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -11,7 +12,9 @@ public class Demanda implements Serializable {
 	private Integer progresso;
 	private String nome;
 	private String descricao;
+	private String idArea;
 	private List<DemandaLista> lstProgressoRacional;
+	private String uuid;
 	
 	public Demanda() {	}
 
@@ -54,4 +57,23 @@ public class Demanda implements Serializable {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	public String getIdArea() {
+		return idArea;
+	}
+
+	public void setIdArea(String idArea) {
+		this.idArea = idArea;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	
+	
 }

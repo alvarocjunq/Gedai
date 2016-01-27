@@ -3,9 +3,13 @@ package br.com.gedai.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.gedai.bo.DemandaBO;
 import br.com.gedai.data.Demanda;
@@ -24,4 +28,10 @@ public class DemandaController {
 		model.addAttribute("idArea", idArea);
 		return "demanda";
 	}
+	@RequestMapping(value = "inserirDemanda", method = RequestMethod.POST, 
+			produces = MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Demanda inserirDemanda(@RequestBody Demanda demanda){
+		return this.demandaBO.insert(demanda);
+	}
+	
 }

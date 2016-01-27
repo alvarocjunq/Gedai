@@ -13,9 +13,18 @@ public class DemandaListaAtividade implements Serializable {
 	private String nome;
 	private String descricao;
 	private List<DemandaListaAtividadeUsuario> lstAtividadeUsuario;
+	private String uuid;
 	
 	public DemandaListaAtividade() {
 		statusAtividade = new StatusAtividade();
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public Integer getId() {
@@ -66,4 +75,5 @@ public class DemandaListaAtividade implements Serializable {
 			List<DemandaListaAtividadeUsuario> lstAtividadeUsuario) {
 		this.lstAtividadeUsuario = lstAtividadeUsuario;
 	}
+	
 }

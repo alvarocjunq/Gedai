@@ -21,9 +21,8 @@ public class DemandaListaAtividadeController {
 	
 	@RequestMapping(value = "inserirAtividades", method = RequestMethod.POST, 
 					produces = MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody boolean inserirAtividades(@RequestBody List<DemandaListaAtividade> atividades) {
-		demandaListaAtividadeBO.insert(atividades);
-		return true;
+	public @ResponseBody List<DemandaListaAtividade> inserirAtividades(@RequestBody List<DemandaListaAtividade> atividades) {
+		return demandaListaAtividadeBO.insert(atividades);
 	}
 	
 	@RequestMapping(value="atualizarAtividade", method=RequestMethod.POST, 

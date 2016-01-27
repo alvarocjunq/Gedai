@@ -1,5 +1,6 @@
 package br.com.gedai.bo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,13 @@ public class DemandaListaAtividadeBO {
 		return atividade;
 	}
 	
-	public void insert(List<DemandaListaAtividade> atividades) {
-		for(DemandaListaAtividade dla: atividades)
+	public List<DemandaListaAtividade> insert(List<DemandaListaAtividade> atividades) {
+		List<String> lstUuid = new ArrayList<String>();
+		for(DemandaListaAtividade dla: atividades){
 			demandaListaAtividadeMapper.insert(dla);
+			lstUuid.add(dla.getUuid());
+		}
+		return demandaListaAtividadeMapper.obterPorUUID(lstUuid);
 	}
 
 	public void update(DemandaListaAtividade demandaListaAtividade) {

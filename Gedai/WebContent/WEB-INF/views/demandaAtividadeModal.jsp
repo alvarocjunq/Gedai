@@ -1,9 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <div class="ui long modal">
 	<i class="close icon"></i>
 	
-	<div class="header" id="header-modal-atividade"></div>
+	<div class="header header-modal" id="header-modal-atividade"></div>
 	
 	<div class="image content">
 		<div class="image">

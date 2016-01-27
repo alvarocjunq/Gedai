@@ -16,7 +16,7 @@
 	
 	<select id="obterPorId" resultMap="mapSimples">
 		<include refid="selectSimples"/>
-		WHERE id = #{id}
+		WHERE ID = #{id}
 	</select>
 	
 </mapper>

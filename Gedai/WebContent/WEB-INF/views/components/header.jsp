@@ -29,7 +29,7 @@ $(document).ready(function(){
 		    <i class="dropdown icon"></i>
 		    <div class="menu">
 	    		<c:forEach items="${demandasAll}" var="demanda" >
-		      		<div class="item item-menu" data-id="${demanda.id}">${demanda.nome}</div>
+		      		<div class="item item-menu" data-id="${demanda.id}">${demanda.nome} ${demanda.descricao}</div>
 	      		</c:forEach>
 		    </div>
 		  </div>

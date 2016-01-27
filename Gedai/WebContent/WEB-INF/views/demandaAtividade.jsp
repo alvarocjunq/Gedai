@@ -11,50 +11,6 @@ $(document).ready(function(){
 	$('.ui.dropdown').dropdown();
 	$('.dropdown').dropdown({direction: 'upward'});
 	
-	$(".card-atividade").click(function(e){
-		e.stopPropagation();
-		var id = $(this).attr("id");
-		$("#idAtividade").val(id);
-		
-		$('.ui.long.modal')
-				.modal({
-				    onShow: function(){
-						$.ajax({
-						    url: "obterAtividade?idAtividade="+id,
-						    type: 'GET',
-						    contentType : "application/json",
-						    success: function(data) {
-						    	$("#header-modal-atividade").text(data.nome);
-						    	$(".description p").html(data.descricao);
-						    }
-						});
-				    	
-						$.ajax({
-						    url: "obterListas?idDemanda="+$("#idDemanda").val(),
-						    type: 'GET',
-						    contentType : "application/json",
-						    success: function(lista) {
-						    	$("#lstListas .menu .item").removeClass(".active");
-						    	$("#lstListas .menu .item").removeClass(".selected");
-						    	$("#lstListas .text").text("Mover para...");
-						    	loadTable("lstListas .menu", lista, getLineListas)
-						    }
-						});
-				    	
-				    },
-				    onHidden: function(){
-				    	$("#header-modal-atividade").text("");
-				    	
-				    	if($(".description p"))
-					    	$(".description p").text("");
-				    		
-				    	if($(".description textarea"))
-				    		$(".description textarea").replaceWith("<p></p>");
-				    	
-				    }
-			  	})
-			  	.modal('show');
-	});
 	
 	$(".nova-atividade").click(function(e){
 		e.stopPropagation();
@@ -90,14 +46,23 @@ $(document).ready(function(){
 		var lstAtividades = demandaLista.find(".atividades");
 		var idLista = demandaLista.attr("id");
 		
+		
 		var atividades = [];
 		var nomeAtividade = "";
-		
+		var newTextArea;
+		var uuid ="";
+		var contListaAnterior;
+		var contListaPosterior;
+		var atividade;
 		lstAtividades.find(".card-atividade").each(function(){
-			nomeAtividade = $(this).find("textarea").val();
+			newTextArea = $(this).find("textarea");
+			nomeAtividade = newTextArea.val();
+			uuid = newTextArea.attr('id');
+			
 			if(nomeAtividade){
 				atividades.push({	idDemandaLista : idLista, 
-								 	nome : nomeAtividade
+								 	nome : nomeAtividade,
+								 	uuid:  uuid
 								});
 			}
 		})
@@ -107,25 +72,37 @@ $(document).ready(function(){
 		    type: 'POST',
 		    contentType : "application/json",
 		    data: JSON.stringify(atividades),
-		    success: function() {
-		    	
+		    success: function(lista) {
 				lstAtividades.find(".card-atividade").each(function(){
-					var textArea = $(this).find("textarea");
+					var _this = $(this);
+					var textArea = _this.find("textarea");
 					nomeAtividade = textArea.val();
-					
 					if(nomeAtividade == "")
-						$(this).remove();
-					
-					if(nomeAtividade !== "")
+						_this.remove();
+					if(nomeAtividade !== ""){
+						lista.forEach(function(item){
+							if(textArea.attr('id')===item.uuid){
+								_this.attr("id",item.id);
+								_this.attr("data-idAtividade",item.id);
+								_this.attr("onclick",'onclickAtividade(this)');
+							}
+							
+				    	});	
 						textArea.replaceWith("<label>" + nomeAtividade + "</label>");
-					
+					}
+			    	botaoSalvar.css("visibility", "hidden");
+			    	botaoSalvar.parent().find(".cancelar-atividade").css("visibility", "hidden");
+			    	
 				});
-		    	
-		    	botaoSalvar.css("visibility", "hidden");
-		    	botaoSalvar.parent().find(".cancelar-atividade").css("visibility", "hidden");
-		    }
+				if(idLista){
+					atividade = $(".card-atividade[data-idAtividade= "+idLista+"]");
+		    		contListaPosterior = parseInt($(".contador[data-idDemandaLista="+idLista+"]").text()) +1;
+		    		$(".contador[data-idDemandaLista="+idLista+"]").text(contListaPosterior);
+				}
+			}
 		});
 	});
+	
 	
 	$(".description").click(function(e){
 		e.stopPropagation();
@@ -171,6 +148,48 @@ $(document).ready(function(){
 	
 });
 
+function onclickAtividade(escopo){
+	var id = $(escopo).attr("id");
+	$("#idAtividade").val(id);
+	$('.ui.long.modal')
+			.modal({
+			    onShow: function(){
+					$.ajax({
+					    url: "obterAtividade?idAtividade="+id,
+					    type: 'GET',
+					    contentType : "application/json",
+					    success: function(data) {
+					    	$("#header-modal-atividade").text(data.nome);
+					    	$(".description p").html(data.descricao);
+					    }
+					});
+			    	
+					$.ajax({
+					    url: "obterListas?idDemanda="+$("#idDemanda").val(),
+					    type: 'GET',
+					    contentType : "application/json",
+					    success: function(lista) {
+					    	$("#lstListas .menu .item").removeClass(".active");
+					    	$("#lstListas .menu .item").removeClass(".selected");
+					    	$("#lstListas .text").text("Mover para...");
+					    	loadTable("lstListas .menu", lista, getLineListas)
+					    }
+					});
+			    	
+			    },
+			    onHidden: function(){
+			    	$("#header-modal-atividade").text("");
+			    	
+			    	if($(".description p"))
+				    	$(".description p").text("");
+			    		
+			    	if($(".description textarea"))
+			    		$(".description textarea").replaceWith("<p></p>");
+			    	
+			    }
+		  	})
+		  	.modal('show');
+}
 function getLineListas(item){
 	var linha="";
 	linha = linha.concat("<div class='item' data-id='", item.id,"'>", item.nome ,"</div>")
@@ -200,7 +219,7 @@ function getLineListas(item){
 					
 						<c:forEach items="${lista.lstAtividades}" var="atividade" varStatus="i">
 							<c:set var="contador" value="${i.count}"/>
-							<div class="card-atividade" id="${atividade.id}" data-idAtividade="${atividade.id}" draggable="true">
+							<div class="card-atividade" onclick="onclickAtividade(this);" id="${atividade.id}" data-idAtividade="${atividade.id}" draggable="true">
 								<label>
 									${atividade.nome}
 								</label>

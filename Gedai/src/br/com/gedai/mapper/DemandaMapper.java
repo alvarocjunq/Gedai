@@ -14,4 +14,5 @@ public interface DemandaMapper {
 	List<Demanda> obterTodos();
 	List<Demanda> obterPorArea(Integer idArea);
 	Demanda obterPorId(Integer id);
+	Demanda obterPorUUID(String uuid);
 }

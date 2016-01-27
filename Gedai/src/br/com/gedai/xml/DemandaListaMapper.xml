@@ -10,7 +10,7 @@
 		<association property="tipoLista" column="ID_TIPO_LISTA"	
 					 select="br.com.gedai.mapper.TipoListaMapper.obterPorId"/>
 	</resultMap>
-
+	
 	<resultMap id="mapQtdPorLista" type="br.com.gedai.data.DemandaLista">
 		<result property="nome" column="NOME" />
 		<result property="qtd" column="QTD" />

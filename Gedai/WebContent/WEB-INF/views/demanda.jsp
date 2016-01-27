@@ -35,9 +35,37 @@ $(document).ready(function(){
 	
 	$(".card-demanda").click(function(e){
 		e.stopPropagation();
-		go("atividade?idDemanda=".concat($(this).attr("data-idDemanda"), "&idArea=", $("#idArea").val()));
+		onclickDemanda($(this));
+	});
+	
+	
+	$(".card-novaDemanda").click(function(e){
+		clearAll(".ui.grid.grid-modal");
+		$(".small.modal").modal('show');
+		
+	});
+	
+	$("#salvar-demanda").click(function(e){
+		var demanda = {nome: 		$("#nome").val(),
+					   descricao: 	$("#descricao").val(),
+					   idArea:		$("#idArea").val(),
+					   uuid:		guid()};
+		$.ajax({
+		    url: "inserirDemanda",
+		    type: 'POST',
+		    contentType : "application/json",
+		    data: JSON.stringify(demanda),
+		    success: function(json) {
+		    	$("#template-novaDemanda").tmpl(json).appendTo(".ui.link.cards");
+		    }
+		
+		});
 	});
 });
+
+function onclickDemanda(escopo){
+	go("atividade?idDemanda=".concat($(escopo).attr("data-idDemanda"), "&idArea=", $("#idArea").val()));
+}
 </script>
 
 <body>
@@ -47,25 +75,59 @@ $(document).ready(function(){
 <input type="hidden" value="${idArea}" id="idArea" />
 <div id="content" class="conteudo">
 	<div class="ui three column grid">
-	<div class="ui link cards">
-		<c:forEach items="${demandas}" var="demanda">
-		
-			<div class="status-demanda" id="${demanda.id}">
-				<c:forEach items="${demanda.lstProgressoRacional}" var="status">
-					<div>
-						<label data-nome>${status.nome}</label> 
-						<label data-qtd>${status.qtd}</label>
-					</div>
-				</c:forEach>
+		<div class="ui link cards">
+			<c:forEach items="${demandas}" var="demanda">
+			
+				<div class="status-demanda" id="${demanda.id}">
+					<c:forEach items="${demanda.lstProgressoRacional}" var="status">
+						<div>
+							<label data-nome>${status.nome}</label> 
+							<label data-qtd>${status.qtd}</label>
+						</div>
+					</c:forEach>
+				</div>
+		     <gedai:cardDemanda progress="${demanda.progresso}" 
+		    					label="${demanda.nome}" 
+		    					id="${demanda.id}" 
+		    					descricao="${demanda.descricao}" />
+			</c:forEach>
+			<script id="template-novaDemanda" type="text/x-jquery-tmpl">
+				<div class="card card-demanda" onclick="onclickDemanda(this);" data-idDemanda="\${id}">
+			    	<div class="content">
+			      		<img class="right floated mini ui image mini-image-card" src="resources/img/sabre-de-luz.png">
+			      		<div class="header">
+			      	  		\${nome}
+			      		</div>
+			      		<div class="description">
+			     			\${descricao}
+			      		</div>
+			    	</div>
+			    	<div class="extra content">
+				    	<div class="ui progress green card-demanda-pos" id="\${id}">
+							<div class="bar progress-demanda" style="width: 0%;">
+					  			<div class="progress">0%</div>
+					  		</div>
+						</div>
+			    	</div>
+			  </div>
+			</script>
+			<div id="novaDemanda"></div>
+		</div>
+		<div class="ui cards">
+				<div class="card">
+			    	<div class="content">
+			    		<div class="header">Criar nova demanda</div>
+			    		<div class="description"></div>
+			    		<div class="ui bottom attached button card-novaDemanda">
+			    			<i class="add icon "></i>
+			    		</div>
+			    	</div>
+			    </div>
 			</div>
-	     <gedai:cardDemanda progress="${demanda.progresso}" 
-	    					label="${demanda.nome}" 
-	    					id="${demanda.id}" 
-	    					descricao="${demanda.descricao}" />
-		</c:forEach>
+		
 	</div>
-	</div>
+	
 </div>
-
+	<c:import url="demandaInserirModal.jsp" />
 </body>
 </html>
