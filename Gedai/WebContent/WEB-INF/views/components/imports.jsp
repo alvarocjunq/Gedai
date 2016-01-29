@@ -12,7 +12,7 @@
 	<link type="text/css" rel="stylesheet" href="resources/css/alertify.default.css" />
 	
 	<script type="text/javascript" src="resources/js/jquery-2.1.4.jsx"></script>
-	<script type="text/javascript" src="resources/js/jquery.tmpl.mim.jsx"></script>
+	<script type="text/javascript" src="resources/js/jquery.tmpl.min.jsx"></script>
 	<script type="text/javascript" src="resources/js/jquery.tmplPlus.jsx"></script>
 	<script type="text/javascript" src="resources/js/semantic.min.jsx"></script>
 	<script type="text/javascript" src="resources/js/alertify.min.jsx"></script>

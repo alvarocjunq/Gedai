@@ -6,12 +6,17 @@
 	<resultMap id="mapSimples" type="br.com.gedai.data.Area">
 		<id property="id" column="ID" />
 		<result property="nome" column="NOME" />
+		<result property="nivel" column="NIVEL" />
+		<result property="coluna" column="COLUNA" />
 	</resultMap>
 	
 	<sql id="selectSimples">
 		SELECT ID,
-		       NOME
+		       NOME,
+		       NIVEL, 
+		       COLUNA
 		FROM TB_AREA
+		ORDER BY NIVEL, COLUNA
 	</sql>
 	
 	<select id="obterTodos" resultMap="mapSimples">

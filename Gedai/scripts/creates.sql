@@ -96,3 +96,6 @@ ALTER TABLE tb_demanda_lista_atividade_usuario
   ON DELETE NO ACTION;
 
 
+
+alter table TB_AREA add column nivel integer;
+alter table TB_AREA add column coluna integer;

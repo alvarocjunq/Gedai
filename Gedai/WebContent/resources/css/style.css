@@ -4,3 +4,7 @@
 .padding-top-150{padding-top: 150px !important;}
 
 .bold{font-weight: bold;}
+
+.hidden{display: none;}
+.visibility-false{visibility: hidden !important;}
+.visibility-true{visibility: visible !important;}
