@@ -12,7 +12,7 @@ public class Demanda implements Serializable {
 	private Integer progresso;
 	private String nome;
 	private String descricao;
-	private String idArea;
+	private Integer idArea;
 	private List<DemandaLista> lstProgressoRacional;
 	private String uuid;
 	
@@ -58,11 +58,11 @@ public class Demanda implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public String getIdArea() {
+	public Integer getIdArea() {
 		return idArea;
 	}
 
-	public void setIdArea(String idArea) {
+	public void setIdArea(Integer idArea) {
 		this.idArea = idArea;
 	}
 

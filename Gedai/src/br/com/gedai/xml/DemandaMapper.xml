@@ -8,13 +8,15 @@
 		<result property="nome" column="NOME" />
 		<result property="descricao" column="DESCRICAO" />
 		<result property="uuid" column="UUID" />
+		<result property="idArea" column="ID_AREA" />
 	</resultMap>
 	
 	<sql id="selectSimples">
 		SELECT ID,
 		       NOME,
 		       DESCRICAO,
-		       UUID
+		       UUID,
+		       ID_AREA
 		FROM TB_DEMANDA
 	</sql>
 	

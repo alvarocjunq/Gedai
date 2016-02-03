@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.gedai.bo.DemandaBO;
 import br.com.gedai.bo.DemandaListaBO;
+import br.com.gedai.data.Demanda;
 import br.com.gedai.data.DemandaLista;
 
 @Controller
@@ -27,8 +28,9 @@ public class DemandaListaController {
 	public String demanda(Model model, Integer idDemanda, Integer idArea) {
 		model.addAttribute("listas", demandaListaBO.obterPorDemanda(idDemanda));
 		model.addAttribute("idDemanda", idDemanda);
-		model.addAttribute("demanda", demandaBO.obterPorId(idDemanda));
-		model.addAttribute("demandasAll", demandaBO.obterPorArea(idArea));
+		Demanda demanda = demandaBO.obterPorId(idDemanda);
+		model.addAttribute("demanda", demanda);
+		model.addAttribute("demandasAll", demandaBO.obterPorArea(demanda.getIdArea()));
 		return "demandaAtividade";
 	}
 	

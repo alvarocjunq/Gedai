@@ -1,6 +1,7 @@
 package br.com.gedai.data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class DemandaListaAtividade implements Serializable {
@@ -9,15 +10,57 @@ public class DemandaListaAtividade implements Serializable {
 	
 	private Integer id;
 	private Integer idDemandaLista;
+	private String nomeDemandaLista;
 	private StatusAtividade statusAtividade;
 	private String nome;
 	private String descricao;
 	private List<DemandaListaAtividadeUsuario> lstAtividadeUsuario;
 	private String uuid;
+	private Usuario usuarioLogado;
+	private Date dataInclusao;
+	private Date dataFinalizacao;
 	
 	public DemandaListaAtividade() {
 		statusAtividade = new StatusAtividade();
 	}
+	
+	
+	public Date getDataFinalizacao() {
+		return dataFinalizacao;
+	}
+
+
+	public void setDataFinalizacao(Date dataFinalizacao) {
+		this.dataFinalizacao = dataFinalizacao;
+	}
+
+
+	public String getNomeDemandaLista() {
+		return nomeDemandaLista;
+	}
+	public void setNomeDemandaLista(String nomeDemandaLista) {
+		this.nomeDemandaLista = nomeDemandaLista;
+	}
+
+	public Usuario getUsuarioLogado() {
+		return usuarioLogado;
+	}
+
+
+	public Date getDataInclusao() {
+		return dataInclusao;
+	}
+
+
+	public void setUsuarioLogado(Usuario usuarioLogado) {
+		this.usuarioLogado = usuarioLogado;
+	}
+
+
+	public void setDataInclusao(Date dataInclusao) {
+		this.dataInclusao = dataInclusao;
+	}
+
 
 	public String getUuid() {
 		return uuid;

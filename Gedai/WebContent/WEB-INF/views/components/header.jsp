@@ -5,8 +5,9 @@ $(document).ready(function(){
 	
 	$(".item-menu").click(function(e){
 		e.stopPropagation();
+		var idArea = ($.urlParam('idArea') == null ? "": $.urlParam('idArea'));
 		go("atividade?idDemanda=".concat($(this).attr("data-id"),
-				"&nome=", $(this).text()));	
+				"&idArea=", idArea));	
 	});
 	
 	$(".item-header-icon").click(function(e){
@@ -35,8 +36,6 @@ $(document).ready(function(){
 		  </div>
 		</div>
 	 	
-<!-- 		<a class="active item">Demandas</a>  -->
-<!-- 		<a class="item">Amigos </a> -->
 		<div class="right menu">
 			<a class="ui item" href="logout">Sair</a>
 		</div>

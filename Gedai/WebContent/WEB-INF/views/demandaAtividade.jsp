@@ -114,15 +114,19 @@ $(document).ready(function(){
 	});
 	
 	$("#salvar-modal").click(function(){
+		
+		var demandaLista = $("#lstListas .menu .selected");
 		var _nome = $("#header-modal-atividade").text();
     	var _descricao = ($(".description textarea").val() ? $(".description textarea").val() : $(".description p").text());
-    	var _idDemandaLista = $("#lstListas .menu .selected").attr("data-id");
+    	var _idDemandaLista = demandaLista.attr("data-id");
+    	var _textDemandaLista = demandaLista.text();
     	var idAtividade = $("#idAtividade").val();
     	
 		var atividade = {id : idAtividade, 
 						 nome: _nome,
 						 descricao: _descricao,
-						 idDemandaLista: _idDemandaLista};
+						 idDemandaLista: _idDemandaLista,
+						 nomeDemandaLista: _textDemandaLista};
 		
 		$.ajax({
 		    url: "atualizarAtividade",

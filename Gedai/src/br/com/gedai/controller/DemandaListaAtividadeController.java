@@ -2,6 +2,8 @@ package br.com.gedai.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -21,8 +23,9 @@ public class DemandaListaAtividadeController {
 	
 	@RequestMapping(value = "inserirAtividades", method = RequestMethod.POST, 
 					produces = MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<DemandaListaAtividade> inserirAtividades(@RequestBody List<DemandaListaAtividade> atividades) {
-		return demandaListaAtividadeBO.insert(atividades);
+	public @ResponseBody List<DemandaListaAtividade> inserirAtividades(@RequestBody List<DemandaListaAtividade> atividades,
+																	   HttpSession session) {
+		return demandaListaAtividadeBO.insert(atividades, session);
 	}
 	
 	@RequestMapping(value="atualizarAtividade", method=RequestMethod.POST, 

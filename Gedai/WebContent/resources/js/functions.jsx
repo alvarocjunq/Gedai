@@ -30,16 +30,6 @@ function isContentRequired(escopo){
 	return isValid;
 }
 
-//function setRequired(obj){
-//	obj.parent().addClass("has-error");
-//}
-//
-//function clearRequired(escopo){
-//	$(escopo + ".has-error").each(function(){
-//		$(this).removeClass("has-error");
-//	});
-//}
-
 function clearAll(container){
 	$(container+" input:text").each(function(){
 		$(this).val("");
@@ -59,13 +49,8 @@ function getOptionCombo(value, text){
 function loading(ligado){
 	if(ligado){
 		$("body").append("<div class='ui loader large' id='loader'></div>");
-//		if($("#conteudo") == undefined){
-//			$("#content").addClass("ui blurring segment dimmable dimmed");
-//			$("#content").append("<div class='ui simple dimmer' id='dimmerLoader'></div>");
-//		}else{
-			$(".conteudo").addClass("ui blurring segment dimmable dimmed");
-			$(".conteudo").append("<div class='ui simple dimmer' id='dimmerLoader'></div>");
-//		}
+		$(".conteudo").addClass("ui blurring segment dimmable dimmed");
+		$(".conteudo").append("<div class='ui simple dimmer' id='dimmerLoader'></div>");
 		$("#loader").addClass("active");
 	}
 	else{
@@ -202,4 +187,11 @@ function guid() {
 	}
 	return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
 	    s4() + '-' + s4() + s4() + s4();
+}
+
+$.urlParam = function(name){
+	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null)
+       return null;
+    return results[1] || 0;
 }
