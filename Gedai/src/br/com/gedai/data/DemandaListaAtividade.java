@@ -19,12 +19,19 @@ public class DemandaListaAtividade implements Serializable {
 	private Usuario usuarioLogado;
 	private Date dataInclusao;
 	private Date dataFinalizacao;
+	private Date dataInicio;
 	
 	public DemandaListaAtividade() {
 		statusAtividade = new StatusAtividade();
 	}
 	
-	
+	public Date getDataInicio() {
+		return dataInicio;
+	}
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
+	}
+
 	public Date getDataFinalizacao() {
 		return dataFinalizacao;
 	}

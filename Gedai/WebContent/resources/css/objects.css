@@ -145,6 +145,13 @@
 	font-size: 14px;
 }
 
+.footer-tarefa {
+	margin-top: 20px !important;
+	text-align: right;
+	cursor: pointer;
+	font-size: 14px;
+}
+
 .lista-atividade{
    background-color: #BC4949 !important;
    color: white;
@@ -153,7 +160,28 @@
 .lista-atividade.over{
 	background-color: #d01919 !important
 }
-/* .card-atividade * { pointer-events: none; } */
+
+.lista-daily-task{
+   background-color: #1678c2 !important;
+   color: white;
+}
+
+.task{
+	background-color: white;
+    color: black;
+    margin-top: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.task textarea {
+	width: 100%;
+	border: 0;
+    background-color: #EFEFEF;
+    resize: none;
+}
+
 .card-atividade{
     padding-bottom: 5px;
     padding-top: 5px;
@@ -179,6 +207,7 @@
     resize: none;
 }
 
+
 .nova-atividade{
 	padding: 7.5px;
     float: right;
@@ -194,6 +223,31 @@
 }
 
 .salvar-atividade{
+    float: left;
+    color: white;
+    background-color: #63B363;
+    padding: 10px;
+    border-radius: 2px;
+    visibility: hidden;
+    cursor: pointer;
+}
+
+
+.nova-tarefa{
+	padding: 7.5px;
+    float: right;
+    cursor: pointer;
+}
+
+.cancelar-tarefa{
+    float: left;
+    padding-left: 15px;
+    padding-top: 8px;
+    visibility: hidden;
+    cursor: pointer;
+}
+
+.salvar-tarefa{
     float: left;
     color: white;
     background-color: #63B363;
@@ -267,4 +321,14 @@
 .header-modal{
 	background-color: rgba(212, 212, 213, 0.54)!important;
     color: black !important;
+}
+
+.icon-task{
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+.contador-task{
+	float: right;
+	cursor: default !important;
 }

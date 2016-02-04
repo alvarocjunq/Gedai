@@ -8,3 +8,7 @@
 .hidden{display: none;}
 .visibility-false{visibility: hidden !important;}
 .visibility-true{visibility: visible !important;}
+
+.float-right{float: right;}
+
+.cursor-default{cursor: default !important;}

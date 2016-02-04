@@ -51,8 +51,18 @@ public class DemandaListaAtividadeBO {
 	public void update(DemandaListaAtividade demandaListaAtividade) {
 		StringUtils.emptyToNull(demandaListaAtividade);
 		
-		if(TipoListaEnum.FEITO.getNome().equals(demandaListaAtividade.getNomeDemandaLista()))
+		TipoListaEnum TIPO = TipoListaEnum.getEnum(demandaListaAtividade.getNomeDemandaLista());
+		
+		switch (TIPO) {
+		case FAZENDO:
+			demandaListaAtividade.setDataInicio(new Date());
+			break;
+		case FEITO:
 			demandaListaAtividade.setDataFinalizacao(new Date());
+			break;
+		case FAZER:
+			break;
+		}
 		
 		demandaListaAtividadeMapper.update(demandaListaAtividade);
 	}

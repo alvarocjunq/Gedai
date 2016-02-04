@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.gedai.bo.DemandaBO;
 import br.com.gedai.bo.DemandaListaBO;
+import br.com.gedai.bo.DemandaTarefaBO;
 import br.com.gedai.data.Demanda;
 import br.com.gedai.data.DemandaLista;
 
@@ -24,6 +25,9 @@ public class DemandaListaController {
 	@Autowired
 	private DemandaBO demandaBO; 
 	
+	@Autowired
+	private DemandaTarefaBO demandaTarefaBO;
+	
 	@RequestMapping("atividade")
 	public String demanda(Model model, Integer idDemanda, Integer idArea) {
 		model.addAttribute("listas", demandaListaBO.obterPorDemanda(idDemanda));
@@ -31,6 +35,7 @@ public class DemandaListaController {
 		Demanda demanda = demandaBO.obterPorId(idDemanda);
 		model.addAttribute("demanda", demanda);
 		model.addAttribute("demandasAll", demandaBO.obterPorArea(demanda.getIdArea()));
+		model.addAttribute("tarefas", demandaTarefaBO.obterPorDemanda(idDemanda));
 		return "demandaAtividade";
 	}
 	

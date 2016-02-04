@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="br.com.gedai.mapper.DemandaTarefaMapper">
+
+	<sql id="selectSimples">
+		SELECT ID,
+		       NOME,
+		       DESCRICAO,
+		       UUID,
+		       CONTADOR
+		FROM TB_DEMANDA_TAREFA
+	</sql>
+	
+	<select id="obterPorDemanda" resultType="br.com.gedai.data.DemandaTarefa">
+		<include refid="selectSimples"/>
+		WHERE ID_DEMANDA = #{idDemanda}
+		ORDER BY NOME
+	</select>
+	
+	<select id="obterPorUUID" resultType="br.com.gedai.data.DemandaTarefa">
+		<include refid="selectSimples"/>
+		WHERE UUID IN
+			<foreach item="item" index="index" collection="lstUuid" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</select>
+	
+	<update id="updateContador">
+		UPDATE TB_DEMANDA_TAREFA
+		   SET CONTADOR = #{contador}
+		WHERE ID = #{id}
+	</update>
+	
+	<insert id="insert">
+		INSERT INTO TB_DEMANDA_TAREFA
+			(NOME, 
+			DESCRICAO, 
+			ID_DEMANDA,
+			USU_INCLUSAO,
+			DATA_INCLUSAO,
+			UUID)
+		VALUES
+			(#{nome},
+			#{descricao},
+			#{idDemanda},
+			#{usuarioInclusao.id},
+			#{dataInclusao},
+			#{uuid})
+	</insert>
+	
+</mapper>

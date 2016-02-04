@@ -6,12 +6,93 @@
 <html>
 <c:import url="/WEB-INF/views/components/imports.jsp" />
 
+
+
+<body>
+
+<c:import url="/WEB-INF/views/components/header.jsp" />
+<input type="hidden" value="${idDemanda}" id="idDemanda"/>
+<input type="hidden" value="" id="idAtividade"/>
+<div id="content" class="conteudo">
+
+	<h3 class="ui header header-atividades">${demanda.nome} <small>${demanda.descricao}</small></h3>
+	<div class="ui large horizontal list">
+	
+	<c:forEach items="${listas}" var="lista" >
+		<div class="item">
+			<div class="ui card">
+				<c:set var="contador" value="0"/>
+				
+				<div class="content lista-atividade" id="${lista.id}">
+					<h4>${lista.nome}</h4>
+					<div class="atividades">
+					
+						<c:forEach items="${lista.lstAtividades}" var="atividade" varStatus="i">
+							<c:set var="contador" value="${i.count}"/>
+							<div class="card-atividade" onclick="onclickAtividade(this);" id="${atividade.id}" data-idAtividade="${atividade.id}" draggable="true">
+								<label>
+									${atividade.nome}
+								</label>
+							</div>
+						</c:forEach>
+						
+					</div>
+					<div class="content footer-atividade">
+					  	<label class="salvar-atividade">Salvar</label>
+					  	<label class="cancelar-atividade"><i class="remove large icon"></i></label>
+					  	<label class="nova-atividade">Nova atividade <i class="plus square outline icon"></i></label> 
+			    	</div>
+		    	</div>
+		    	<div class="floating ui green label contador" data-idDemandaLista="${lista.id}">${contador}</div>
+	    	</div>
+		</div>
+	</c:forEach>
+
+	<div class="item">
+		<div class="ui card">
+			<div class="content lista-daily-task" id="">
+				<h4>Tarefas Di&aacute;rias</h4>
+				<div class="lista-task">
+					<c:forEach items="${tarefas}" var="tarefa">
+						<div class="task" data-idTarefa="${tarefa.id}">		
+							<a class="ui black medium circular label contador-task">${tarefa.contador}</a>
+							<a class="ui tiny red circular label remove-icon"><i class="minus icon icon-task"></i></a> 
+							<a class="ui tiny green circular label add-icon"><i class="plus icon icon-task"></i></a>
+							<br /><br />
+							<label>${tarefa.nome}</label>
+						</div>
+					</c:forEach>
+				</div>
+				<div class="content footer-tarefa">
+				  	<label class="salvar-tarefa">Salvar</label>
+				  	<label class="cancelar-tarefa"><i class="remove large icon"></i></label>
+				  	<label class="nova-tarefa">Nova tarefa <i class="plus square outline icon"></i></label> 
+		    	</div>
+		    	
+	    	</div>
+    	</div>
+	</div>
+	
+	</div>
+		
+</div>
+<script id="template-nova-tarefa" type="text/x-jquery-tmpl">
+	<a class="ui black medium circular label float-right cursor-default">\${contador}</a>
+	<a class="ui tiny red circular label"><i class="minus icon icon-task"></i></a> 
+	<a class="ui tiny green circular label"><i class="plus icon icon-task"></i></a>
+	<br /><br />
+	<label>\${nome}</label>
+</script>
+
+<c:import url="demandaAtividadeModal.jsp" />
+</body>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	$('.ui.dropdown').dropdown();
 	$('.dropdown').dropdown({direction: 'upward'});
 	
-	
+
 	$(".nova-atividade").click(function(e){
 		e.stopPropagation();
 		var id = guid();
@@ -21,6 +102,17 @@ $(document).ready(function(){
 		$("#"+id).focus();	
 		$(this).parent().find(".salvar-atividade").css("visibility", "visible");
 		$(this).parent().find(".cancelar-atividade").css("visibility", "visible");
+	});
+	
+	$(".nova-tarefa").click(function(e){
+		e.stopPropagation();
+		var id = guid();
+		var card = "";
+		card = card.concat("<div class='task'><textarea maxlength='100' id='", id, "'></textarea></div>"); 
+		$(this).parent().parent().find(".lista-task").append(card);
+		$("#"+id).focus();	
+		$(this).parent().find(".salvar-tarefa").css("visibility", "visible");
+		$(this).parent().find(".cancelar-tarefa").css("visibility", "visible");
 	});
 	
 	$(".cancelar-atividade").click(function(e){
@@ -38,6 +130,74 @@ $(document).ready(function(){
 		$(this).parent().find(".salvar-atividade").css("visibility", "hidden");
 	});
 	
+	$(".cancelar-tarefa").click(function(e){
+		e.stopPropagation();
+		var nomeTarefa = "";
+		var tarefaLista = $(this).parent().parent();
+		
+		tarefaLista.find(".lista-task .task").each(function(){
+			nomeTarefa = $(this).find("textarea").val();
+			if(nomeTarefa != undefined){
+				$(this).remove();
+			}
+		})
+		$(this).css("visibility", "hidden");
+		$(this).parent().find(".salvar-tarefa").css("visibility", "hidden");
+	});
+	
+	$(".salvar-tarefa").click(function(e){
+		e.stopPropagation();
+		var botaoSalvar = $(this);
+		var demandaTarefa = botaoSalvar.parent().parent();
+		var lstTarefa = demandaTarefa.find(".lista-task");
+		var tarefas = [];
+		var nomeTarefa = "";
+		var newTextArea;
+		var idDemanda = $.urlParam("idDemanda");
+		
+		lstTarefa.find(".task").each(function(){
+			newTextArea = $(this).find("textarea");
+			nomeTarefa = newTextArea.val();
+			uuid = newTextArea.attr('id');
+			
+			if(nomeTarefa){
+				tarefas.push({	idDemanda : idDemanda, 
+							 	nome : nomeTarefa,
+							 	uuid:  uuid
+								});
+			}
+		});
+		
+		$.ajax({
+		    url: "inserirTarefas",
+		    type: 'POST',
+		    contentType : "application/json",
+		    data: JSON.stringify(tarefas),
+		    success: function(lista) {
+		    	lstTarefa.find(".task").each(function(){
+					var _this = $(this);
+					var textArea = _this.find("textarea");
+					nomeTarefa = textArea.val();
+					if(nomeTarefa == "")
+						_this.remove();
+					
+					if(nomeTarefa !== ""){
+						lista.forEach(function(item){
+							if(textArea.attr('id')===item.uuid){
+								_this.attr("id",item.id);
+								_this.attr("data-idTarefa",item.id);
+								textArea.replaceWith($("#template-nova-tarefa").tmpl({nome: item.nome, contador: item.contador}));
+							}
+				    	});	
+					}
+			    	botaoSalvar.css("visibility", "hidden");
+			    	botaoSalvar.parent().find(".cancelar-tarefa").css("visibility", "hidden");
+			    	
+				});
+			}
+		});
+	});
+	
 	$(".salvar-atividade").click(function(e){
 		e.stopPropagation();
 		
@@ -45,7 +205,6 @@ $(document).ready(function(){
 		var demandaLista = botaoSalvar.parent().parent();
 		var lstAtividades = demandaLista.find(".atividades");
 		var idLista = demandaLista.attr("id");
-		
 		
 		var atividades = [];
 		var nomeAtividade = "";
@@ -152,6 +311,49 @@ $(document).ready(function(){
 	
 });
 
+$(document).on("click", ".remove-icon", function(e) {
+	e.stopPropagation();
+	var objCont = $(this).parent().find(".contador-task");
+	var contador = $(this).parent().find(".contador-task").text();
+	
+	if(contador === '0') return;
+	
+	contador = parseInt(contador) - 1;
+	objCont.text(contador);
+	var idDemandaTarefa = objCont.closest(".task").attr("data-idTarefa");
+	onClickUpdateContador(idDemandaTarefa, contador);
+});
+
+
+$(document).on("click", ".add-icon", function(e) {
+	e.stopPropagation();
+	var objCont = $(this).parent().find(".contador-task");
+	var contador = objCont.text();
+	contador = parseInt(contador) + 1;
+	objCont.text(contador);
+	var idDemandaTarefa = objCont.closest(".task").attr("data-idTarefa");
+	onClickUpdateContador(idDemandaTarefa, contador);
+});
+
+function onClickUpdateContador(idDemandaTarefa, contador){
+	$.ajax({
+	    url: "updateContador",
+	    type: 'POST',
+	    contentType : "application/json",
+	    data: JSON.stringify({id: idDemandaTarefa, contador: contador}),
+	    success: function() {}
+	});
+}
+
+$(document).on("keydown", "textarea", function() {
+    while ($(this).prop("scrollHeight") > $(this).prop("offsetHeight")){
+    	var rows = $(this).prop("rows");
+    	rows += 1;
+    	$(this).prop("rows", rows);	
+    }
+});
+
+
 function onclickAtividade(escopo){
 	var id = $(escopo).attr("id");
 	$("#idAtividade").val(id);
@@ -199,103 +401,6 @@ function getLineListas(item){
 	linha = linha.concat("<div class='item' data-id='", item.id,"'>", item.nome ,"</div>")
 	return linha;
 }
-
-</script>
-
-<body>
-
-<c:import url="/WEB-INF/views/components/header.jsp" />
-<input type="hidden" value="${idDemanda}" id="idDemanda"/>
-<input type="hidden" value="" id="idAtividade"/>
-<div id="content" class="conteudo">
-
-	<h3 class="ui header header-atividades">${demanda.nome} <small>${demanda.descricao}</small></h3>
-	<div class="ui large horizontal list">
-	
-	<c:forEach items="${listas}" var="lista" >
-		<div class="item">
-			<div class="ui card">
-				<c:set var="contador" value="0"/>
-				
-				<div class="content lista-atividade" id="${lista.id}">
-					<h4>${lista.nome}</h4>
-					<div class="atividades">
-					
-						<c:forEach items="${lista.lstAtividades}" var="atividade" varStatus="i">
-							<c:set var="contador" value="${i.count}"/>
-							<div class="card-atividade" onclick="onclickAtividade(this);" id="${atividade.id}" data-idAtividade="${atividade.id}" draggable="true">
-								<label>
-									${atividade.nome}
-								</label>
-							</div>
-						</c:forEach>
-						
-					</div>
-					<div class="content footer-atividade">
-					  	<label class="salvar-atividade">Salvar</label>
-					  	<label class="cancelar-atividade"><i class="remove large icon"></i></label>
-					  	<label class="nova-atividade">Nova atividade <i class="plus square outline icon"></i></label> 
-			    	</div>
-		    	</div>
-		    	<div class="floating ui green label contador" data-idDemandaLista="${lista.id}">${contador}</div>
-	    	</div>
-		</div>
-	</c:forEach>
-	</div>
-		
-</div>
-<c:import url="demandaAtividadeModal.jsp" />
-</body>
-
-<script>
-function handleDragStart(e) {
-	this.style.opacity = '0.4';  // this / e.target is the source node.
-}
-
-function handleDragOver(e) {
-  if (e.preventDefault) {
-    e.preventDefault(); // Necessary. Allows us to drop.
-  }
-  e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
-  e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
-  return false;
-}
-
-function handleDragEnd(e) {
-  // this/e.target is the source node.
-  $(".lista-atividade").removeClass("over");
-  this.style.opacity = '1.0';
-}
-
-function handleDragEnter(e) {
-	$(this).closest(".lista-atividade").addClass("over"); // this / e.target is the current hover target.
-}
-
-function handleDragLeave(e) {
-	$(this).closest(".lista-atividade").removeClass("over");// this / e.target is previous target element.
-}
-function handleDrop(e) {
-  // this / e.target is current target element.
-
-  if (e.stopPropagation) {
-    e.stopPropagation(); // stops the browser from redirecting.
-  }
-
-  // See the section on the DataTransfer object.
-
-  return false;
-}
-	
-
-var cards = document.querySelectorAll(".atividades .card-atividade");
-[].forEach.call(cards, function(card) {
-	card.addEventListener('dragenter', handleDragEnter, false);
-	card.addEventListener('dragleave', handleDragLeave, false);
-	card.addEventListener('dragstart', handleDragStart, false);
-	card.addEventListener('dragover', handleDragOver, false);
-	card.addEventListener('dragend', handleDragEnd, false);
-	card.addEventListener('drop', handleDrop, false);
-});
 
 </script>
 </html>

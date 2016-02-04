@@ -55,6 +55,10 @@
 	       <if test="idDemandaLista != null">
 	       		,ID_DEMANDA_LISTA=#{idDemandaLista}
 	       </if>
+	       
+     	   <if test="dataInicio != null">
+	       		,DATA_INICIO = #{dataInicio}
+	       </if>
 
 		WHERE ID = #{id}
 	</update>
