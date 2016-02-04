@@ -44,8 +44,8 @@
 #content{
   box-shadow: none;
   border: 0;
-  margin-left: 5% !important;
-  margin-right: 5% !important;
+  margin-left: 2% !important;
+/*   margin-right: 5% !important; */
   padding-top: 80px;
 }
 
