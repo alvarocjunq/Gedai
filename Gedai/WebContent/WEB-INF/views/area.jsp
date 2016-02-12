@@ -6,6 +6,25 @@
 <html>
 <c:import url="/WEB-INF/views/components/imports.jsp" />
 
+<body>
+
+<c:import url="/WEB-INF/views/components/header.jsp" />
+	
+<div id="content" class="conteudo">
+	<c:forEach items="${areas}" var="area">
+		<div class="area hidden" 
+			 data-idArea="${area.id}"
+			 data-nome="${area.nome}" 
+			 data-nivel="${area.nivel}" 
+			 data-coluna="${area.coluna}">
+		</div>
+	</c:forEach>
+	
+	<div class="ui six column centered grid grid-areas"></div>
+</div>
+
+</body>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	
@@ -105,23 +124,4 @@ $(document).ready(function(){
 	});
 });
 </script>
-
-<body>
-
-<c:import url="/WEB-INF/views/components/header.jsp" />
-	
-<div id="content" class="conteudo">
-	<c:forEach items="${areas}" var="area">
-		<div class="area hidden" 
-			 data-idArea="${area.id}"
-			 data-nome="${area.nome}" 
-			 data-nivel="${area.nivel}" 
-			 data-coluna="${area.coluna}">
-		</div>
-	</c:forEach>
-	
-	<div class="ui six column centered grid grid-areas"></div>
-</div>
-
-</body>
 </html>

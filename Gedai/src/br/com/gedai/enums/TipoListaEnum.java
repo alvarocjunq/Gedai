@@ -15,7 +15,7 @@ public enum TipoListaEnum {
 	
 	public static TipoListaEnum getEnum(String nome){
 		for(TipoListaEnum tipo: TipoListaEnum.values()){
-			if(nome.equals(tipo.getNome())){
+			if(tipo.getNome().equals(nome)){
 				return tipo;
 			}
 		}

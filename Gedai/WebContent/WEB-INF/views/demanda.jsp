@@ -6,68 +6,6 @@
 <html>
 <c:import url="/WEB-INF/views/components/imports.jsp" />
 
-<script type="text/javascript">
-$(document).ready(function(){
-	$('.card-demanda-pos')
-		.popup({position : 'right center',html: '*', 
-				onShow : function(item){
-					var popup = this;
-					var texto = "";
-					texto = texto.concat("<div class='ui two column grid'>");
-					
-					$(".status-demanda[id="+ $(item).attr("id") +"] div").each(function(){
-						texto = texto.concat("<div class='row'>");
-						
-						texto = texto.concat("<div class='column bold'>", 
-												$(this).find("label[data-nome]").text(),
-											  "</div>");
-						
-						texto = texto.concat("<div class='column'>", 
-											 	$(this).find("label[data-qtd]").text(),
-											 "</div>");
-						
-						texto = texto.concat("</div>");
-					});
-					
-					texto = texto.concat("</div>");
-					popup.html(texto);
-				}});
-	
-	$(".card-demanda").click(function(e){
-		e.stopPropagation();
-		onclickDemanda($(this));
-	});
-	
-	
-	$(".card-novaDemanda").click(function(e){
-		clearAll(".ui.grid.grid-modal");
-		$(".small.modal").modal('show');
-		
-	});
-	
-	$("#salvar-demanda").click(function(e){
-		var demanda = {nome: 		$("#nome").val(),
-					   descricao: 	$("#descricao").val(),
-					   idArea:		$("#idArea").val(),
-					   uuid:		guid()};
-		$.ajax({
-		    url: "inserirDemanda",
-		    type: 'POST',
-		    contentType : "application/json",
-		    data: JSON.stringify(demanda),
-		    success: function(json) {
-		    	$("#template-novaDemanda").tmpl(json).appendTo(".ui.link.cards");
-		    }
-		
-		});
-	});
-});
-
-function onclickDemanda(escopo){
-	go("atividade?idDemanda=".concat($(escopo).attr("data-idDemanda"), "&idArea=", $("#idArea").val()));
-}
-</script>
-
 <body>
 
 <c:import url="/WEB-INF/views/components/header.jsp" />
@@ -130,4 +68,66 @@ function onclickDemanda(escopo){
 </div>
 	<c:import url="demandaInserirModal.jsp" />
 </body>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.card-demanda-pos')
+		.popup({position : 'right center',html: '*', 
+				onShow : function(item){
+					var popup = this;
+					var texto = "";
+					texto = texto.concat("<div class='ui two column grid'>");
+					
+					$(".status-demanda[id="+ $(item).attr("id") +"] div").each(function(){
+						texto = texto.concat("<div class='row'>");
+						
+						texto = texto.concat("<div class='column bold'>", 
+												$(this).find("label[data-nome]").text(),
+											  "</div>");
+						
+						texto = texto.concat("<div class='column'>", 
+											 	$(this).find("label[data-qtd]").text(),
+											 "</div>");
+						
+						texto = texto.concat("</div>");
+					});
+					
+					texto = texto.concat("</div>");
+					popup.html(texto);
+				}});
+	
+	$(".card-demanda").click(function(e){
+		e.stopPropagation();
+		onclickDemanda($(this));
+	});
+	
+	
+	$(".card-novaDemanda").click(function(e){
+		clearAll(".ui.grid.grid-modal");
+		$(".small.modal").modal('show');
+		
+	});
+	
+	$("#salvar-demanda").click(function(e){
+		var demanda = {nome: 		$("#nome").val(),
+					   descricao: 	$("#descricao").val(),
+					   idArea:		$("#idArea").val(),
+					   uuid:		guid()};
+		$.ajax({
+		    url: "inserirDemanda",
+		    type: 'POST',
+		    contentType : "application/json",
+		    data: JSON.stringify(demanda),
+		    success: function(json) {
+		    	$("#template-novaDemanda").tmpl(json).appendTo(".ui.link.cards");
+		    }
+		
+		});
+	});
+});
+
+function onclickDemanda(escopo){
+	go("atividade?idDemanda=".concat($(escopo).attr("data-idDemanda"), "&idArea=", $("#idArea").val()));
+}
+</script>
 </html>

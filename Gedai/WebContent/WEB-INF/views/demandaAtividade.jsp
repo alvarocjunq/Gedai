@@ -77,9 +77,9 @@
 		
 </div>
 <script id="template-nova-tarefa" type="text/x-jquery-tmpl">
-	<a class="ui black medium circular label float-right cursor-default">\${contador}</a>
-	<a class="ui tiny red circular label"><i class="minus icon icon-task"></i></a> 
-	<a class="ui tiny green circular label"><i class="plus icon icon-task"></i></a>
+	<a class="ui black medium circular label contador-task">\${contador}</a>
+	<a class="ui tiny red circular label remove-icon"><i class="minus icon icon-task"></i></a> 
+	<a class="ui tiny green circular label add-icon"><i class="plus icon icon-task"></i></a>
 	<br /><br />
 	<label>\${nome}</label>
 </script>
@@ -89,9 +89,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.ui.dropdown').dropdown();
-	$('.dropdown').dropdown({direction: 'upward'});
-	
+	$('.selection.dropdown').dropdown({direction: 'upward'});
 
 	$(".nova-atividade").click(function(e){
 		e.stopPropagation();
@@ -266,10 +264,12 @@ $(document).ready(function(){
 	$(".description").click(function(e){
 		e.stopPropagation();
 		var p = $(this).find("p");
-		var texto = p.html();
-		texto = texto.replace(/<br>/g, '\n');
-		p.replaceWith("<textarea>"+texto+"</textarea>");
-		$(this).find("textarea").focus();
+		if(p.length > 0){
+			var texto = p.html();
+			texto = texto.replace(/<br>/g, '\n');
+			p.replaceWith("<textarea>"+texto+"</textarea>");
+			$(this).find("textarea").focus();
+		}
 	});
 	
 	$("#salvar-modal").click(function(){

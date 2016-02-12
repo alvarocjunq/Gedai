@@ -53,16 +53,19 @@ public class DemandaListaAtividadeBO {
 		
 		TipoListaEnum TIPO = TipoListaEnum.getEnum(demandaListaAtividade.getNomeDemandaLista());
 		
-		switch (TIPO) {
-		case FAZENDO:
-			demandaListaAtividade.setDataInicio(new Date());
-			break;
-		case FEITO:
-			demandaListaAtividade.setDataFinalizacao(new Date());
-			break;
-		case FAZER:
-			break;
-		}
+		if(TIPO != null)
+			switch (TIPO) {
+			case FAZENDO:
+				demandaListaAtividade.setDataInicio(new Date());
+				break;
+			case FEITO:
+				demandaListaAtividade.setDataFinalizacao(new Date());
+				break;
+			case FAZER:
+				break;
+			default:
+				break;
+			}
 		
 		demandaListaAtividadeMapper.update(demandaListaAtividade);
 	}
