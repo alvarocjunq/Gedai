@@ -24,17 +24,31 @@ $(document).ready(function(){
 	    	<h5 class="ui red image header">Gedai - Gerenciador de Demandas e Atividades Internas</h5>
 	 	</div>
 	 	
-		<div class="ui compact  menu menu-dropdown">
-		  <div class="ui dropdown item">
-		    Demandas
-		    <i class="dropdown icon"></i>
-		    <div class="menu">
-	    		<c:forEach items="${demandasAll}" var="demanda" >
-		      		<div class="item item-menu" data-id="${demanda.id}">${demanda.nome} ${demanda.descricao}</div>
-	      		</c:forEach>
-		    </div>
-		  </div>
-		</div>
+	 	<c:if test="${param.visual != 'clean'}">
+	 		<script>
+				$.ajax({
+				    url: "obterDemandaPorArea?idArea="+$.urlParam("idArea"),
+				    type: 'GET',
+				    contentType : "application/json",
+				    success: function(lista) {
+				    	lista.forEach(function(item){
+				    		$("#template-demanda-combo").tmpl(item).appendTo(".menu-demanda");
+				    	});
+				    }
+				});
+	 		</script>
+			<div class="ui compact  menu menu-dropdown">
+			  <div class="ui dropdown item">
+			    Demandas
+			    <i class="dropdown icon"></i>
+			    <div class="menu menu-demanda">
+					<script id="template-demanda-combo" type="text/x-jquery-tmpl">
+			      		<div class="item item-menu" data-id="\${id}">\${nome} \${descricao}</div>
+					</script>
+			    </div>
+			  </div>
+			</div>
+		</c:if>
 	 	
 		<div class="right menu">
 			<a class="ui item" href="logout">Sair</a>

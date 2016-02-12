@@ -8,7 +8,9 @@
 
 <body>
 
-<c:import url="/WEB-INF/views/components/header.jsp" />
+<c:import url="/WEB-INF/views/components/header.jsp">
+	<c:param name="visual" value="clean" />
+</c:import>
 	
 <div id="content" class="conteudo">
 	<c:forEach items="${areas}" var="area">

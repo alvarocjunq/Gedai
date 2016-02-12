@@ -20,7 +20,6 @@ public class AreaController {
 	@RequestMapping("area")
 	public String demanda(Model model) {
 		model.addAttribute("areas", areaBO.obterTodos());
-		model.addAttribute("demandasAll", demandaBO.obterTodos());
 		return "area";
 	}
 }

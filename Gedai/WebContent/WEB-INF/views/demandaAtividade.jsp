@@ -6,8 +6,6 @@
 <html>
 <c:import url="/WEB-INF/views/components/imports.jsp" />
 
-
-
 <body>
 
 <c:import url="/WEB-INF/views/components/header.jsp" />

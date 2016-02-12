@@ -24,7 +24,6 @@ public class DemandaController {
 	public String demanda(Model model, Integer idArea) {
 		List<Demanda> lista = demandaBO.obterPorArea(idArea);
 		model.addAttribute("demandas", lista);
-		model.addAttribute("demandasAll", lista);
 		model.addAttribute("idArea", idArea);
 		return "demanda";
 	}
@@ -32,6 +31,11 @@ public class DemandaController {
 			produces = MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Demanda inserirDemanda(@RequestBody Demanda demanda){
 		return this.demandaBO.insert(demanda);
+	}
+	
+	@RequestMapping(value="obterDemandaPorArea", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Demanda> obterDemandaPorArea(Integer idArea) {
+		return demandaBO.obterPorArea(idArea);
 	}
 	
 }

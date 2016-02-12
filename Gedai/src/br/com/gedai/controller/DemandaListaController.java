@@ -34,11 +34,9 @@ public class DemandaListaController {
 		model.addAttribute("idDemanda", idDemanda);
 		Demanda demanda = demandaBO.obterPorId(idDemanda);
 		model.addAttribute("demanda", demanda);
-		model.addAttribute("demandasAll", demandaBO.obterPorArea(demanda.getIdArea()));
 		model.addAttribute("tarefas", demandaTarefaBO.obterPorDemanda(idDemanda));
 		return "demandaAtividade";
 	}
-	
 	
 	@RequestMapping(value="obterListas", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<DemandaLista> obterListas(Integer idDemanda) {
