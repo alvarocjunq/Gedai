@@ -1,6 +1,7 @@
 package br.com.gedai.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class DemandaListaAtividade implements Serializable {
 	private Date dataInicio;
 	
 	public DemandaListaAtividade() {
-		statusAtividade = new StatusAtividade();
+		lstAtividadeUsuario = new ArrayList<DemandaListaAtividadeUsuario>();
 	}
 	
 	public Date getDataInicio() {
@@ -35,7 +36,6 @@ public class DemandaListaAtividade implements Serializable {
 	public Date getDataFinalizacao() {
 		return dataFinalizacao;
 	}
-
 
 	public void setDataFinalizacao(Date dataFinalizacao) {
 		this.dataFinalizacao = dataFinalizacao;

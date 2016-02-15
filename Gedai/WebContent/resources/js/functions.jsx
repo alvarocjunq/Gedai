@@ -195,3 +195,4 @@ $.urlParam = function(name){
        return null;
     return results[1] || 0;
 }
+

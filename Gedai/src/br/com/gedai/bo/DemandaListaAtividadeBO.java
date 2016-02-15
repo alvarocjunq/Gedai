@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.gedai.data.DemandaListaAtividade;
+import br.com.gedai.data.DemandaListaAtividadeUsuario;
 import br.com.gedai.data.Usuario;
 import br.com.gedai.enums.TipoListaEnum;
 import br.com.gedai.mapper.DemandaListaAtividadeMapper;
@@ -38,10 +39,23 @@ public class DemandaListaAtividadeBO {
 		List<String> lstUuid = new ArrayList<String>();
 		Usuario usuarioLogado = usuarioBO.getUserSession(session);
 		Date dataAtual = new Date();
+		String nomeLista = atividades.get(0).getNomeDemandaLista();
+		
+		boolean isFazendo = (nomeLista.equalsIgnoreCase(TipoListaEnum.FAZENDO.getNome()));
+		boolean isFeito = (nomeLista.equalsIgnoreCase(TipoListaEnum.FEITO.getNome()));
 		
 		for(DemandaListaAtividade dla: atividades){
 			dla.setUsuarioLogado(usuarioLogado);
 			dla.setDataInclusao(dataAtual);
+			
+			if(isFazendo)
+				dla.setDataInicio(dataAtual);
+			
+			if(isFeito){
+				dla.setDataInicio(dataAtual);
+				dla.setDataFinalizacao(dataAtual);
+			}
+			
 			demandaListaAtividadeMapper.insert(dla);
 			lstUuid.add(dla.getUuid());
 		}
@@ -67,6 +81,11 @@ public class DemandaListaAtividadeBO {
 				break;
 			}
 		
+		demandaListaAtividadeUsuarioBO.delete(demandaListaAtividade.getId());
+		
+		for(DemandaListaAtividadeUsuario ativUsuario: demandaListaAtividade.getLstAtividadeUsuario())
+			demandaListaAtividadeUsuarioBO.insert(ativUsuario);
+
 		demandaListaAtividadeMapper.update(demandaListaAtividade);
 	}
 

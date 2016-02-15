@@ -87,8 +87,8 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.selection.dropdown').dropdown({direction: 'upward'});
-
+	$('.selection.dropdown.up').dropdown({direction: 'upward'});
+	
 	$(".nova-atividade").click(function(e){
 		e.stopPropagation();
 		var id = guid();
@@ -209,6 +209,8 @@ $(document).ready(function(){
 		var contListaAnterior;
 		var contListaPosterior;
 		var atividade;
+		var nomeLista = lstAtividades.parent().find("h4").text();
+		
 		lstAtividades.find(".card-atividade").each(function(){
 			newTextArea = $(this).find("textarea");
 			nomeAtividade = newTextArea.val();
@@ -217,10 +219,20 @@ $(document).ready(function(){
 			if(nomeAtividade){
 				atividades.push({	idDemandaLista : idLista, 
 								 	nome : nomeAtividade,
-								 	uuid:  uuid
+								 	uuid:  uuid,
+								 	nomeDemandaLista: nomeLista
 								});
 			}
-		})
+			
+			if(nomeAtividade != undefined && nomeAtividade === "")
+				$(this).remove();
+		});
+		
+		if(atividades.length == 0){
+	    	botaoSalvar.css("visibility", "hidden");
+	    	botaoSalvar.parent().find(".cancelar-atividade").css("visibility", "hidden");
+			return;
+		}
 		
 		$.ajax({
 		    url: "inserirAtividades",
@@ -250,8 +262,7 @@ $(document).ready(function(){
 			    	
 				});
 				if(idLista){
-					atividade = $(".card-atividade[data-idAtividade= "+idLista+"]");
-		    		contListaPosterior = parseInt($(".contador[data-idDemandaLista="+idLista+"]").text()) +1;
+		    		contListaPosterior = parseInt($(".contador[data-idDemandaLista="+idLista+"]").text()) + lista.length;
 		    		$(".contador[data-idDemandaLista="+idLista+"]").text(contListaPosterior);
 				}
 			}
@@ -269,21 +280,55 @@ $(document).ready(function(){
 			$(this).find("textarea").focus();
 		}
 	});
+
+	$("#excluir-modal").click(function(e){
+		e.stopPropagation();
+		var _this = $(this);
+		if(_this.attr("class").indexOf("loading") > -1) 
+			return;		
+		
+		_this.addClass("loading");
+    	var idAtividade = $("#idAtividade").val();
+    	$.ajax({
+		    url: "excluirAtividade?idAtividade=" + idAtividade, 
+		    type: 'GET',
+		    contentType : "application/json",
+		    success: function() {
+		    	_this.removeClass("loading");
+		    	$(".ui.modal").modal("hide");
+		    	removeContador(idAtividade);
+		    	$(".card-atividade[data-idAtividade="+idAtividade+"]").remove();
+		    	alertify.success("Atividade excluida com sucesso.");
+		    }
+		});
+	});
 	
 	$("#salvar-modal").click(function(){
-		
 		var demandaLista = $("#lstListas .menu .selected");
-		var _nome = $("#header-modal-atividade").text();
+		var _nome = $("#header-modal-atividade").val();
     	var _descricao = ($(".description textarea").val() ? $(".description textarea").val() : $(".description p").text());
     	var _idDemandaLista = demandaLista.attr("data-id");
     	var _textDemandaLista = demandaLista.text();
     	var idAtividade = $("#idAtividade").val();
+    	var arrUsuariosAssociados = [];
+		if(_nome === ""){
+			alertify.error("Informe o nome da atividade para continuar");
+			return;
+		}
     	
+		//Armazenar os usuarios associados
+		$("#lstUsuarios").parent().find("a").each(function(){
+			arrUsuariosAssociados.push({usuario : {id : $(this).attr("data-value")}, 
+										idDemandaListaAtividade: idAtividade
+									   });
+		});
+		
 		var atividade = {id : idAtividade, 
 						 nome: _nome,
 						 descricao: _descricao,
 						 idDemandaLista: _idDemandaLista,
-						 nomeDemandaLista: _textDemandaLista};
+						 nomeDemandaLista: _textDemandaLista,
+						 lstAtividadeUsuario : arrUsuariosAssociados};
 		
 		$.ajax({
 		    url: "atualizarAtividade",
@@ -292,15 +337,13 @@ $(document).ready(function(){
 		    data: JSON.stringify(atividade),
 		    success: function() {
 				$(".ui.modal").modal("hide");
-		    	
+				alertify.success("Atividade salva com sucesso.");
+	    		var atividade = $(".card-atividade[data-idAtividade= "+idAtividade+"]");
+	    		atividade.find("label").text(_nome);
 		    	if(_idDemandaLista){
-		    		var atividade = $(".card-atividade[data-idAtividade= "+idAtividade+"]");
-		    		var contListaAnterior = parseInt(atividade.closest(".ui.card").find(".floating.ui.label").text()) - 1;
+		    		removeContador(idAtividade);
 		    		var contListaPosterior = parseInt($(".contador[data-idDemandaLista="+_idDemandaLista+"]").text()) +1;
-		    		
-		    		atividade.closest(".ui.card").find(".floating.ui.label").text(contListaAnterior);
 		    		$(".contador[data-idDemandaLista="+_idDemandaLista+"]").text(contListaPosterior);
-		    		
 		    		$(".lista-atividade[id="+_idDemandaLista+"] .atividades").append(atividade);
 		    	}
 		    }
@@ -351,9 +394,27 @@ $(document).on("keydown", "textarea", function() {
     }
 });
 
+function getEvento(texto){
+	return "".concat("<div class='event'> <div class='content'> <div class='summary'>",
+				       texto, 
+				    "</div></div></div>");
+}
+
+function removeContador(idAtividade){
+	var atividade = $(".card-atividade[data-idAtividade= "+idAtividade+"]");
+	var contListaAnterior = parseInt(atividade.closest(".ui.card").find(".floating.ui.label").text()) - 1;
+	atividade.closest(".ui.card").find(".floating.ui.label").text(contListaAnterior);
+}
 
 function onclickAtividade(escopo){
 	var id = $(escopo).attr("id");
+	var nomeLista = $(escopo).closest(".lista-atividade").find("h4").text();
+	
+	if(nomeLista === "Fazer")
+		$("#excluir-modal").css("visibility", "visible");
+	else
+		$("#excluir-modal").css("visibility", "hidden");
+		
 	$("#idAtividade").val(id);
 	$('.ui.long.modal')
 			.modal({
@@ -363,8 +424,35 @@ function onclickAtividade(escopo){
 					    type: 'GET',
 					    contentType : "application/json",
 					    success: function(data) {
-					    	$("#header-modal-atividade").text(data.nome);
-					    	$(".description p").html(data.descricao);
+					    	
+					    	data.lstAtividadeUsuario.forEach(function(item){
+					    		$("#lstUsuarios").prepend("<a class='ui label transition visible' data-value='"+ item.usuario.id +"' style='display: inline-block !important;'>"+item.usuario.nome+"<i class='delete icon'></i></a>");
+					    	});
+					    	
+					    	$("#header-modal-atividade").val(data.nome);
+					    	
+					    	if(data.descricao)
+					    		$(".description p").html(data.descricao);
+					    	else{
+					    		$(".description p").css("border", "1px solid");
+					    		$(".description p").css("border-color", "rgb(169, 169, 169)");
+					    	}
+					    	
+					    	var eventos = "";
+					    	
+				    		eventos += getEvento("Criado em ".concat(customFormat(data.dataInclusao, "#DD#/#MM#/#YYYY#"), 
+				    											   " por ", data.usuarioLogado.nome));
+
+				    		if(data.dataInicio)
+				    			eventos += getEvento("Iniciado em ".concat(customFormat(data.dataInicio, "#DD#/#MM#/#YYYY#")));
+				    		
+				    		if(data.dataFinalizacao){
+				    			eventos += getEvento("Finalizado em ".concat(customFormat(data.dataFinalizacao, "#DD#/#MM#/#YYYY#")));
+				    			if(data.dataInicio) 
+				    				eventos += getEvento("Atividade levou ".concat(getDateDiff(data.dataInicio, data.dataFinalizacao), " dia(s)"));
+				    		}
+					    	
+					    	$("#informacoes-modal").append(eventos);
 					    }
 					});
 			    	
@@ -376,20 +464,33 @@ function onclickAtividade(escopo){
 					    	$("#lstListas .menu .item").removeClass(".active");
 					    	$("#lstListas .menu .item").removeClass(".selected");
 					    	$("#lstListas .text").text("Mover para...");
-					    	loadTable("lstListas .menu", lista, getLineListas)
+					    	loadTable("lstListas .menu", lista, getLineListas);
+					    }
+					});
+					
+					$.ajax({
+					    url: "obterUsuarios",
+					    type: 'GET',
+					    contentType : "application/json",
+					    success: function(lista) {
+					    	loadTable("lstUsuarios", lista, getOptionComboUsuario);
 					    }
 					});
 			    	
 			    },
 			    onHidden: function(){
+			    	$("#lstUsuarios").dropdown('clear');
 			    	$("#header-modal-atividade").text("");
 			    	
-			    	if($(".description p"))
-				    	$(".description p").text("");
+			    	if($(".description p")){
+			    		$(".description p").text("");
+			    		$(".description p").css("border", "0");
+			    	}
 			    		
 			    	if($(".description textarea"))
 			    		$(".description textarea").replaceWith("<p></p>");
 			    	
+			    	$("#informacoes-modal .event").remove();
 			    }
 		  	})
 		  	.modal('show');
@@ -398,6 +499,10 @@ function getLineListas(item){
 	var linha="";
 	linha = linha.concat("<div class='item' data-id='", item.id,"'>", item.nome ,"</div>")
 	return linha;
+}
+
+function getOptionComboUsuario(item){
+	return "<option value='".concat(item.id , "'>", item.nome , "</option>"); 
 }
 
 </script>

@@ -1,5 +1,7 @@
 package br.com.gedai.bo;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,10 @@ public class UsuarioBO {
 	public Usuario obterLoginSenha(Usuario usuario){
 		usuario.setSenha(Criptografia.getSenha(usuario.getSenha()));
 		return this.usuarioMapper.obterLoginSenha(usuario);
+	}
+	
+	public List<Usuario> obterTodos(){
+		return usuarioMapper.obterTodos();
 	}
 	
 	public void updateSenha(Usuario usuario){

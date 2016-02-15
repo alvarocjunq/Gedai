@@ -1,11 +1,16 @@
 package br.com.gedai.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.gedai.bo.UsuarioBO;
 import br.com.gedai.data.Usuario;
@@ -55,5 +60,11 @@ public class UsuarioController {
 	public String logout(HttpSession session) {
 		session.invalidate();
 		return "redirect:login";
+	}
+	
+	
+	@RequestMapping(value = "obterUsuarios", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Usuario> obterUsuarios() {
+		return usuarioBO.obterTodos();
 	}
 }
