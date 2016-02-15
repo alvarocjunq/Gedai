@@ -3,18 +3,18 @@
 $(document).ready(function(){
 	$('.ui.dropdown').dropdown();
 	
-	$(".item-menu").click(function(e){
-		e.stopPropagation();
-		var idArea = ($.urlParam('idArea') == null ? "": $.urlParam('idArea'));
-		go("atividade?idDemanda=".concat($(this).attr("data-id"),
-				"&idArea=", idArea));	
-	});
-	
 	$(".item-header-icon").click(function(e){
 		e.stopPropagation();
 		go("area");
 	});
 	
+});
+
+$(document).on("click", ".item-menu", function(e) {
+	e.stopPropagation();
+	var idArea = ($.urlParam('idArea') == null ? "": $.urlParam('idArea'));
+	go("atividade?idDemanda=".concat($(this).attr("data-id"),
+			"&idArea=", idArea));	
 });
 </script>
 

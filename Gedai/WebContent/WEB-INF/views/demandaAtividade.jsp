@@ -209,6 +209,8 @@ $(document).ready(function(){
 		var contListaAnterior;
 		var contListaPosterior;
 		var atividade;
+		var nomeLista = lstAtividades.parent().find("h4").text();
+		
 		lstAtividades.find(".card-atividade").each(function(){
 			newTextArea = $(this).find("textarea");
 			nomeAtividade = newTextArea.val();
@@ -217,10 +219,18 @@ $(document).ready(function(){
 			if(nomeAtividade){
 				atividades.push({	idDemandaLista : idLista, 
 								 	nome : nomeAtividade,
-								 	uuid:  uuid
+								 	uuid:  uuid,
+								 	nomeDemandaLista: nomeLista
 								});
 			}
-		})
+		});
+		
+		if(atividades.length == 0){
+			lstAtividades.find(".card-atividade").remove();
+	    	botaoSalvar.css("visibility", "hidden");
+	    	botaoSalvar.parent().find(".cancelar-atividade").css("visibility", "hidden");
+			return;
+		}
 		
 		$.ajax({
 		    url: "inserirAtividades",
@@ -269,6 +279,20 @@ $(document).ready(function(){
 			$(this).find("textarea").focus();
 		}
 	});
+
+	$("#excluir-modal").click(function(){
+    	var idAtividade = $("#idAtividade").val();
+    	$.ajax({
+		    url: "excluirAtividade?idAtividade=" + idAtividade, 
+		    type: 'GET',
+		    contentType : "application/json",
+		    success: function() {
+		    	$(".ui.modal").modal("hide");
+		    	$(".card-atividade[data-idAtividade="+idAtividade+"]").remove();
+		    	alertify.success("Atividade excluida com sucesso.");
+		    }
+		});
+	});
 	
 	$("#salvar-modal").click(function(){
 		
@@ -292,7 +316,7 @@ $(document).ready(function(){
 		    data: JSON.stringify(atividade),
 		    success: function() {
 				$(".ui.modal").modal("hide");
-		    	
+				alertify.success("Atividade salva com sucesso.");
 		    	if(_idDemandaLista){
 		    		var atividade = $(".card-atividade[data-idAtividade= "+idAtividade+"]");
 		    		var contListaAnterior = parseInt(atividade.closest(".ui.card").find(".floating.ui.label").text()) - 1;
@@ -351,6 +375,11 @@ $(document).on("keydown", "textarea", function() {
     }
 });
 
+function getEvento(texto){
+	return "".concat("<div class='event'> <div class='content'> <div class='summary'>",
+				       texto, 
+				    "</div></div></div>");
+}
 
 function onclickAtividade(escopo){
 	var id = $(escopo).attr("id");
@@ -364,7 +393,28 @@ function onclickAtividade(escopo){
 					    contentType : "application/json",
 					    success: function(data) {
 					    	$("#header-modal-atividade").text(data.nome);
-					    	$(".description p").html(data.descricao);
+					    	
+					    	if(data.descricao)
+					    		$(".description p").html(data.descricao);
+					    	else{
+					    		$(".description p").css("border", "1px solid");
+					    		$(".description p").css("border-color", "rgb(169, 169, 169)");
+					    	}
+					    	
+					    	var eventos = "";
+					    	
+				    		eventos += getEvento("Criado em ".concat(customFormat(data.dataInclusao, "#DD#/#MM#/#YYYY#"), 
+				    											   " por ", data.usuarioLogado.nome));
+
+				    		if(data.dataInicio)
+				    			eventos += getEvento("Iniciado em ".concat(customFormat(data.dataInicio, "#DD#/#MM#/#YYYY#")));
+				    		
+				    		if(data.dataFinalizacao){
+				    			eventos += getEvento("Finalizado em ".concat(customFormat(data.dataFinalizacao, "#DD#/#MM#/#YYYY#")));
+				    			if(data.dataInicio) eventos += getEvento("Atividade levou ".concat(getDateDiff(data.dataInicio, data.dataFinalizacao), " dia(s)"))
+				    		}
+					    	
+					    	$("#informacoes-modal").append(eventos);
 					    }
 					});
 			    	
@@ -384,12 +434,15 @@ function onclickAtividade(escopo){
 			    onHidden: function(){
 			    	$("#header-modal-atividade").text("");
 			    	
-			    	if($(".description p"))
-				    	$(".description p").text("");
+			    	if($(".description p")){
+			    		$(".description p").text("");
+			    		$(".description p").css("border", "0");
+			    	}
 			    		
 			    	if($(".description textarea"))
 			    		$(".description textarea").replaceWith("<p></p>");
 			    	
+			    	$("#informacoes-modal .event").remove();
 			    }
 		  	})
 		  	.modal('show');

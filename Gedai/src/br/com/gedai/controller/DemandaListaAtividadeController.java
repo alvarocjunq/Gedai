@@ -35,6 +35,13 @@ public class DemandaListaAtividadeController {
 		return true;
 	}
 	
+	@RequestMapping(value = "excluirAtividade", method=RequestMethod.GET, 
+					produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody boolean excluirAtividade(Integer idAtividade) {
+		demandaListaAtividadeBO.delete(idAtividade);
+		return true;
+	}
+	
 	@RequestMapping(value="obterAtividade", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody DemandaListaAtividade obterAtividade(Integer idAtividade) {
 		return demandaListaAtividadeBO.obterPorId(idAtividade);

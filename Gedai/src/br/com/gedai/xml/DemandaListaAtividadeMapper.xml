@@ -9,6 +9,11 @@
 		<result property="nome" column="NOME" />
 		<result property="descricao" column="DESCRICAO" />
 		<result property="uuid" column="UUID" />
+		<result property="dataInclusao" column="DATA_INCLUSAO" />
+		<result property="dataFinalizacao" column="DATA_FINALIZACAO" />
+		<result property="dataInicio" column="DATA_INICIO" />
+		<association property="usuarioLogado" column="USU_INCLUSAO"	
+					 select="br.com.gedai.mapper.UsuarioMapper.obterPorId"/>
 		<association property="statusAtividade" column="ID_STATUS_ATIVIDADE"	
 					 select="br.com.gedai.mapper.StatusAtividadeMapper.obterPorId"/>
 	</resultMap>
@@ -19,7 +24,11 @@
 		       ID_STATUS_ATIVIDADE,
 		       NOME,
 		       DESCRICAO,
-		       UUID
+		       UUID,
+		       DATA_INCLUSAO,
+		       DATA_FINALIZACAO,
+		       DATA_INICIO,
+		       USU_INCLUSAO
 		FROM TB_DEMANDA_LISTA_ATIVIDADE
 	</sql>
 	
@@ -73,6 +82,13 @@
 		  UUID,
 		  USU_INCLUSAO,
 		  DATA_INCLUSAO
+		  
+		  <if test="dataInicio != null">
+	       		,DATA_INICIO
+	      </if>
+	      <if test="dataFinalizacao != null">
+	       		,DATA_FINALIZACAO
+	      </if>
 		)
 		VALUES
 		(
@@ -83,6 +99,12 @@
 		  #{uuid},
 		  #{usuarioLogado.id},
 		  #{dataInclusao}
+		  <if test="dataInicio != null">
+	      	,#{dataInicio}
+	      </if>
+		  <if test="dataFinalizacao != null">
+	      	,#{dataFinalizacao}
+	      </if>
 		)
 	</insert>
 	

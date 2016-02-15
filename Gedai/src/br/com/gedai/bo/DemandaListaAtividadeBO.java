@@ -38,10 +38,23 @@ public class DemandaListaAtividadeBO {
 		List<String> lstUuid = new ArrayList<String>();
 		Usuario usuarioLogado = usuarioBO.getUserSession(session);
 		Date dataAtual = new Date();
+		String nomeLista = atividades.get(0).getNomeDemandaLista();
+		
+		boolean isFazendo = (nomeLista.equalsIgnoreCase(TipoListaEnum.FAZENDO.getNome()));
+		boolean isFeito = (nomeLista.equalsIgnoreCase(TipoListaEnum.FEITO.getNome()));
 		
 		for(DemandaListaAtividade dla: atividades){
 			dla.setUsuarioLogado(usuarioLogado);
 			dla.setDataInclusao(dataAtual);
+			
+			if(isFazendo)
+				dla.setDataInicio(dataAtual);
+			
+			if(isFeito){
+				dla.setDataInicio(dataAtual);
+				dla.setDataFinalizacao(dataAtual);
+			}
+			
 			demandaListaAtividadeMapper.insert(dla);
 			lstUuid.add(dla.getUuid());
 		}

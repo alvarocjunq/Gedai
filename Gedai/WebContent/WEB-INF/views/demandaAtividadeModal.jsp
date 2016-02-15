@@ -3,24 +3,24 @@
 	
 	<div class="header header-modal" id="header-modal-atividade"></div>
 	
-	<div class="image content">
-		<div class="image">
-			<i class="file text outline icon"></i>
-		</div>
+	<div class="content">
 		<div class="description">
 			<p></p>
+			<div class="ui small feed" id="informacoes-modal">
+				<h4 class="ui header">Informa&ccedil;&otilde;es</h4>
+			  
+			</div>
 		</div>
 	</div>
 		
 	<div class="actions">
-		
 		<div class="ui compact selection dropdown" id="lstListas">
 		  <i class="caret up icon"></i>
 		  <div class="text">Mover para...</div>
 		  <div class="menu"></div>
 		</div>
-
-		<div class="ui inverted buttons">
+		<button class="ui red button" id="excluir-modal">Excluir</button>
+		<div class="ui buttons">
 			<div class="ui green button" id="salvar-modal">
 				<i class="checkmark icon"></i> Salvar
 			</div>
