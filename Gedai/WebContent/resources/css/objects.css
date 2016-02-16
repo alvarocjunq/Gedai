@@ -277,6 +277,12 @@
     cursor: text;
 }
 
+.description p{
+    padding-bottom: 50px;
+    border-radius: 5px;
+    border-color: rgb(169, 169, 169);
+}
+
 .ui.card>:last-child{border-radius: .28571429rem .28571429rem .28571429rem .28571429rem !important;}
 .floating.green.label{background-color: #24903E!important;}
 
@@ -348,6 +354,7 @@
 	cursor: default !important;
 }
 
+<<<<<<< HEAD
 #excluir-modal{
 	float: left;
 }
@@ -365,4 +372,23 @@ label.theme-default{
 h4.theme-default{
 	font-weight: bold;
 	color: #D80000 !important
+=======
+/* .acoes-modal-header{ */
+/* 	width: 100px; */
+/*     text-align: center; */
+/*     border-bottom: 1px solid #BC4949; */
+/*     margin-bottom: 5px; */
+/*     font-size: 16px; */
+/*     font-weight: bold; */
+/* } */
+/* .acoes-modal-buttons{ */
+/* 	margin-top: 10px; */
+/* } */
+/* .acoes-modal-buttons button{ */
+/* 	width: 100%; */
+/* } */
+
+#excluir-modal{
+	float: left;
+>>>>>>> branch 'master' of https://github.com/alvarocjunq/Gedai.git
 }

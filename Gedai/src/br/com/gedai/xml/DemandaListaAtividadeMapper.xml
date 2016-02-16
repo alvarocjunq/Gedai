@@ -14,6 +14,11 @@
 		<result property="dataInicio" column="DATA_INICIO" />
 		<association property="usuarioLogado" column="USU_INCLUSAO"	
 					 select="br.com.gedai.mapper.UsuarioMapper.obterPorId"/>
+<<<<<<< HEAD
+=======
+		<association property="statusAtividade" column="ID_STATUS_ATIVIDADE"	
+					 select="br.com.gedai.mapper.StatusAtividadeMapper.obterPorId"/>
+>>>>>>> branch 'master' of https://github.com/alvarocjunq/Gedai.git
 	</resultMap>
 
 	<sql id="selectSimples">
