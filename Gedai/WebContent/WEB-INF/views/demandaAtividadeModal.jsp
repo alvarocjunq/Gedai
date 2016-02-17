@@ -7,8 +7,6 @@
 		</div>
 	</div>
 	
-	<div class="header header-modal" id="header-modal-atividade"></div>
-	
 	<div class="content">
 		<div class="description">
 			<p></p>
@@ -20,7 +18,7 @@
 			  <option value="">Usu&aacute;rios</option>
 			</select>
 			<div class="ui small feed" id="informacoes-modal">
-				<h4 class="ui header">Informa&ccedil;&otilde;es</h4>
+				<h4 class="ui header theme-default">Informa&ccedil;&otilde;es</h4>
 			</div>
 		</div>
 	</div>

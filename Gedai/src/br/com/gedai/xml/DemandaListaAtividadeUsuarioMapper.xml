@@ -24,7 +24,7 @@
 	
 	<delete id="delete">
 		DELETE FROM TB_DEMANDA_LISTA_ATIVIDADE_USUARIO
-		WHERE ID = #{idDemandaListaAtividade}
+		WHERE ID_DEMANDA_LISTA_ATIVIDADE = #{idDemandaListaAtividade}
 	</delete>
 	
 	<insert id="insert">

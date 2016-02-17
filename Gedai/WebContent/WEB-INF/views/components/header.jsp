@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script>
 $(document).ready(function(){
-	$('.ui.dropdown').dropdown();
+	$('.ui.dropdown').dropdown({ allowLabels:true});
 	
 	$(".item-header-icon").click(function(e){
 		e.stopPropagation();

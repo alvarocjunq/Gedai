@@ -354,7 +354,6 @@
 	cursor: default !important;
 }
 
-<<<<<<< HEAD
 #excluir-modal{
 	float: left;
 }
@@ -371,24 +370,9 @@ label.theme-default{
 
 h4.theme-default{
 	font-weight: bold;
-	color: #D80000 !important
-=======
-/* .acoes-modal-header{ */
-/* 	width: 100px; */
-/*     text-align: center; */
-/*     border-bottom: 1px solid #BC4949; */
-/*     margin-bottom: 5px; */
-/*     font-size: 16px; */
-/*     font-weight: bold; */
-/* } */
-/* .acoes-modal-buttons{ */
-/* 	margin-top: 10px; */
-/* } */
-/* .acoes-modal-buttons button{ */
-/* 	width: 100%; */
-/* } */
+	color: #D80000 !important;
+}
 
 #excluir-modal{
 	float: left;
->>>>>>> branch 'master' of https://github.com/alvarocjunq/Gedai.git
 }

@@ -419,42 +419,62 @@ function onclickAtividade(escopo){
 	$('.ui.long.modal')
 			.modal({
 			    onShow: function(){
+			    	
 					$.ajax({
-					    url: "obterAtividade?idAtividade="+id,
+					    url: "obterUsuarios",
 					    type: 'GET',
 					    contentType : "application/json",
-					    success: function(data) {
+					    success: function(lista) {
+					    	loadTable("lstUsuarios", lista, getOptionComboUsuario);
 					    	
-					    	data.lstAtividadeUsuario.forEach(function(item){
-					    		$("#lstUsuarios").prepend("<a class='ui label transition visible' data-value='"+ item.usuario.id +"' style='display: inline-block !important;'>"+item.usuario.nome+"<i class='delete icon'></i></a>");
-					    	});
-					    	
-					    	$("#header-modal-atividade").val(data.nome);
-					    	
-					    	if(data.descricao)
-					    		$(".description p").html(data.descricao);
-					    	else{
-					    		$(".description p").css("border", "1px solid");
-					    		$(".description p").css("border-color", "rgb(169, 169, 169)");
-					    	}
-					    	
-					    	var eventos = "";
-					    	
-				    		eventos += getEvento("Criado em ".concat(customFormat(data.dataInclusao, "#DD#/#MM#/#YYYY#"), 
-				    											   " por ", data.usuarioLogado.nome));
+					    	$.ajax({
+							    url: "obterAtividade?idAtividade="+id,
+							    type: 'GET',
+							    contentType : "application/json",
+							    success: function(data) {
+							    	var selecionados = [];
+							    	data.lstAtividadeUsuario.forEach(function(item){
+							    		selecionados.push(""+item.usuario.id);
+							    	});
+							    	$("#lstUsuarios").dropdown('set selected',selecionados);
+							    	
+							    	if(selecionados.length == 0){
+							    		$("#lstUsuarios").dropdown('set placeholder text',"Usuários");
+							    	}
+									
+							    	$("#header-modal-atividade").val(data.nome);
+							    	
+							    	if(data.descricao)
+							    		$(".description p").html(data.descricao);
+							    	else{
+							    		$(".description p").css("border", "1px solid");
+							    		$(".description p").css("border-color", "rgb(169, 169, 169)");
+							    	}
+							    	
+							    	var eventos = "";
+							    	
+						    		eventos += getEvento("Criado em ".concat(customFormat(data.dataInclusao, "#DD#/#MM#/#YYYY#"), 
+						    											   " por ", data.usuarioLogado.nome));
 
-				    		if(data.dataInicio)
-				    			eventos += getEvento("Iniciado em ".concat(customFormat(data.dataInicio, "#DD#/#MM#/#YYYY#")));
-				    		
-				    		if(data.dataFinalizacao){
-				    			eventos += getEvento("Finalizado em ".concat(customFormat(data.dataFinalizacao, "#DD#/#MM#/#YYYY#")));
-				    			if(data.dataInicio) 
-				    				eventos += getEvento("Atividade levou ".concat(getDateDiff(data.dataInicio, data.dataFinalizacao), " dia(s)"));
-				    		}
-					    	
-					    	$("#informacoes-modal").append(eventos);
+						    		if(data.dataInicio)
+						    			eventos += getEvento("Iniciado em ".concat(customFormat(data.dataInicio, "#DD#/#MM#/#YYYY#")));
+						    		
+						    		if(data.dataFinalizacao){
+						    			eventos += getEvento("Finalizado em ".concat(customFormat(data.dataFinalizacao, "#DD#/#MM#/#YYYY#")));
+						    			if(data.dataInicio) 
+						    				eventos += getEvento("Atividade levou ".concat(getDateDiff(data.dataInicio, data.dataFinalizacao), " dia(s)"));
+						    		}
+							    	
+							    	$("#informacoes-modal").append(eventos);
+							    }
+							});
 					    }
 					});
+					
+					
+					
+					
+
 			    	
 					$.ajax({
 					    url: "obterListas?idDemanda="+$("#idDemanda").val(),
@@ -468,15 +488,6 @@ function onclickAtividade(escopo){
 					    }
 					});
 					
-					$.ajax({
-					    url: "obterUsuarios",
-					    type: 'GET',
-					    contentType : "application/json",
-					    success: function(lista) {
-					    	loadTable("lstUsuarios", lista, getOptionComboUsuario);
-					    }
-					});
-			    	
 			    },
 			    onHidden: function(){
 			    	$("#lstUsuarios").dropdown('clear');
