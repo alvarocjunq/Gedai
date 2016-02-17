@@ -37,7 +37,7 @@ $(document).on("click", ".item-menu", function(e) {
 				    }
 				});
 	 		</script>
-			<div class="ui compact  menu menu-dropdown">
+			<div class="ui compact menu menu-dropdown">
 			  <div class="ui dropdown item">
 			    Demandas
 			    <i class="dropdown icon"></i>
@@ -49,8 +49,10 @@ $(document).on("click", ".item-menu", function(e) {
 			  </div>
 			</div>
 		</c:if>
-	 	
+		
+	 	<a class="item active" style="margin-left: 10px;">Minha &aacute;rea</a>
+		
 		<div class="right menu">
-			<a class="ui item" href="logout">Sair</a>
+			<a class="ui item" href="logout"><i class="power icon"></i> Sair</a>
 		</div>
 	</div>
