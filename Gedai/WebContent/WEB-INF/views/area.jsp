@@ -12,7 +12,7 @@
 	<c:param name="visual" value="clean" />
 </c:import>
 	
-<div id="content" class="conteudo">
+<div id="content" class="conteudo" style="padding-top: 50px !important;">
 	<c:forEach items="${areas}" var="area">
 		<div class="area hidden" 
 			 data-idArea="${area.id}"

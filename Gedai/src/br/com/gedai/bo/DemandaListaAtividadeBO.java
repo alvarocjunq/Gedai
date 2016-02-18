@@ -62,7 +62,7 @@ public class DemandaListaAtividadeBO {
 		return demandaListaAtividadeMapper.obterPorUUID(lstUuid);
 	}
 
-	public void update(DemandaListaAtividade demandaListaAtividade) {
+	public void update(DemandaListaAtividade demandaListaAtividade, HttpSession session) {
 		StringUtils.emptyToNull(demandaListaAtividade);
 		
 		TipoListaEnum TIPO = TipoListaEnum.getEnum(demandaListaAtividade.getNomeDemandaLista());
@@ -70,9 +70,11 @@ public class DemandaListaAtividadeBO {
 		if(TIPO != null)
 			switch (TIPO) {
 			case FAZENDO:
+				setUsuarioLogadoNaAtividade(demandaListaAtividade, session);
 				demandaListaAtividade.setDataInicio(new Date());
 				break;
 			case FEITO:
+				setUsuarioLogadoNaAtividade(demandaListaAtividade, session);
 				demandaListaAtividade.setDataFinalizacao(new Date());
 				break;
 			case FAZER:
@@ -87,6 +89,21 @@ public class DemandaListaAtividadeBO {
 			demandaListaAtividadeUsuarioBO.insert(ativUsuario);
 
 		demandaListaAtividadeMapper.update(demandaListaAtividade);
+	}
+
+	private void setUsuarioLogadoNaAtividade(DemandaListaAtividade demandaListaAtividade, HttpSession session) {
+		Usuario usuLogado = usuarioBO.getUserSession(session);
+		boolean exist = false;
+		for(DemandaListaAtividadeUsuario ativUsuario: demandaListaAtividade.getLstAtividadeUsuario()){
+			if(usuLogado.getId() == ativUsuario.getUsuario().getId()){
+				exist = true;
+				break;
+			}
+		}
+		if(!exist)
+			demandaListaAtividade.getLstAtividadeUsuario().add(
+					new DemandaListaAtividadeUsuario(usuLogado,
+													 demandaListaAtividade.getIdDemandaLista()));
 	}
 
 	public void delete(Integer idDemandaListaAtividade) {

@@ -13,6 +13,11 @@ public class DemandaListaAtividadeUsuario implements Serializable {
 	public DemandaListaAtividadeUsuario() {
 		usuario = new Usuario();
 	}
+	
+	public DemandaListaAtividadeUsuario(Usuario usuario, Integer idDemandaListaAtividade) {
+		this.idDemandaListaAtividade = idDemandaListaAtividade;
+		this.usuario = usuario;
+	}
 
 	public Integer getId() {
 		return id;

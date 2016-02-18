@@ -30,8 +30,8 @@ public class DemandaListaAtividadeController {
 	
 	@RequestMapping(value="atualizarAtividade", method=RequestMethod.POST, 
 					produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody boolean atualizarAtividade(@RequestBody DemandaListaAtividade atividade) {
-		demandaListaAtividadeBO.update(atividade);
+	public @ResponseBody boolean atualizarAtividade(@RequestBody DemandaListaAtividade atividade, HttpSession session) {
+		demandaListaAtividadeBO.update(atividade, session);
 		return true;
 	}
 	
