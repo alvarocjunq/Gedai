@@ -1,7 +1,9 @@
 package br.com.gedai.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DemandaTarefa implements Serializable {
 
@@ -15,8 +17,11 @@ public class DemandaTarefa implements Serializable {
 	private String uuid;
 	private Usuario usuarioInclusao;
 	private Date dataInclusao;
+	private List<DemandaTarefaUsuario> lstUsuarioTarefa;
 	
-	public DemandaTarefa() {}
+	public DemandaTarefa() {
+		this.lstUsuarioTarefa = new ArrayList<DemandaTarefaUsuario>();
+	}
 
 	
 	public Integer getId() {
@@ -35,6 +40,13 @@ public class DemandaTarefa implements Serializable {
 		return dataInclusao;
 	}
 
+	public List<DemandaTarefaUsuario> getLstUsuarioTarefa() {
+		return lstUsuarioTarefa;
+	}
+
+	public void setLstUsuarioTarefa(List<DemandaTarefaUsuario> lstUsuarioTarefa) {
+		this.lstUsuarioTarefa = lstUsuarioTarefa;
+	}
 
 
 	public void setUsuarioInclusao(Usuario usuarioInclusao) {

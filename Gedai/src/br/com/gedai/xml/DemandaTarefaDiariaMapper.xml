@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="br.com.gedai.mapper.DemandaTarefaDiariaMapper">
+<resultMap id="mapSimples" type="br.com.gedai.data.DemandaTarefaDiaria">
+	<id property="id" column="ID" />
+	<result property="idTarefa" column="ID_DEMANDA_TAREFA" />
+	<result property="dataAtualizacao" column="DATA_ATUALIZACAO"/>
+	<result property="contador" column="CONTADOR_TAREFA"/>
+	<association property="usuario" column="ID_USUARIO"	
+					 select="br.com.gedai.mapper.UsuarioMapper.obterPorId"/>
+</resultMap>
+
+
+	<sql id="selectSimples">
+		SELECT ID,
+			   ID_DEMANDA_TAREFA,
+			   ID_USUARIO,
+		       DATA_ATUALIZACAO,
+		       CONTADOR_TAREFA
+		FROM TB_DEMANDA_TAREFA_DIARIA
+	</sql>
+	
+	<sql id="whereDiaria">
+		WHERE ID_DEMANDA_TAREFA = #{idTarefa} 
+		  AND DATA_ATUALIZACAO = #{dataAtualizacao} 	
+		  AND ID_USUARIO =#{usuario.id}
+	</sql>
+	
+	<select id="sumTarefaDiariaPorData" resultType="br.com.gedai.data.DemandaTarefaDiaria">
+		SELECT ID_DEMANDA_TAREFA as idTarefa,
+		    SUM(CONTADOR_TAREFA) as contador
+		FROM TB_DEMANDA_TAREFA_DIARIA
+		JOIN TB_DEMANDA_TAREFA ON TB_DEMANDA_TAREFA_DIARIA.ID_DEMANDA_TAREFA = TB_DEMANDA_TAREFA.ID
+		WHERE DATA_ATUALIZACAO = #{dataAtualizacao}  AND TB_DEMANDA_TAREFA.ID_DEMANDA = #{idDemanda}
+		GROUP BY ID_DEMANDA_TAREFA
+	</select>
+	
+	
+	<select id="obterPorUsuario" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		<include refid="whereDiaria"/>
+	</select>
+	
+	<select id="obterPorId" resultType="br.com.gedai.data.DemandaTarefaDiaria">
+		<include refid="selectSimples"/>
+		WHERE ID = #{id}
+	</select>
+	
+	<update id="addContadorUsuario">
+		UPDATE TB_DEMANDA_TAREFA_DIARIA
+		   SET CONTADOR_TAREFA = CONTADOR_TAREFA + 1
+	   <include refid="whereDiaria"/>
+	</update>
+	
+	<update id="removeContadorUsuario">
+		UPDATE TB_DEMANDA_TAREFA_DIARIA
+		   SET CONTADOR_TAREFA = CONTADOR_TAREFA - 1
+	   <include refid="whereDiaria"/>
+	</update>
+	
+	<insert id="insert">
+		INSERT INTO TB_DEMANDA_TAREFA_DIARIA
+			(ID_USUARIO,
+			 ID_DEMANDA_TAREFA,			
+	       	 DATA_ATUALIZACAO)
+		VALUES
+			(#{usuario.id},
+			#{idTarefa},
+			#{dataAtualizacao})
+	</insert>
+	
+</mapper>

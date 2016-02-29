@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import br.com.gedai.data.DemandaListaAtividade;
+import br.com.gedai.dto.AtividadePDFDTO;
 
 
 @Component
@@ -16,5 +17,6 @@ public interface DemandaListaAtividadeMapper {
 	List<DemandaListaAtividade> obterPorLista(Integer idDemandaLista);
 	DemandaListaAtividade obterPorId(Integer idDemandaListaAtividade);
 	List<DemandaListaAtividade> obterPorUUID(@Param("lstUuid") List<String> lstUuid);
+	List<AtividadePDFDTO> obterAtividadePorDemandaPDF(Integer idDemanda);
 	
 }

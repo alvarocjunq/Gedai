@@ -11,10 +11,13 @@
 <c:import url="/WEB-INF/views/components/header.jsp" />
 <input type="hidden" value="${idDemanda}" id="idDemanda"/>
 <input type="hidden" value="" id="idAtividade"/>
-<div id="content" class="conteudo">
+<input type="hidden" value="" id="idTarefa"/>
 
-	<h3 class="ui header header-atividades">${demanda.nome} <small>${demanda.descricao}</small></h3>
+<div id="content" class="conteudo">
+	
+	<h3 class="ui header header-atividades">${demanda.nome} <small>${demanda.descricao}</small> <i class="file excel outline icon"></i></h3>
 	<div class="ui large horizontal list">
+	
 	
 	<c:forEach items="${listas}" var="lista" >
 		<div class="item">
@@ -52,7 +55,7 @@
 				<h4>Tarefas Di&aacute;rias</h4>
 				<div class="lista-task">
 					<c:forEach items="${tarefas}" var="tarefa">
-						<div class="task" data-idTarefa="${tarefa.id}">		
+						<div class="task" data-idTarefa="${tarefa.id}" id="${tarefa.id}" >		
 							<a class="ui black medium circular label contador-task">${tarefa.contador}</a>
 							<a class="ui tiny red circular label remove-icon"><i class="minus icon icon-task"></i></a> 
 							<a class="ui tiny green circular label add-icon"><i class="plus icon icon-task"></i></a>
@@ -83,11 +86,19 @@
 </script>
 
 <c:import url="demandaAtividadeModal.jsp" />
+<c:import url="associarUsuarioModal.jsp" />
+<c:import url="visualizarListaAtividadesModal.jsp" />
 </body>
 
 <script type="text/javascript">
 $(document).ready(function(){
 	$('.selection.dropdown.up').dropdown({direction: 'upward'});
+	
+	$("#dataInicio").mask("99/99/9999",{placeholder:"dd/mm/aaaa"});
+	$("#dataFim").mask("99/99/9999",{placeholder:"dd/mm/aaaa"});
+	
+	$("#dataIni").mask("99/99/9999",{placeholder:"dd/mm/aaaa"});
+	$("#dataFinazalicao").mask("99/99/9999",{placeholder:"dd/mm/aaaa"});
 	
 	$(".nova-atividade").click(function(e){
 		e.stopPropagation();
@@ -139,6 +150,28 @@ $(document).ready(function(){
 		})
 		$(this).css("visibility", "hidden");
 		$(this).parent().find(".salvar-tarefa").css("visibility", "hidden");
+	});
+	
+	$('.file.excel.outline.icon').click(function(e){
+		e.stopPropagation();
+		var idDemanda = $.urlParam("idDemanda");
+		
+	    $.fileDownload("exportExcelAtividade?idDemanda=".concat(idDemanda), {
+	        successCallback: function (url) {
+	        },
+	        failCallback: function (responseHtml, url) {
+	        }
+	    });
+	    return false;
+// 		$("#reportModal")
+// 		.modal({
+// 		    onShow: function(){
+// 		    	$("#frame-report").attr("src","visualizarAtividades?idDemanda=".concat(idDemanda));
+// 		 	},
+// 			 onHidden: function(){
+// 				 $("#frame-report").attr("src","");
+// 			 }
+// 		}).modal('show');
 	});
 	
 	$(".salvar-tarefa").click(function(e){
@@ -310,6 +343,10 @@ $(document).ready(function(){
     	var _idDemandaLista = demandaLista.attr("data-id");
     	var _textDemandaLista = demandaLista.text();
     	var idAtividade = $("#idAtividade").val();
+    	var dataInicio = isCorrectDate("#dataInicio")? new Date(getDateValid($("#dataInicio").val())):$("#dataInicio").val();
+    	var dataFim = isCorrectDate("#dataFim")? new Date(getDateValid($("#dataFim").val())):$("#dataFim").val();
+    	var dataInicioReal = isCorrectDate("#dataIni")? new Date(getDateValid($("#dataIni").val())):$("#dataIni").val();
+    	var dataFimReal = isCorrectDate("#dataFinazalicao")?  new Date(getDateValid($("#dataFinazalicao").val())):$("#dataFinalizacao").val();
     	var arrUsuariosAssociados = [];
 		if(_nome === ""){
 			alertify.error("Informe o nome da atividade para continuar");
@@ -328,6 +365,10 @@ $(document).ready(function(){
 						 descricao: _descricao,
 						 idDemandaLista: _idDemandaLista,
 						 nomeDemandaLista: _textDemandaLista,
+						 dataInicioPrevisto: dataInicio,
+						 dataFimPrevisto: dataFim,
+						 dataInicio: dataInicioReal,
+						 dataFinalizacao: dataFimReal,
 						 lstAtividadeUsuario : arrUsuariosAssociados};
 		
 		$.ajax({
@@ -352,6 +393,34 @@ $(document).ready(function(){
 	
 });
 
+$("#salvar-modal-tarefa").click(function(){
+	var idTarefa = $("#idTarefa").val();
+	var nomeTarefa = $("#header-modal-tarefa").val();
+	var tarefa = {id			  : idTarefa,
+				 nome			  : nomeTarefa};
+	
+	$.ajax({
+	    url: "updateTarefa",
+	    type: 'POST',
+	    contentType : "application/json",
+	    data: JSON.stringify(tarefa),
+	    success: function() {
+	    	alertify.success("Tarefa salva com sucesso.");
+	    	$("#associarUsuariotarefa").modal("hide");
+	    }
+	});
+	
+	
+});
+
+
+
+
+$(document).on("click", ".task > label", function(e){
+	var idTarefa = $(this).closest(".task").attr("data-idTarefa")
+	onclickTarefa(idTarefa);
+});
+
 $(document).on("click", ".remove-icon", function(e) {
 	e.stopPropagation();
 	var objCont = $(this).parent().find(".contador-task");
@@ -359,10 +428,8 @@ $(document).on("click", ".remove-icon", function(e) {
 	
 	if(contador === '0') return;
 	
-	contador = parseInt(contador) - 1;
-	objCont.text(contador);
 	var idDemandaTarefa = objCont.closest(".task").attr("data-idTarefa");
-	onClickUpdateContador(idDemandaTarefa, contador);
+	onClickUpdateContador(idDemandaTarefa, contador, "remove", objCont);
 });
 
 
@@ -370,19 +437,20 @@ $(document).on("click", ".add-icon", function(e) {
 	e.stopPropagation();
 	var objCont = $(this).parent().find(".contador-task");
 	var contador = objCont.text();
-	contador = parseInt(contador) + 1;
-	objCont.text(contador);
 	var idDemandaTarefa = objCont.closest(".task").attr("data-idTarefa");
-	onClickUpdateContador(idDemandaTarefa, contador);
+	onClickUpdateContador(idDemandaTarefa, contador, "add",objCont);
 });
 
-function onClickUpdateContador(idDemandaTarefa, contador){
+function onClickUpdateContador(idTarefa, contador, tipo,objCont){
+	
 	$.ajax({
 	    url: "updateContador",
 	    type: 'POST',
 	    contentType : "application/json",
-	    data: JSON.stringify({id: idDemandaTarefa, contador: contador}),
-	    success: function() {}
+	    data: JSON.stringify({idTarefa: idTarefa, contador: contador, tipoOperacao : tipo}),
+	    success: function(contAtual) {
+	    	objCont.text(contAtual);
+	    }
 	});
 }
 
@@ -416,7 +484,7 @@ function onclickAtividade(escopo){
 		$("#excluir-modal").css("visibility", "hidden");
 		
 	$("#idAtividade").val(id);
-	$('.ui.long.modal')
+	$("#atividadeModal")
 			.modal({
 			    onShow: function(){
 			    	
@@ -449,33 +517,40 @@ function onclickAtividade(escopo){
 							    	else{
 							    		$(".description p").css("border", "1px solid");
 							    		$(".description p").css("border-color", "rgb(169, 169, 169)");
+							    		$(".description p").css("padding","15px");
 							    	}
 							    	
+							    	if(data.dataInicioPrevisto)
+							    		$("#dataInicio").val(customFormat(data.dataInicioPrevisto, "#DD#/#MM#/#YYYY#"));
+							    	
+						    		if(data.dataFimPrevisto)
+						    			$("#dataFim").val(customFormat(data.dataFimPrevisto,"#DD#/#MM#/#YYYY#"));
+						    		
 							    	var eventos = "";
 							    	
-						    		eventos += getEvento("Criado em ".concat(customFormat(data.dataInclusao, "#DD#/#MM#/#YYYY#"), 
+						    		eventos += getEvento("Status 'FAZER' em ".concat(customFormat(data.dataInclusao, "#DD#/#MM#/#YYYY#"), 
 						    											   " por ", data.usuarioLogado.nome));
-
-						    		if(data.dataInicio)
-						    			eventos += getEvento("Iniciado em ".concat(customFormat(data.dataInicio, "#DD#/#MM#/#YYYY#")));
-						    		
+									
+						    	 	if(data.dataInicio){
+						    			eventos += getEvento("Status 'FAZENDO' em ".concat(customFormat(data.dataInicio, "#DD#/#MM#/#YYYY#")));
+						    			$("#dataIni").val(customFormat(data.dataInicio, "#DD#/#MM#/#YYYY#"));
+						    	 	}
 						    		if(data.dataFinalizacao){
-						    			eventos += getEvento("Finalizado em ".concat(customFormat(data.dataFinalizacao, "#DD#/#MM#/#YYYY#")));
-						    			if(data.dataInicio) 
-						    				eventos += getEvento("Atividade levou ".concat(getDateDiff(data.dataInicio, data.dataFinalizacao), " dia(s)"));
+						    			eventos += getEvento("Status 'FEITO' em ".concat(customFormat(data.dataFinalizacao, "#DD#/#MM#/#YYYY#")));
+						    			$("#dataFinazalicao").val(customFormat(data.dataFinalizacao, "#DD#/#MM#/#YYYY#"));
 						    		}
-							    	
+						    		
 							    	$("#informacoes-modal").append(eventos);
+							    	
+// 							    	if(data.dataFinalizacao == null || data.dataFinalizacao ===""){
+// 							    		$("#dataFinazalicao").attr("disabled", "disabled");
+// 							    		$("#dataIni").attr("disabled", "disabled");
+// 							    	}
 							    }
 							});
 					    }
 					});
 					
-					
-					
-					
-
-			    	
 					$.ajax({
 					    url: "obterListas?idDemanda="+$("#idDemanda").val(),
 					    type: 'GET',
@@ -491,21 +566,45 @@ function onclickAtividade(escopo){
 			    },
 			    onHidden: function(){
 			    	$("#lstUsuarios").dropdown('clear');
-			    	$("#header-modal-atividade").text("");
+// 			    	$("#header-modal-atividade").text("");
 			    	
 			    	if($(".description p")){
-			    		$(".description p").text("");
+// 			    		$(".description p").text("");
 			    		$(".description p").css("border", "0");
 			    	}
 			    		
 			    	if($(".description textarea"))
 			    		$(".description textarea").replaceWith("<p></p>");
 			    	
+			    	clearAll("#atividadeModal");
+			    	
 			    	$("#informacoes-modal .event").remove();
 			    }
 		  	})
 		  	.modal('show');
+	
 }
+
+function onclickTarefa(id){
+	$("#idTarefa").val(id);
+	$("#associarUsuariotarefa")
+	.modal({
+	    onShow: function(){
+	    	$.ajax({
+			    url: "obterTarefa?idTarefa="+id,
+			    type: 'GET',
+			    contentType : "application/json",
+			    success: function(data) {
+			    	$("#header-modal-tarefa").val(data.nome);
+			    }
+	    	});
+	 	},
+		 onHidden: function(){
+	    	$("#header-modal-tarefa").text("");
+		 }
+	}).modal('show');
+}
+
 function getLineListas(item){
 	var linha="";
 	linha = linha.concat("<div class='item' data-id='", item.id,"'>", item.nome ,"</div>")
@@ -513,7 +612,7 @@ function getLineListas(item){
 }
 
 function getOptionComboUsuario(item){
-	return "<option value='".concat(item.id , "'>", item.nome , "</option>"); 
+	return "<option value='".concat(item.id , "'>", item.nome , "</option>");
 }
 
 </script>

@@ -1,5 +1,4 @@
-<div class="ui long modal">
-
+<div class="ui long modal" id="atividadeModal">
 	<i class="close icon"></i>
 	<div class="header header-modal" >
 		<div class="field">
@@ -8,7 +7,31 @@
 	</div>
 	
 	<div class="content">
+		<form class="ui form">
+			<div class="ui four column grid">
+				<div class="column field">
+					<label class="theme-default">Data In&iacute;cio Previsto</label>
+					<input type="text" id="dataInicio" value="" />
+				</div>
+				<div class="column field">
+					<label class="theme-default">Data Fim Previsto</label>
+					<input type="text" id="dataFim" value="" />
+				</div>
+				<div class="right column field">
+					<label class="theme-default">Data In&iacute;cio Real</label>
+					<input type="text" id="dataIni" value="" />
+				</div>
+				<div class="column field">
+					<label class="theme-default">Data Fim Real</label>
+					<input type="text" id="dataFinazalicao" value="" />
+				</div>
+			</div>
+		</form>
+	
 		<div class="description">
+			<div class="field">
+				<label class="theme-default">Descri&ccedil;&atilde;o</label>
+			</div>
 			<p></p>
 		</div>
 		

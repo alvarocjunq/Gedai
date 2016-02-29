@@ -6,11 +6,10 @@
   </div>
   <form class="ui form">
 	  <div class="ui grid grid-modal">
-	  
-		  <div class="field four wide column">
-				<label>Nome Demanda</label> 
-			 	<input type="text" maxlength="30" id="nome"/>
-			</div>
+		<div class="field four wide column">
+			<label>Nome Demanda</label> 
+			<input type="text" maxlength="30" id="nome"/>
+		</div>
 		<div class="field twelve wide column">
 			<label>Descrição</label> 
 		 	<input type="text" value="" maxlength="255" id="descricao"/>

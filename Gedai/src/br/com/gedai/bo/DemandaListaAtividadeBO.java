@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import br.com.gedai.data.DemandaListaAtividade;
 import br.com.gedai.data.DemandaListaAtividadeUsuario;
 import br.com.gedai.data.Usuario;
+import br.com.gedai.dto.AtividadePDFDTO;
 import br.com.gedai.enums.TipoListaEnum;
 import br.com.gedai.mapper.DemandaListaAtividadeMapper;
 import br.com.gedai.utils.StringUtils;
@@ -64,18 +65,19 @@ public class DemandaListaAtividadeBO {
 
 	public void update(DemandaListaAtividade demandaListaAtividade, HttpSession session) {
 		StringUtils.emptyToNull(demandaListaAtividade);
-		
+		demandaListaAtividade.setDataInicio(demandaListaAtividade.getDataInicio());
+		demandaListaAtividade.setDataFinalizacao(demandaListaAtividade.getDataFinalizacao());
 		TipoListaEnum TIPO = TipoListaEnum.getEnum(demandaListaAtividade.getNomeDemandaLista());
 		
 		if(TIPO != null)
 			switch (TIPO) {
 			case FAZENDO:
 				setUsuarioLogadoNaAtividade(demandaListaAtividade, session);
-				demandaListaAtividade.setDataInicio(new Date());
+				demandaListaAtividade.setDataInicio(demandaListaAtividade.getDataInicio()!= null ? demandaListaAtividade.getDataInicio():new Date());
 				break;
 			case FEITO:
 				setUsuarioLogadoNaAtividade(demandaListaAtividade, session);
-				demandaListaAtividade.setDataFinalizacao(new Date());
+				demandaListaAtividade.setDataFinalizacao(demandaListaAtividade.getDataFinalizacao()!= null? demandaListaAtividade.getDataFinalizacao(): new Date());
 				break;
 			case FAZER:
 				break;
@@ -103,7 +105,7 @@ public class DemandaListaAtividadeBO {
 		if(!exist)
 			demandaListaAtividade.getLstAtividadeUsuario().add(
 					new DemandaListaAtividadeUsuario(usuLogado,
-													 demandaListaAtividade.getIdDemandaLista()));
+							demandaListaAtividade.getId()));
 	}
 
 	public void delete(Integer idDemandaListaAtividade) {
@@ -113,5 +115,11 @@ public class DemandaListaAtividadeBO {
 	public List<DemandaListaAtividade> obterPorLista(Integer idDemandaLista) {
 		return demandaListaAtividadeMapper.obterPorLista(idDemandaLista);
 	}
-
+	
+	public List<AtividadePDFDTO> obterAtividadePorDemandaPDF(Integer idDemanda){
+		return this.demandaListaAtividadeMapper.obterAtividadePorDemandaPDF(idDemanda);
+	}
+	
+	
+	
 }

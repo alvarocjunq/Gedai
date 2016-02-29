@@ -2,6 +2,9 @@ package br.com.gedai.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -42,4 +45,10 @@ public class DemandaListaController {
 	public @ResponseBody List<DemandaLista> obterListas(Integer idDemanda) {
 		return demandaListaBO.obterPorDemanda(idDemanda);
 	}
+	
+	@RequestMapping("exportExcelAtividade")
+	public void gerarPDFDemanda(Integer idDemanda, HttpServletResponse res, HttpSession session){
+		this.demandaListaBO.gerarExcelAtividades(idDemanda, res, session);
+	}
+	
 }

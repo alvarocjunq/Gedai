@@ -17,6 +17,8 @@
 	<script type="text/javascript" src="resources/js/semantic.min.jsx"></script>
 	<script type="text/javascript" src="resources/js/alertify.min.jsx"></script>
 	<script type="text/javascript" src="resources/js/functions.jsx"></script>
+	<script type="text/javascript" src="resources/js/jquery.mask.min.jsx"></script>
 	<script type="text/javascript" src="resources/js/DateUtils.jsx"></script>
+	<script type="text/javascript" src="resources/js/jquery.fileDownload.jsx"></script>
 	
 </head>

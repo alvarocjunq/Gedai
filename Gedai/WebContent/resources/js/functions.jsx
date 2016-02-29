@@ -34,6 +34,9 @@ function clearAll(container){
 	$(container+" input:text").each(function(){
 		$(this).val("");
 	});
+	$(container+" input[type=date]").each(function(){
+		$(this).val("");
+	});
 	
 	$(container + "select").each(function(){
 		$(this).children("option:selected").removeAttr("selected").end()
@@ -196,3 +199,15 @@ $.urlParam = function(name){
     return results[1] || 0;
 }
 
+function isCorrectDate(data){
+	if($(data).val()){
+		var dataFimPrevisto = new Date(getDateValid($(data).val()));
+		var anoFimPrevisto = dataFimPrevisto.getFullYear();
+		if(isNaN(dataFimPrevisto.getDate()) || (anoFimPrevisto <= 1900 || anoFimPrevisto >= 2500)){
+			return false;
+		}
+		return true;
+	}
+	
+	return false;
+}

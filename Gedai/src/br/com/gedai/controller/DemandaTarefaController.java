@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.gedai.bo.DemandaTarefaBO;
 import br.com.gedai.data.DemandaTarefa;
+import br.com.gedai.data.DemandaTarefaDiaria;
 
 @Controller
 public class DemandaTarefaController {
@@ -30,9 +31,21 @@ public class DemandaTarefaController {
 	
 	@RequestMapping(value = "updateContador", method = RequestMethod.POST, 
 			produces = MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Boolean updateContador(@RequestBody DemandaTarefa demandaTarefa){
-		this.demandaTarefaBO.updateContador(demandaTarefa);
+	public @ResponseBody Integer updateContador(@RequestBody DemandaTarefaDiaria demandaTarefaDiaria, HttpSession session){
+		return this.demandaTarefaBO.updateContador(demandaTarefaDiaria, session);
+	}
+	
+	@RequestMapping(value = "obterTarefa", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody DemandaTarefa obterTarefa(Integer idTarefa){
+		return this.demandaTarefaBO.obterPorId(idTarefa);
+	}	
+	
+	@RequestMapping(value = "updateTarefa", method = RequestMethod.POST, 
+			produces = MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Boolean updateTarefa(@RequestBody DemandaTarefa demandaTarefa){
+		this.demandaTarefaBO.updateTarefa(demandaTarefa);
 		return true;
 	}
+	
 	
 }

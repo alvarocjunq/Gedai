@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class DemandaListaAtividade implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -21,6 +23,12 @@ public class DemandaListaAtividade implements Serializable {
 	private Date dataInclusao;
 	private Date dataFinalizacao;
 	private Date dataInicio;
+	
+	@DateTimeFormat(pattern="dd/MM/yyyy")
+	private Date dataInicioPrevisto;
+	
+	@DateTimeFormat(pattern="dd/MM/yyyy")
+	private Date dataFimPrevisto;
 	
 	public DemandaListaAtividade() {
 		lstAtividadeUsuario = new ArrayList<DemandaListaAtividadeUsuario>();
@@ -125,5 +133,20 @@ public class DemandaListaAtividade implements Serializable {
 			List<DemandaListaAtividadeUsuario> lstAtividadeUsuario) {
 		this.lstAtividadeUsuario = lstAtividadeUsuario;
 	}
-	
+
+	public Date getDataInicioPrevisto() {
+		return dataInicioPrevisto;
+	}
+
+	public Date getDataFimPrevisto() {
+		return dataFimPrevisto;
+	}
+
+	public void setDataInicioPrevisto(Date dataInicioPrevisto) {
+		this.dataInicioPrevisto = dataInicioPrevisto;
+	}
+
+	public void setDataFimPrevisto(Date dataFimPrevisto) {
+		this.dataFimPrevisto = dataFimPrevisto;
+	}
 }

@@ -43,5 +43,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ApachePOI"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jasper"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

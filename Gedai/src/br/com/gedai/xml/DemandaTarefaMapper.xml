@@ -7,10 +7,22 @@
 		SELECT ID,
 		       NOME,
 		       DESCRICAO,
-		       UUID,
-		       CONTADOR
+		       UUID
 		FROM TB_DEMANDA_TAREFA
 	</sql>
+	
+	<select id="obterTarefasPorDemandaPDF" resultType="br.com.gedai.dto.TarefaPDFDTO">
+		SELECT TB_DEMANDA_TAREFA.NOME as nome,
+		       TB_DEMANDA_TAREFA.DATA_INCLUSAO as dataInclusao,
+		       TB_DEMANDA_TAREFA_DIARIA.DATA_ATUALIZACAO as dataAtualizacao,
+		       TB_USUARIO.NOME as nomeUsuario
+		FROM TB_DEMANDA_TAREFA
+		JOIN TB_DEMANDA_TAREFA_DIARIA ON TB_DEMANDA_TAREFA.ID = TB_DEMANDA_TAREFA_DIARIA.ID_DEMANDA_TAREFA
+		JOIN TB_USUARIO ON TB_DEMANDA_TAREFA_DIARIA.ID_USUARIO = TB_USUARIO.ID
+		WHERE ID_DEMANDA = #{idDemanda}
+		ORDER BY NOME
+	</select>
+	
 	
 	<select id="obterPorDemanda" resultType="br.com.gedai.data.DemandaTarefa">
 		<include refid="selectSimples"/>
@@ -26,11 +38,17 @@
 			</foreach>
 	</select>
 	
-	<update id="updateContador">
+	<select id="obterPorId" resultType="br.com.gedai.data.DemandaTarefa">
+		<include refid="selectSimples"/>
+		WHERE ID = #{id}
+	</select>
+	
+	<update id="updateNomeTarefa">
 		UPDATE TB_DEMANDA_TAREFA
-		   SET CONTADOR = #{contador}
+		   SET NOME = #{nome}
 		WHERE ID = #{id}
 	</update>
+	
 	
 	<insert id="insert">
 		INSERT INTO TB_DEMANDA_TAREFA

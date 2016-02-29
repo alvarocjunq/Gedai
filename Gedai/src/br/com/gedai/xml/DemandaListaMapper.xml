@@ -24,6 +24,11 @@
 		FROM TB_DEMANDA_LISTA
 	</sql>
 	
+	<select id="obterPorId" resultMap="mapSimples">
+		<include refid="selectSimples"/>
+		WHERE ID = #{id}
+	</select>
+	
 	<select id="obterPorDemanda" resultMap="mapSimples">
 		<include refid="selectSimples"/>
 		WHERE ID_DEMANDA = #{idDemanda}
