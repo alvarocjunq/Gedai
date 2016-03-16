@@ -50,7 +50,7 @@ $(document).on("click", ".item-menu", function(e) {
 			</div>
 		</c:if>
 		
-	 	<a class="item active" style="margin-left: 10px;">Minha &aacute;rea</a>
+	 	<a class="item active" style="margin-left: 10px;">Agenda</a>
 		
 		<div class="right menu">
 			<a class="ui item" href="logout"><i class="power icon"></i> Sair</a>

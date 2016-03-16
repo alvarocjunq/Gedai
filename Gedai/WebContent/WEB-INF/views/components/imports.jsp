@@ -5,9 +5,9 @@
 	
 	<title>Gedai - Gerenciador de Demandas e Atividades Internas</title>
 	<link href="resources/img/favicon.ico" rel="shortcut icon">
-	<link type="text/css" rel="stylesheet" href="resources/css/style.css">
+	<link type="text/css" rel="stylesheet" href="resources/css/style.css?${version}">
 	<link type="text/css" rel="stylesheet" href="resources/css/semantic.min.css">
-	<link type="text/css" rel="stylesheet" href="resources/css/objects.css">
+	<link type="text/css" rel="stylesheet" href="resources/css/objects.css?${version}">
 	<link type="text/css" rel="stylesheet" href="resources/css/alertify.core.css" />
 	<link type="text/css" rel="stylesheet" href="resources/css/alertify.default.css" />
 	

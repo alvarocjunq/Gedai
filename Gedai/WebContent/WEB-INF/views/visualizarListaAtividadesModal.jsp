@@ -5,7 +5,7 @@
 	  		Relat&oacute;rio Atividades e tarefas
 	  </div>
   </div>
-  <div class="ui grid grid-modal">
+  <div class="ui grid grid-modal report" >
   		<iframe src="" id="frame-report"></iframe>
   </div>
 </div>

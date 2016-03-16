@@ -47,8 +47,14 @@ public class DemandaListaController {
 	}
 	
 	@RequestMapping("exportExcelAtividade")
-	public void gerarPDFDemanda(Integer idDemanda, HttpServletResponse res, HttpSession session){
+	public void gerarExcelDemanda(Integer idDemanda, HttpServletResponse res, HttpSession session){
 		this.demandaListaBO.gerarExcelAtividades(idDemanda, res, session);
 	}
+	
+	@RequestMapping("visualizarAtividades")
+	public void gerarPDFDemanda(Integer idDemanda, HttpServletResponse res, HttpSession session){
+		demandaListaBO.gerarPDF(idDemanda, res);
+	}
+	
 	
 }

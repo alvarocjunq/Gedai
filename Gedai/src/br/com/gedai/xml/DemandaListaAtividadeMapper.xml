@@ -5,7 +5,7 @@
 
 	<resultMap id="mapSimples" type="br.com.gedai.data.DemandaListaAtividade">
 		<id property="id" column="ID" />
-			<result property="idDemandaLista" column="ID_DEMANDA_LISTA" />
+		<result property="idDemandaLista" column="ID_DEMANDA_LISTA" />
 		<result property="nome" column="NOME" />
 		<result property="descricao" column="DESCRICAO" />
 		<result property="uuid" column="UUID" />
@@ -16,7 +16,43 @@
 		<result property="dataFimPrevisto" column="DATA_FIM_PREVISTO" />
 		<association property="usuarioLogado" column="USU_INCLUSAO"	
 					 select="br.com.gedai.mapper.UsuarioMapper.obterPorId"/>
+					 
+		
 	</resultMap>
+	
+<!-- 	<resultMap id="resultDemandaAtividadePDF" type="br.com.gedai.dto.AtividadePDFDTO" > -->
+<!-- 		<result property="nomeAtividade" column="nomeAtividade" /> -->
+<!-- 		<result property="nomeDemanda" column="nomeDemanda" /> -->
+<!-- 		<result property="descAtividade" column="descAtividade" /> -->
+<!-- 		<result property="nomeUsuarioInclusao" column="nomeUsuarioInclusao" /> -->
+<!-- 		<result property="dataInicioPrevista" column="dataInicioPrevista" /> -->
+<!-- 		<result property="dataFimPrevista" column="dataFimPrevista" /> -->
+<!-- 		<result property="dataFimRealizada" column="dataFimRealizada" /> -->
+<!-- 		<result property="dataInicioRealizada" column="dataInicioRealizada" /> -->
+<!-- 		<collection property="usuariosAssociados" javaType="ArrayList" column="idDemandaListaAtividade"  -->
+<!-- 					ofType="br.com.gedai.data.DemandaListaAtividadeUsuario"  -->
+<!-- 						select="br.com.gedai.mapper.DemandaListaAtividadeUsuarioMapper.obterPorAtividade" /> -->
+<!-- 	</resultMap> -->
+	
+	
+	<select id="obterAtividadesPendentes" >
+		SELECT TB_AREA.NOME,
+		       TB_DEMANDA.NOME,
+		       TB_DEMANDA_LISTA.NOME,
+		       TB_DEMANDA_LISTA_ATIVIDADE.NOME,
+		       TB_DEMANDA_LISTA_ATIVIDADE.DATA_INICIO_PREVISTO,
+		       TB_DEMANDA_LISTA_ATIVIDADE.DATA_FIM_PREVISTO
+		FROM TB_DEMANDA_LISTA_ATIVIDADE
+		  JOIN TB_DEMANDA_LISTA ON TB_DEMANDA_LISTA.ID = TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA
+		  JOIN TB_DEMANDA ON TB_DEMANDA.ID = TB_DEMANDA_LISTA.ID_DEMANDA
+		  JOIN TB_AREA ON TB_AREA.ID = TB_DEMANDA.ID_AREA
+		  JOIN TB_DEMANDA_LISTA_ATIVIDADE_USUARIO ON TB_DEMANDA_LISTA_ATIVIDADE.ID = TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_DEMANDA_LISTA_ATIVIDADE
+		WHERE TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_USUARIO = #{idUsuarioLogado}
+		AND   TB_DEMANDA_LISTA.NOME IN ('Fazer','Fazendo')
+		ORDER BY TB_AREA.NOME,
+		         TB_DEMANDA_LISTA.NOME,
+		         TB_DEMANDA_LISTA_ATIVIDADE.DATA_INICIO_PREVISTO;
+	</select>
 	
 	<sql id="selectSimples">
 		SELECT ID,
@@ -35,8 +71,10 @@
 	
 	
 	<select id="obterAtividadePorDemandaPDF" resultType="br.com.gedai.dto.AtividadePDFDTO">
-		SELECT TB_DEMANDA_LISTA_ATIVIDADE.NOME as nomeAtividade,
-		       TB_DEMANDA_LISTA_ATIVIDADE.DESCRICAO as descAtividade,
+		SELECT TB_DEMANDA_LISTA_ATIVIDADE.ID AS idDemandaListaAtividade,
+			   TB_DEMANDA.NOME ||' '|| TB_DEMANDA.DESCRICAO as nomeDemanda,
+	           TB_DEMANDA_LISTA_ATIVIDADE.NOME as nomeAtividade,
+	           TB_DEMANDA_LISTA_ATIVIDADE.DESCRICAO as descAtividade,
 		       TB_DEMANDA_LISTA_ATIVIDADE.DATA_FIM_PREVISTO as dataFimPrevista,
 		       TB_DEMANDA_LISTA_ATIVIDADE.DATA_INICIO_PREVISTO as dataInicioPrevista,
 		       TB_DEMANDA_LISTA_ATIVIDADE.DATA_INICIO as dataInicioRealizada,
@@ -45,10 +83,11 @@
 		       USUARIOINCLUSAO.NOME as nomeUsuarioInclusao
 		FROM TB_DEMANDA_LISTA_ATIVIDADE
 		LEFT JOIN TB_DEMANDA_LISTA_ATIVIDADE_USUARIO ON TB_DEMANDA_LISTA_ATIVIDADE.ID=TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_DEMANDA_LISTA_ATIVIDADE
-		LEFT  JOIN TB_USUARIO AS USUARIOINCLUSAO ON USUARIOINCLUSAO.ID = TB_DEMANDA_LISTA_ATIVIDADE.USU_INCLUSAO
-		LEFT  JOIN TB_USUARIO ON TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_USUARIO = TB_USUARIO.ID
-		LEFT  JOIN TB_DEMANDA_LISTA ON TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA =  TB_DEMANDA_LISTA.ID
-		WHERE ID_DEMANDA=#{idDemanda};
+		LEFT JOIN TB_USUARIO AS USUARIOINCLUSAO ON USUARIOINCLUSAO.ID = TB_DEMANDA_LISTA_ATIVIDADE.USU_INCLUSAO
+		LEFT JOIN TB_USUARIO ON TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_USUARIO = TB_USUARIO.ID
+		LEFT JOIN TB_DEMANDA_LISTA ON TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA =  TB_DEMANDA_LISTA.ID
+		LEFT JOIN TB_DEMANDA ON TB_DEMANDA.ID = TB_DEMANDA_LISTA.ID_DEMANDA
+		WHERE TB_DEMANDA.ID=#{idDemanda};
 	</select>
 	
 	<select id="obterPorId" resultMap="mapSimples">
@@ -72,6 +111,7 @@
 	<delete id="delete">
 		DELETE FROM TB_DEMANDA_LISTA_ATIVIDADE
 		WHERE ID = #{idDemandaListaAtividade}
+		
 	</delete>
 	
 	<update id="update">

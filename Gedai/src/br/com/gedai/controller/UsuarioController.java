@@ -16,6 +16,7 @@ import br.com.gedai.bo.UsuarioBO;
 import br.com.gedai.data.Usuario;
 import br.com.gedai.enums.ConfigEnum;
 import br.com.gedai.utils.Criptografia;
+import br.com.gedai.utils.StringUtils;
 import br.com.gedai.utils.Utils;
 
 @Controller
@@ -24,10 +25,13 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioBO usuarioBO;
 	
+	private static final String VERSION = "1.1";
+	
 	private static final String PAG_LOGIN = "login";
 
 	@RequestMapping(value={"/", "/login"})
-	public String login() {
+	public String login(HttpSession session) {
+		session.setAttribute("version", VERSION);
 		return PAG_LOGIN;
 	}
 	
@@ -52,7 +56,8 @@ public class UsuarioController {
 		}
 
 		session.setAttribute(ConfigEnum.USUARIO_LOGADO.getValor(), usuarioBanco);
-		
+		if(StringUtils.isEmpty(session.getAttribute("version").toString()) && null != session.getAttribute("version"))
+			session.setAttribute("version", VERSION);
 		return "redirect:area";
 	}
 	

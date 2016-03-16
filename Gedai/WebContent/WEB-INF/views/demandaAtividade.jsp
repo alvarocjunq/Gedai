@@ -15,7 +15,8 @@
 
 <div id="content" class="conteudo">
 	
-	<h3 class="ui header header-atividades">${demanda.nome} <small>${demanda.descricao}</small> <i class="file excel outline icon"></i></h3>
+	<h3 class="ui header header-atividades">${demanda.nome} <small>${demanda.descricao}</small> <i class="file excel outline icon"></i>
+	<i class="file pdf outline icon" style="margin: auto;"></i></h3>
 	<div class="ui large horizontal list">
 	
 	
@@ -39,9 +40,11 @@
 						
 					</div>
 					<div class="content footer-atividade">
-					  	<label class="salvar-atividade">Salvar</label>
-					  	<label class="cancelar-atividade"><i class="remove large icon"></i></label>
-					  	<label class="nova-atividade">Nova atividade <i class="plus square outline icon"></i></label> 
+						<c:if test="${lista.nome eq 'Fazer'}">
+						  	<label class="salvar-atividade">Salvar</label>
+						  	<label class="cancelar-atividade"><i class="remove large icon"></i></label>
+						  	<label class="nova-atividade">Nova atividade <i class="plus square outline icon"></i></label>
+						</c:if> 
 			    	</div>
 		    	</div>
 		    	<div class="floating ui green label contador" data-idDemandaLista="${lista.id}">${contador}</div>
@@ -163,16 +166,22 @@ $(document).ready(function(){
 	        }
 	    });
 	    return false;
-// 		$("#reportModal")
-// 		.modal({
-// 		    onShow: function(){
-// 		    	$("#frame-report").attr("src","visualizarAtividades?idDemanda=".concat(idDemanda));
-// 		 	},
-// 			 onHidden: function(){
-// 				 $("#frame-report").attr("src","");
-// 			 }
-// 		}).modal('show');
+
 	});
+	$('.file.pdf.outline.icon').click(function(e){
+		e.stopPropagation();
+		var idDemanda = $.urlParam("idDemanda");
+		$("#reportModal")
+		.modal({
+		    onShow: function(){
+		    	$("#frame-report").attr("src","visualizarAtividades?idDemanda=".concat(idDemanda));
+		 	},
+			 onHidden: function(){
+				 $("#frame-report").attr("src","");
+			 }
+		}).modal('show');
+	});
+	
 	
 	$(".salvar-tarefa").click(function(e){
 		e.stopPropagation();
@@ -215,7 +224,7 @@ $(document).ready(function(){
 							if(textArea.attr('id')===item.uuid){
 								_this.attr("id",item.id);
 								_this.attr("data-idTarefa",item.id);
-								textArea.replaceWith($("#template-nova-tarefa").tmpl({nome: item.nome, contador: item.contador}));
+								textArea.replaceWith($("#template-nova-tarefa").tmpl({nome: item.nome, contador: 0}));
 							}
 				    	});	
 					}
@@ -569,10 +578,10 @@ function onclickAtividade(escopo){
 // 			    	$("#header-modal-atividade").text("");
 			    	
 			    	if($(".description p")){
-// 			    		$(".description p").text("");
-			    		$(".description p").css("border", "0");
+			    		$(".description p").text("");
 			    	}
-			    		
+			    	$(".description p").css("border-color", "rgb(169, 169, 169)");
+			    	
 			    	if($(".description textarea"))
 			    		$(".description textarea").replaceWith("<p></p>");
 			    	

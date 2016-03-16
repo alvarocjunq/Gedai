@@ -45,8 +45,7 @@
   box-shadow: none;
   border: 0;
   margin-left: 2% !important;
-/*   margin-right: 5% !important; */
-  padding-top: 80px;
+  padding-top: 70px;
 }
 
 #content-title{
@@ -387,4 +386,9 @@ h4.theme-default{
 
 #excluir-modal{
 	float: left;
+}
+
+.report iframe{
+	width:100% !important;
+	height:80vh !important;
 }

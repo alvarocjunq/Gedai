@@ -109,6 +109,7 @@ public class DemandaListaAtividadeBO {
 	}
 
 	public void delete(Integer idDemandaListaAtividade) {
+		demandaListaAtividadeUsuarioBO.delete(idDemandaListaAtividade);
 		demandaListaAtividadeMapper.delete(idDemandaListaAtividade);
 	}
 

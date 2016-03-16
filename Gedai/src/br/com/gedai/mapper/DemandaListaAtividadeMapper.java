@@ -11,12 +11,21 @@ import br.com.gedai.dto.AtividadePDFDTO;
 
 @Component
 public interface DemandaListaAtividadeMapper {
+	
 	void insert(DemandaListaAtividade demandaListaAtividade);
+	
 	void update(DemandaListaAtividade demandaListaAtividade);
+	
 	void delete(Integer idDemandaListaAtividade);
+	
 	List<DemandaListaAtividade> obterPorLista(Integer idDemandaLista);
+	
 	DemandaListaAtividade obterPorId(Integer idDemandaListaAtividade);
+	
 	List<DemandaListaAtividade> obterPorUUID(@Param("lstUuid") List<String> lstUuid);
+	
 	List<AtividadePDFDTO> obterAtividadePorDemandaPDF(Integer idDemanda);
+	
+	List<DemandaListaAtividade> obterAtividadesPendentes(Integer idUsuarioLogado);
 	
 }

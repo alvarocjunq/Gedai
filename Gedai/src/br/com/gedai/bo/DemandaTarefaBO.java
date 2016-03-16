@@ -96,6 +96,6 @@ public class DemandaTarefaBO {
 	}
 	
 	public List<TarefaPDFDTO> obterTarefaPorDemandaPDF(Integer idDemanda){
-		return this.obterTarefaPorDemandaPDF(idDemanda);
+		return demandaTarefaMapper.obterTarefasPorDemandaPDF(idDemanda);
 	}
 }

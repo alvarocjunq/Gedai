@@ -2,7 +2,9 @@ package br.com.gedai.bo;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,11 +15,13 @@ import org.springframework.stereotype.Service;
 
 import br.com.gedai.data.DemandaLista;
 import br.com.gedai.dto.AtividadePDFDTO;
+import br.com.gedai.dto.TarefaPDFDTO;
 import br.com.gedai.enums.TipoListaEnum;
 import br.com.gedai.mapper.DemandaListaMapper;
 import br.com.gedai.utils.DateUtils;
 import br.com.gedai.utils.FileUtils;
 import br.com.gedai.utils.GenerateExcel;
+import br.com.gedai.utils.PDFUtils;
 import br.com.gedai.utils.StringUtils;
 
 
@@ -47,23 +51,32 @@ public class DemandaListaBO {
 
 	public List<DemandaLista> obterPorDemanda(Integer idDemanda) {
 		List<DemandaLista> lista = demandaListaMapper.obterPorDemanda(idDemanda);
-		
 		for(DemandaLista dl: lista)
 			dl.setLstAtividades(demandaListaAtividadeBO.obterPorLista(dl.getId()));
 		
 		return lista;
 	}
 	
-//	public void gerarPDF(Integer idDemanda, HttpServletResponse res){
-////		List<TarefaPDFDTO> lstTarefas = demandaTarefaBO.obterTarefaPorDemandaPDF(idDemanda);
-//		List<AtividadePDFDTO> lstAtividades = demandaListaAtividadeBO.obterAtividadePorDemandaPDF(idDemanda);
-////		List<TarefaPDFDTO> lstTarefas = new ArrayList<TarefaPDFDTO>();
-//		Map<String, Object> parametros = new HashMap<String, Object>();
-////		parametros.put("tarefas", lstTarefas);
-//		parametros.put("atividades", lstAtividades);
-//		String nomeReportSaida = "Lista_Atividades";
-//		PDFUtils.setImageParam(parametros, "logo", "logo-isban-fundo-cinza.jpg");
-//		PDFUtils.gerar(parametros, lstAtividades, "vizualizarRelatorioDemanda", nomeReportSaida, res);
+	public void gerarPDF(Integer idDemanda, HttpServletResponse res){
+		List<AtividadePDFDTO> lstAtividades = demandaListaAtividadeBO.obterAtividadePorDemandaPDF(idDemanda);
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("atividades", lstAtividades);
+		String nomeReportSaida = "Lista_Atividades";
+		PDFUtils.setImageParam(parametros, "logo", "logo-isban-fundo-cinza.jpg");
+		PDFUtils.gerar(parametros, lstAtividades, "vizualizarRelatorioDemanda", nomeReportSaida, res);
+	}
+	
+//	private List<AtividadePDFDTO> getAtividades(List<AtividadePDFDTO> lstAtividades){
+//		Set<String> nomeAtividades = new HashSet<String>();
+//		for(AtividadePDFDTO iAtividade: lstAtividades){
+//			nomeAtividades.add(iAtividade.getNomeAtividade());
+//		}
+//		for(String nomeAtividade: nomeAtividades){
+//			for(AtividadePDFDTO iAtividade: lstAtividades){
+//				
+//			}
+//		}
+//		return lstAtividades;
 //	}
 	
 	public List<DemandaLista> obterProgressoRacional(Integer idDemanda){
@@ -76,8 +89,10 @@ public class DemandaListaBO {
 		try {
 			XSSFWorkbook workbook = new XSSFWorkbook(FileUtils.getInputStream(arquivoFinal));
 			List<AtividadePDFDTO> lstAtividades = demandaListaAtividadeBO.obterAtividadePorDemandaPDF(idDemanda);
-			GenerateExcel.generateLines(workbook.getSheetAt(0), lstAtividades , 8, 2);
-			GenerateExcel.gerarExcel(workbook, res, "Lista de Atividades", new Date());
+			List<TarefaPDFDTO> lstTarefas = demandaTarefaBO.obterTarefaPorDemandaPDF(idDemanda);
+			GenerateExcel.generateLines(workbook.getSheetAt(0), lstAtividades , 9, 2);
+			GenerateExcel.generateLines(workbook.getSheetAt(1), lstTarefas , 5, 2);
+			GenerateExcel.gerarExcel(workbook, res, "Lista_Atividades_Tarefa", new Date());
 			fileFinal.delete();
 		} catch (Exception e) {
 			e.printStackTrace();

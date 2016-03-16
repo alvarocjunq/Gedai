@@ -1,9 +1,12 @@
 package br.com.gedai.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import br.com.gedai.annotation.PositionExcel;
+import br.com.gedai.data.DemandaListaAtividadeUsuario;
 import br.com.gedai.utils.DateUtils;
 
 public class AtividadePDFDTO implements Serializable{
@@ -14,43 +17,52 @@ public class AtividadePDFDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String nomeAtividade;
+	private String nomeDemanda;
 	private String descAtividade;
 	private String nomeResp;
+	private Integer idUsuario;
 	private String nomeUsuarioInclusao;
 	private Date dataInicioPrevista;
 	private Date dataFimPrevista;
 	private Date dataFimRealizada;
 	private Date dataInicioRealizada;
+	private List<DemandaListaAtividadeUsuario> usuariosAssociados;
 	
 	public AtividadePDFDTO(){
-		
+		usuariosAssociados = new ArrayList<DemandaListaAtividadeUsuario>();
 	}
+	
 	@PositionExcel(posicao={0})
+	public String getNomeDemanda() {
+		return nomeDemanda;
+	}
+	
+	@PositionExcel(posicao={1})
 	public String getNomeAtividade() {
 		return nomeAtividade;
 	}
 	
-	@PositionExcel(posicao={1})
+	@PositionExcel(posicao={2})
 	public String getDescAtividade() {
 		return descAtividade;
 	}
 	
-	@PositionExcel(posicao={2})
+	@PositionExcel(posicao={3})
 	public String getNomeResp() {
 		return nomeResp;
 	}
 	
-	@PositionExcel(posicao={3})
+	@PositionExcel(posicao={4})
 	public String getNomeUsuarioInclusao() {
 		return nomeUsuarioInclusao;
 	}
 	
-	@PositionExcel(posicao={4})
+	@PositionExcel(posicao={5})
 	public String getDataInicioPrevista() {
 		return DateUtils.getDataString(dataInicioPrevista,"dd/MM/yyyy");
 	}
 	
-	@PositionExcel(posicao={5})
+	@PositionExcel(posicao={6})
 	public String getDataFimPrevista() {
 		return DateUtils.getDataString(dataFimPrevista,"dd/MM/yyyy");
 	}
@@ -60,11 +72,15 @@ public class AtividadePDFDTO implements Serializable{
 		return DateUtils.getDataString(dataFimRealizada,"dd/MM/yyyy");
 	}
 
-	@PositionExcel(posicao={6})
+	@PositionExcel(posicao={8})
 	public String getDataInicioRealizada() {
 		return DateUtils.getDataString(dataInicioRealizada, "dd/MM/yyyy");
 	}
 	
+	public void setNomeDemanda(String nomeDemanda) {
+		this.nomeDemanda = nomeDemanda;
+	}
+
 	public void setNomeAtividade(String nomeAtividade) {
 		this.nomeAtividade = nomeAtividade;
 	}
@@ -96,6 +112,28 @@ public class AtividadePDFDTO implements Serializable{
 
 	public void setNomeUsuarioInclusao(String nomeUsuarioInclusao) {
 		this.nomeUsuarioInclusao = nomeUsuarioInclusao;
+	}
+
+	@Override
+	public String toString() {
+		return nomeResp;
+	}
+
+	public List<DemandaListaAtividadeUsuario> getUsuarioAssociados() {
+		return usuariosAssociados;
+	}
+
+	public void setUsuarioAssociados(
+			List<DemandaListaAtividadeUsuario> usuarioAssociados) {
+		this.usuariosAssociados = usuarioAssociados;
+	}
+
+	public Integer getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Integer idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 	
 }
