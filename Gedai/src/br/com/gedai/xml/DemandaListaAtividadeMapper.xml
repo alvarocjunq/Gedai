@@ -14,26 +14,22 @@
 		<result property="dataInicio" column="DATA_INICIO" />
 		<result property="dataInicioPrevisto" column="DATA_INICIO_PREVISTO" />
 		<result property="dataFimPrevisto" column="DATA_FIM_PREVISTO" />
+		<result property="atividadeContinua" column="atividadeContinua" />
 		<association property="usuarioLogado" column="USU_INCLUSAO"	
 					 select="br.com.gedai.mapper.UsuarioMapper.obterPorId"/>
-					 
-		
 	</resultMap>
 	
-<!-- 	<resultMap id="resultDemandaAtividadePDF" type="br.com.gedai.dto.AtividadePDFDTO" > -->
-<!-- 		<result property="nomeAtividade" column="nomeAtividade" /> -->
-<!-- 		<result property="nomeDemanda" column="nomeDemanda" /> -->
-<!-- 		<result property="descAtividade" column="descAtividade" /> -->
-<!-- 		<result property="nomeUsuarioInclusao" column="nomeUsuarioInclusao" /> -->
-<!-- 		<result property="dataInicioPrevista" column="dataInicioPrevista" /> -->
-<!-- 		<result property="dataFimPrevista" column="dataFimPrevista" /> -->
-<!-- 		<result property="dataFimRealizada" column="dataFimRealizada" /> -->
-<!-- 		<result property="dataInicioRealizada" column="dataInicioRealizada" /> -->
-<!-- 		<collection property="usuariosAssociados" javaType="ArrayList" column="idDemandaListaAtividade"  -->
-<!-- 					ofType="br.com.gedai.data.DemandaListaAtividadeUsuario"  -->
-<!-- 						select="br.com.gedai.mapper.DemandaListaAtividadeUsuarioMapper.obterPorAtividade" /> -->
-<!-- 	</resultMap> -->
-	
+	<resultMap id="mapAgenda" type="br.com.gedai.data.DemandaListaAtividade">
+		<id property="id" column="ID" />
+		<result property="nome" column="NOME" />
+		<result property="dataInicioPrevisto" column="DATA_INICIO_PREVISTO" />
+		<result property="dataFimPrevisto" column="DATA_FIM_PREVISTO" />
+		<result property="area" column="area" />
+		<result property="demanda" column="demanda" />
+		<result property="idDemanda" column="idDemanda" />
+		<result property="idDemandaLista" column="ID_DEMANDA_LISTA" />
+		<result property="atividadeContinua" column="atividadeContinua" />
+	</resultMap>
 	
 	<select id="obterAtividadesPendentes" >
 		SELECT TB_AREA.NOME,
@@ -51,7 +47,7 @@
 		AND   TB_DEMANDA_LISTA.NOME IN ('Fazer','Fazendo')
 		ORDER BY TB_AREA.NOME,
 		         TB_DEMANDA_LISTA.NOME,
-		         TB_DEMANDA_LISTA_ATIVIDADE.DATA_INICIO_PREVISTO;
+		         TB_DEMANDA_LISTA_ATIVIDADE.DATA_INICIO_PREVISTO
 	</select>
 	
 	<sql id="selectSimples">
@@ -65,7 +61,9 @@
 		       DATA_INICIO,
 		       DATA_INICIO_PREVISTO,
 		       DATA_FIM_PREVISTO,
-		       USU_INCLUSAO
+		       USU_INCLUSAO,
+		       case when ATIVIDADE_CONTINUA = 0 then 'false'
+            		else 'true' end as atividadeContinua
 		FROM TB_DEMANDA_LISTA_ATIVIDADE
 	</sql>
 	
@@ -94,6 +92,38 @@
 		<include refid="selectSimples" />
 		WHERE ID = #{idDemandaListaAtividade}
 	</select>
+	
+	<select id="obterParaAgenda" resultMap="mapAgenda">
+		SELECT TB_AREA.NOME as area,
+		       TB_DEMANDA.ID as idDemanda,
+		       TB_DEMANDA.DESCRICAO as demanda,
+	           TB_DEMANDA_LISTA_ATIVIDADE.ID,
+		       TB_DEMANDA_LISTA_ATIVIDADE.NOME,
+		       TB_DEMANDA_LISTA_ATIVIDADE.DATA_INICIO_PREVISTO,
+		       TB_DEMANDA_LISTA_ATIVIDADE.DATA_FIM_PREVISTO,
+		       TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA,
+		       case when ATIVIDADE_CONTINUA = 0 then 'false'
+            		else 'true' end as atividadeContinua
+		FROM TB_DEMANDA_LISTA_ATIVIDADE
+		  JOIN TB_DEMANDA_LISTA ON TB_DEMANDA_LISTA.ID = TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA
+		  JOIN TB_DEMANDA ON TB_DEMANDA.ID = TB_DEMANDA_LISTA.ID_DEMANDA
+		  JOIN TB_AREA ON TB_AREA.ID = TB_DEMANDA.ID_AREA
+		  JOIN TB_DEMANDA_LISTA_ATIVIDADE_USUARIO ON TB_DEMANDA_LISTA_ATIVIDADE.ID = TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_DEMANDA_LISTA_ATIVIDADE
+		WHERE TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_USUARIO = #{idUsuarioLogado}
+		AND   TB_DEMANDA_LISTA.NOME IN ('Fazer','Fazendo')
+		ORDER BY TB_DEMANDA.DESCRICAO,
+		         TB_DEMANDA_LISTA.NOME,
+		         TB_DEMANDA_LISTA_ATIVIDADE.DATA_INICIO_PREVISTO
+	</select>
+	
+	<select id="countParaAgenda" resultType="int">
+		SELECT count(1) as contador
+		FROM TB_DEMANDA_LISTA_ATIVIDADE
+		  JOIN TB_DEMANDA_LISTA ON TB_DEMANDA_LISTA.ID = TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA
+		  JOIN TB_DEMANDA_LISTA_ATIVIDADE_USUARIO ON TB_DEMANDA_LISTA_ATIVIDADE.ID = TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_DEMANDA_LISTA_ATIVIDADE
+		WHERE TB_DEMANDA_LISTA_ATIVIDADE_USUARIO.ID_USUARIO = #{idUsuarioLogado}
+		AND   TB_DEMANDA_LISTA.NOME IN ('Fazer','Fazendo')
+	</select>
 
 	<select id="obterPorUUID" resultMap="mapSimples">
 		<include refid="selectSimples" />
@@ -118,35 +148,46 @@
 		UPDATE TB_DEMANDA_LISTA_ATIVIDADE
 		   SET NOME = #{nome},
 		       DESCRICAO = #{descricao},
-		       DATA_FINALIZACAO = #{dataFinalizacao}
-		       
+		       DATA_FINALIZACAO = #{dataFinalizacao},
+		       ATIVIDADE_CONTINUA = #{atividadeContinuaValue} 
 	       <if test="idDemandaLista != null">
 	       		,ID_DEMANDA_LISTA=#{idDemandaLista}
 	       </if>
-	       
-<!--      	   <if test="dataInicio != null"> -->
-	       		,DATA_INICIO = #{dataInicio}
-<!-- 	       </if> -->
-	       
-<!-- 	       <if test="dataInicioPrevisto != null"> -->
-	       		,DATA_INICIO_PREVISTO = #{dataInicioPrevisto}
-<!-- 	       </if> -->
-	       
-<!-- 	       <if test="dataFimPrevisto != null"> -->
-	       		,DATA_FIM_PREVISTO = #{dataFimPrevisto}
-<!-- 	       </if> -->
+       		,DATA_INICIO = #{dataInicio}
+       		,DATA_INICIO_PREVISTO = #{dataInicioPrevisto}
+       		,DATA_FIM_PREVISTO = #{dataFimPrevisto}
 		WHERE ID = #{id}
 	</update>
+	
+	<update id="finalizarAtividade">
+	UPDATE TB_DEMANDA_LISTA_ATIVIDADE
+	   SET ID_DEMANDA_LISTA = (SELECT ID
+	                           FROM TB_DEMANDA_LISTA
+	                           WHERE ID_DEMANDA IN (SELECT TB_DEMANDA.ID
+	                                                FROM TB_DEMANDA_LISTA
+	                                                  JOIN TB_DEMANDA ON TB_DEMANDA_LISTA.ID_DEMANDA = TB_DEMANDA.ID
+	                                                  JOIN TB_DEMANDA_LISTA_ATIVIDADE ON TB_DEMANDA_LISTA.ID = TB_DEMANDA_LISTA_ATIVIDADE.ID_DEMANDA_LISTA
+	                                                WHERE TB_DEMANDA_LISTA_ATIVIDADE.ID = #{idAtividade})
+	                           AND   NOME = 'Feito'),
+  		   DATA_FINALIZACAO = current_date
+	WHERE ID = #{idAtividade}
+	</update>
+	
+	<select id="nextSequence" resultType="int">
+		call next value for SEQ_DEMANDA_LISTA_ATIVIDADE 
+	</select>
 	
 	<insert id="insert">
 		INSERT INTO TB_DEMANDA_LISTA_ATIVIDADE
 		(
+		  ID,
 		  ID_DEMANDA_LISTA,
 		  NOME,
 		  DESCRICAO,
 		  UUID,
 		  USU_INCLUSAO,
-		  DATA_INCLUSAO
+		  DATA_INCLUSAO,
+		  ATIVIDADE_CONTINUA
 		  
 		  <if test="dataInicio != null">
 	       		,DATA_INICIO
@@ -163,12 +204,15 @@
 		)
 		VALUES
 		(
+		  #{id},
 		  #{idDemandaLista},
 		  #{nome},
 		  #{descricao},
 		  #{uuid},
 		  #{usuarioLogado.id},
-		  #{dataInclusao}
+		  #{dataInclusao},
+		  #{atividadeContinuaValue}
+		  
 		  <if test="dataInicio != null">
 	      	,#{dataInicio}
 	      </if>

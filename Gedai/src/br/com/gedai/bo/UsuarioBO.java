@@ -43,5 +43,12 @@ public class UsuarioBO {
 	public Usuario getUserSession(HttpSession session){
 		return (Usuario) session.getAttribute(ConfigEnum.USUARIO_LOGADO.getValor());
 	}
+
+	public void atualizarAtividadeUsuario(Integer idAtividade, HttpSession session) {
+		Usuario usuario = getUserSession(session);
+		usuario.setIdAtividadeFazendo(idAtividade);
+		session.setAttribute(ConfigEnum.USUARIO_LOGADO.getValor(), usuario);
+		usuarioMapper.updateAtividade(usuario);
+	}
 	
 }

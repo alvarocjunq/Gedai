@@ -8,6 +8,19 @@ $(document).ready(function(){
 		go("area");
 	});
 	
+	$("#menu-agenda").click(function(e){
+		e.stopPropagation();
+		go("agenda");
+	});
+	
+	$.ajax({
+	    url: "countAtividade",
+	    type: 'GET',
+	    success: function(contador) {
+	    	$(".count-header").text(contador);
+	    }
+	});
+	
 });
 
 $(document).on("click", ".item-menu", function(e) {
@@ -49,9 +62,12 @@ $(document).on("click", ".item-menu", function(e) {
 			  </div>
 			</div>
 		</c:if>
-		
-	 	<a class="item active" style="margin-left: 10px;">Agenda</a>
-		
+<!-- 		<div class="ui compact menu"> -->
+	 	<a class="item active" style="margin-left: 10px;" id="menu-agenda">Agenda
+	 		<div class="floating ui red label count-header">0</div>
+	 	</a>
+	 	
+<!-- 		</div> -->
 		<div class="right menu">
 			<a class="ui item" href="logout"><i class="power icon"></i> Sair</a>
 		</div>

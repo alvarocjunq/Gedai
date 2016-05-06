@@ -12,6 +12,7 @@ public class Usuario implements Serializable{
 	private String nome;
 	private String usuario;
 	private String senha;
+	private Integer idAtividadeFazendo;
 	
 	public Usuario() {}
 
@@ -43,6 +44,13 @@ public class Usuario implements Serializable{
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+	public Integer getIdAtividadeFazendo() {
+		return idAtividadeFazendo;
+	}
+	public void setIdAtividadeFazendo(Integer idAtividadeFazendo) {
+		this.idAtividadeFazendo = idAtividadeFazendo;
+	}
+
 
 	public String toString() {
 		return StringUtils.concat("Usuario=", usuario, ", id=", id, ", nome=", nome);

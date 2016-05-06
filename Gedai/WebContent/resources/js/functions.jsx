@@ -211,3 +211,21 @@ function isCorrectDate(data){
 	
 	return false;
 }
+
+$(document).on("click", ".description", function(e){
+	e.stopPropagation();
+	var p = $(this).find("p");
+	if(p.length > 0){
+		var texto = p.html();
+		texto = texto.replace(/<br>/g, '\n');
+		p.replaceWith("<textarea>"+texto+"</textarea>");
+		$(this).find("textarea").focus();
+	}
+});
+
+$(document).on("click", "#atividadeContinua", function(e){
+	e.stopPropagation();
+	$(this).attr("value", ($(this).prop("checked")));
+});
+
+

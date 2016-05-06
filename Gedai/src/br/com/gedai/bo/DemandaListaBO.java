@@ -66,19 +66,6 @@ public class DemandaListaBO {
 		PDFUtils.gerar(parametros, lstAtividades, "vizualizarRelatorioDemanda", nomeReportSaida, res);
 	}
 	
-//	private List<AtividadePDFDTO> getAtividades(List<AtividadePDFDTO> lstAtividades){
-//		Set<String> nomeAtividades = new HashSet<String>();
-//		for(AtividadePDFDTO iAtividade: lstAtividades){
-//			nomeAtividades.add(iAtividade.getNomeAtividade());
-//		}
-//		for(String nomeAtividade: nomeAtividades){
-//			for(AtividadePDFDTO iAtividade: lstAtividades){
-//				
-//			}
-//		}
-//		return lstAtividades;
-//	}
-	
 	public List<DemandaLista> obterProgressoRacional(Integer idDemanda){
 		return demandaListaMapper.obterQtdAtividadePorLista(idDemanda);
 	}

@@ -15,6 +15,7 @@ import br.com.gedai.data.Usuario;
 import br.com.gedai.dto.AtividadePDFDTO;
 import br.com.gedai.enums.TipoListaEnum;
 import br.com.gedai.mapper.DemandaListaAtividadeMapper;
+import br.com.gedai.utils.BooleanUtils;
 import br.com.gedai.utils.StringUtils;
 
 @Service
@@ -36,48 +37,54 @@ public class DemandaListaAtividadeBO {
 		return atividade;
 	}
 	
+	public DemandaListaAtividade duplicate(DemandaListaAtividade atividade, HttpSession session) {
+		atividade.setId(demandaListaAtividadeMapper.nextSequence());
+		atividade.setUsuarioLogado(usuarioBO.getUserSession(session));
+		atividade.setDataInclusao(new Date());
+		atividade.setAtividadeContinuaValue(1);
+			
+		demandaListaAtividadeMapper.insert(atividade);
+		
+		return atividade;
+	}
+	
 	public List<DemandaListaAtividade> insert(List<DemandaListaAtividade> atividades, HttpSession session) {
 		List<String> lstUuid = new ArrayList<String>();
 		Usuario usuarioLogado = usuarioBO.getUserSession(session);
-		Date dataAtual = new Date();
-		String nomeLista = atividades.get(0).getNomeDemandaLista();
-		
-		boolean isFazendo = (nomeLista.equalsIgnoreCase(TipoListaEnum.FAZENDO.getNome()));
-		boolean isFeito = (nomeLista.equalsIgnoreCase(TipoListaEnum.FEITO.getNome()));
+		final Date dataAtual = new Date();
 		
 		for(DemandaListaAtividade dla: atividades){
 			dla.setUsuarioLogado(usuarioLogado);
 			dla.setDataInclusao(dataAtual);
+			dla.setAtividadeContinuaValue(0);
+			int id = demandaListaAtividadeMapper.nextSequence();
 			
-			if(isFazendo)
-				dla.setDataInicio(dataAtual);
-			
-			if(isFeito){
-				dla.setDataInicio(dataAtual);
-				dla.setDataFinalizacao(dataAtual);
-			}
+			dla.setId(id);
 			
 			demandaListaAtividadeMapper.insert(dla);
+			demandaListaAtividadeUsuarioBO.insert(new DemandaListaAtividadeUsuario(usuarioLogado, id));
 			lstUuid.add(dla.getUuid());
 		}
+		
 		return demandaListaAtividadeMapper.obterPorUUID(lstUuid);
 	}
 
-	public void update(DemandaListaAtividade demandaListaAtividade, HttpSession session) {
-		StringUtils.emptyToNull(demandaListaAtividade);
-		demandaListaAtividade.setDataInicio(demandaListaAtividade.getDataInicio());
-		demandaListaAtividade.setDataFinalizacao(demandaListaAtividade.getDataFinalizacao());
-		TipoListaEnum TIPO = TipoListaEnum.getEnum(demandaListaAtividade.getNomeDemandaLista());
+	public void update(DemandaListaAtividade dla, HttpSession session) {
+		StringUtils.emptyToNull(dla);
+		dla.setDataInicio(dla.getDataInicio());
+		dla.setDataFinalizacao(dla.getDataFinalizacao());
+		dla.setAtividadeContinuaValue(BooleanUtils.getValue(dla.getAtividadeContinua()));
+		TipoListaEnum TIPO = TipoListaEnum.getEnum(dla.getNomeDemandaLista());
 		
 		if(TIPO != null)
 			switch (TIPO) {
 			case FAZENDO:
-				setUsuarioLogadoNaAtividade(demandaListaAtividade, session);
-				demandaListaAtividade.setDataInicio(demandaListaAtividade.getDataInicio()!= null ? demandaListaAtividade.getDataInicio():new Date());
+				setUsuarioLogadoNaAtividade(dla, session);
+				dla.setDataInicio(dla.getDataInicio()!= null ? dla.getDataInicio():new Date());
 				break;
 			case FEITO:
-				setUsuarioLogadoNaAtividade(demandaListaAtividade, session);
-				demandaListaAtividade.setDataFinalizacao(demandaListaAtividade.getDataFinalizacao()!= null? demandaListaAtividade.getDataFinalizacao(): new Date());
+				setUsuarioLogadoNaAtividade(dla, session);
+				dla.setDataFinalizacao(dla.getDataFinalizacao()!= null? dla.getDataFinalizacao(): new Date());
 				break;
 			case FAZER:
 				break;
@@ -85,12 +92,12 @@ public class DemandaListaAtividadeBO {
 				break;
 			}
 		
-		demandaListaAtividadeUsuarioBO.delete(demandaListaAtividade.getId());
+		demandaListaAtividadeUsuarioBO.delete(dla.getId());
 		
-		for(DemandaListaAtividadeUsuario ativUsuario: demandaListaAtividade.getLstAtividadeUsuario())
+		for(DemandaListaAtividadeUsuario ativUsuario: dla.getLstAtividadeUsuario())
 			demandaListaAtividadeUsuarioBO.insert(ativUsuario);
 
-		demandaListaAtividadeMapper.update(demandaListaAtividade);
+		demandaListaAtividadeMapper.update(dla);
 	}
 
 	private void setUsuarioLogadoNaAtividade(DemandaListaAtividade demandaListaAtividade, HttpSession session) {

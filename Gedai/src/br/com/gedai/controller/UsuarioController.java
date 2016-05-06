@@ -25,7 +25,7 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioBO usuarioBO;
 	
-	private static final String VERSION = "1.1";
+	private static final String VERSION = "1.6";
 	
 	private static final String PAG_LOGIN = "login";
 

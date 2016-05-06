@@ -8,13 +8,15 @@
 		<result property="nome" column="NOME" />
 		<result property="usuario" column="USUARIO" />
 		<result property="senha" column="SENHA" />
+		<result property="idAtividadeFazendo" column="ID_ATIVIDADE_FAZENDO" />
 	</resultMap>
 
 	<sql id="selectSimples">
 		SELECT ID,
 		       NOME,
 		       USUARIO,
-		       SENHA
+		       SENHA,
+		       ID_ATIVIDADE_FAZENDO
 		FROM TB_USUARIO
 	</sql>
 	
@@ -41,6 +43,12 @@
 	<update id="updateSenha">
 		UPDATE TB_USUARIO
 		   SET SENHA = #{senha}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateAtividade">
+		UPDATE TB_USUARIO
+		   SET ID_ATIVIDADE_FAZENDO = #{idAtividadeFazendo}
 		WHERE id = #{id}
 	</update>
 	

@@ -13,4 +13,5 @@ public interface UsuarioMapper {
 	Usuario obterPorLogin(Usuario usuario);
 	Usuario obterLoginSenha(Usuario usuario);
 	void updateSenha(Usuario usuario);
+	void updateAtividade(Usuario usuario);
 }

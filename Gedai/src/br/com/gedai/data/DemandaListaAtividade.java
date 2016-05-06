@@ -23,12 +23,19 @@ public class DemandaListaAtividade implements Serializable {
 	private Date dataInclusao;
 	private Date dataFinalizacao;
 	private Date dataInicio;
+	private Boolean atividadeContinua;
+	private Integer atividadeContinuaValue;
 	
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date dataInicioPrevisto;
 	
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date dataFimPrevisto;
+	
+	private String area;
+	private String demanda;
+	private Integer idDemanda;
+	private String demandaZebrada;
 	
 	public DemandaListaAtividade() {
 		lstAtividadeUsuario = new ArrayList<DemandaListaAtividadeUsuario>();
@@ -148,5 +155,58 @@ public class DemandaListaAtividade implements Serializable {
 
 	public void setDataFimPrevisto(Date dataFimPrevisto) {
 		this.dataFimPrevisto = dataFimPrevisto;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public String getDemanda() {
+		return demanda;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public void setDemanda(String demanda) {
+		this.demanda = demanda;
+	}
+
+	public Boolean getAtividadeContinua() {
+		return atividadeContinua;
+	}
+
+	public void setAtividadeContinua(Boolean atividadeContinua) {
+		this.atividadeContinua = atividadeContinua;
+	}
+
+	public Integer getAtividadeContinuaValue() {
+		return atividadeContinuaValue;
+	}
+
+	public void setAtividadeContinuaValue(Integer atividadeContinuaValue) {
+		this.atividadeContinuaValue = atividadeContinuaValue;
+	}
+
+	public Integer getIdDemanda() {
+		return idDemanda;
+	}
+
+	public String getDemandaZebrada() {
+		return demandaZebrada;
+	}
+
+	public void setIdDemanda(Integer idDemanda) {
+		this.idDemanda = idDemanda;
+	}
+
+	public void setDemandaZebrada(String demandaZebrada) {
+		this.demandaZebrada = demandaZebrada;
+	}
+
+	@Override
+	public String toString() {
+		return nome;
 	}
 }

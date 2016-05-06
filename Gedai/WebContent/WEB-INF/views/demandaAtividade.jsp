@@ -51,32 +51,6 @@
 	    	</div>
 		</div>
 	</c:forEach>
-
-	<div class="item">
-		<div class="ui card">
-			<div class="content lista-daily-task" id="">
-				<h4>Tarefas Di&aacute;rias</h4>
-				<div class="lista-task">
-					<c:forEach items="${tarefas}" var="tarefa">
-						<div class="task" data-idTarefa="${tarefa.id}" id="${tarefa.id}" >		
-							<a class="ui black medium circular label contador-task">${tarefa.contador}</a>
-							<a class="ui tiny red circular label remove-icon"><i class="minus icon icon-task"></i></a> 
-							<a class="ui tiny green circular label add-icon"><i class="plus icon icon-task"></i></a>
-							<br /><br />
-							<label>${tarefa.nome}</label>
-						</div>
-					</c:forEach>
-				</div>
-				<div class="content footer-tarefa">
-				  	<label class="salvar-tarefa">Salvar</label>
-				  	<label class="cancelar-tarefa"><i class="remove large icon"></i></label>
-				  	<label class="nova-tarefa">Nova tarefa <i class="plus square outline icon"></i></label> 
-		    	</div>
-		    	
-	    	</div>
-    	</div>
-	</div>
-	
 	</div>
 		
 </div>
@@ -160,10 +134,8 @@ $(document).ready(function(){
 		var idDemanda = $.urlParam("idDemanda");
 		
 	    $.fileDownload("exportExcelAtividade?idDemanda=".concat(idDemanda), {
-	        successCallback: function (url) {
-	        },
-	        failCallback: function (responseHtml, url) {
-	        }
+	        successCallback: function (url) {},
+	        failCallback: function (responseHtml, url) {}
 	    });
 	    return false;
 
@@ -311,17 +283,6 @@ $(document).ready(function(){
 		});
 	});
 	
-	
-	$(".description").click(function(e){
-		e.stopPropagation();
-		var p = $(this).find("p");
-		if(p.length > 0){
-			var texto = p.html();
-			texto = texto.replace(/<br>/g, '\n');
-			p.replaceWith("<textarea>"+texto+"</textarea>");
-			$(this).find("textarea").focus();
-		}
-	});
 
 	$("#excluir-modal").click(function(e){
 		e.stopPropagation();
@@ -346,16 +307,11 @@ $(document).ready(function(){
 	});
 	
 	$("#salvar-modal").click(function(){
-		var demandaLista = $("#lstListas .menu .selected");
 		var _nome = $("#header-modal-atividade").val();
     	var _descricao = ($(".description textarea").val() ? $(".description textarea").val() : $(".description p").text());
-    	var _idDemandaLista = demandaLista.attr("data-id");
-    	var _textDemandaLista = demandaLista.text();
     	var idAtividade = $("#idAtividade").val();
     	var dataInicio = isCorrectDate("#dataInicio")? new Date(getDateValid($("#dataInicio").val())):$("#dataInicio").val();
     	var dataFim = isCorrectDate("#dataFim")? new Date(getDateValid($("#dataFim").val())):$("#dataFim").val();
-    	var dataInicioReal = isCorrectDate("#dataIni")? new Date(getDateValid($("#dataIni").val())):$("#dataIni").val();
-    	var dataFimReal = isCorrectDate("#dataFinazalicao")?  new Date(getDateValid($("#dataFinazalicao").val())):$("#dataFinalizacao").val();
     	var arrUsuariosAssociados = [];
 		if(_nome === ""){
 			alertify.error("Informe o nome da atividade para continuar");
@@ -372,13 +328,10 @@ $(document).ready(function(){
 		var atividade = {id : idAtividade, 
 						 nome: _nome,
 						 descricao: _descricao,
-						 idDemandaLista: _idDemandaLista,
-						 nomeDemandaLista: _textDemandaLista,
 						 dataInicioPrevisto: dataInicio,
 						 dataFimPrevisto: dataFim,
-						 dataInicio: dataInicioReal,
-						 dataFinalizacao: dataFimReal,
-						 lstAtividadeUsuario : arrUsuariosAssociados};
+						 lstAtividadeUsuario : arrUsuariosAssociados,
+						 atividadeContinua: $("#atividadeContinua").val()};
 		
 		$.ajax({
 		    url: "atualizarAtividade",
@@ -390,12 +343,6 @@ $(document).ready(function(){
 				alertify.success("Atividade salva com sucesso.");
 	    		var atividade = $(".card-atividade[data-idAtividade= "+idAtividade+"]");
 	    		atividade.find("label").text(_nome);
-		    	if(_idDemandaLista){
-		    		removeContador(idAtividade);
-		    		var contListaPosterior = parseInt($(".contador[data-idDemandaLista="+_idDemandaLista+"]").text()) +1;
-		    		$(".contador[data-idDemandaLista="+_idDemandaLista+"]").text(contListaPosterior);
-		    		$(".lista-atividade[id="+_idDemandaLista+"] .atividades").append(atividade);
-		    	}
 		    }
 		});
 	});
@@ -518,7 +465,9 @@ function onclickAtividade(escopo){
 							    	if(selecionados.length == 0){
 							    		$("#lstUsuarios").dropdown('set placeholder text',"Usuários");
 							    	}
-									
+							    	$("#atividadeContinua").val(data.atividadeContinua);
+							    	$("#atividadeContinua").prop("checked", data.atividadeContinua);
+							    	
 							    	$("#header-modal-atividade").val(data.nome);
 							    	
 							    	if(data.descricao)
@@ -551,10 +500,6 @@ function onclickAtividade(escopo){
 						    		
 							    	$("#informacoes-modal").append(eventos);
 							    	
-// 							    	if(data.dataFinalizacao == null || data.dataFinalizacao ===""){
-// 							    		$("#dataFinazalicao").attr("disabled", "disabled");
-// 							    		$("#dataIni").attr("disabled", "disabled");
-// 							    	}
 							    }
 							});
 					    }
@@ -575,7 +520,6 @@ function onclickAtividade(escopo){
 			    },
 			    onHidden: function(){
 			    	$("#lstUsuarios").dropdown('clear');
-// 			    	$("#header-modal-atividade").text("");
 			    	
 			    	if($(".description p")){
 			    		$(".description p").text("");

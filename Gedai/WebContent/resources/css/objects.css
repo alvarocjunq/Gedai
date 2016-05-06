@@ -392,3 +392,76 @@ h4.theme-default{
 	width:100% !important;
 	height:80vh !important;
 }
+
+#agenda-left{
+	float: left;
+	height: 585px;
+    overflow-y: auto;
+    -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+    transition: width 1s;
+}
+
+#agenda-left .item {
+	padding-left: 2%;
+	cursor: pointer;
+}
+
+#agenda-left .item:hover{
+    background-color: #F5F5F5;
+    font-weight: bold;
+}
+
+#agenda-right{
+	float: right;
+	width: 30%;
+	height: 585px;
+    overflow-y: auto;
+    border-left: 1px solid #bcbdbd;
+    padding-top: 5px;
+    padding-right: 5px;
+}
+#agenda-right p{
+    padding: 5px;
+}
+
+#agenda-right h3{
+    padding-left: 10px;
+    text-decoration: underline;
+}
+
+#agenda-right h3 small{
+	float: right;
+	padding-right: 10px    
+}
+
+
+.middle-atividade{
+	padding-top: 12px;
+}
+
+.atividade-fazendo{
+	background-color: #FB5E5E !important;
+    color: white;
+}
+
+.textarea-fazendo{
+	background-color: transparent;
+    resize: none;
+    width: 100%;
+    border: 0;
+    padding: 5px;
+    height: 200px;
+}
+
+hr.line-separator{
+	border: 1px solid #EF6565;
+}
+
+.demanda-zebrada{
+	background-color: aliceblue;
+}
+
+.count-header{
+	top: initial !important;
+    left: 110% !important;
+}

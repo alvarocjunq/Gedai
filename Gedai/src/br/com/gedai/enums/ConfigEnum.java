@@ -1,7 +1,8 @@
 package br.com.gedai.enums;
 
 public enum ConfigEnum {
-	USUARIO_LOGADO("usuario");
+	USUARIO_LOGADO("usuario"),
+	CLASS_DEMANDA_ZEBRADA("demanda-zebrada");
 	
 	private String valor;
 

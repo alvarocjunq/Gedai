@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="br.com.gedai.mapper.DemandaListaAtividadeTempoMapper">
+
+	<insert id="insert">
+		INSERT INTO TB_DEMANDA_LISTA_ATIVIDADE_TEMPO
+			(ID_ATIVIDADE, 
+			 HORA_INICIO,
+			 ID_USUARIO,
+			 DATA_INICIO
+			)
+		VALUES
+			(#{idAtividade}, 
+			 current_time,
+			 #{idUsuario},
+			 current_date
+			 );
+	</insert>
+	
+	<update id="update">
+		UPDATE TB_DEMANDA_LISTA_ATIVIDADE_TEMPO
+		   SET HORA_FIM = current_time, DATA_FIM = current_date
+		 WHERE ID_ATIVIDADE = #{idAtividade}
+		   AND ID_USUARIO = #{idUsuario}
+		   AND HORA_FIM IS NULL
+	</update>
+	
+</mapper>
